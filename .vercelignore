@@ -1,0 +1,19 @@
+# Losse tweede applicatie (Next.js portaal met inlog/database/NAS-koppeling).
+# Hoort NIET bij de marketingsite en mag hier nooit meegedeployed worden.
+client-portal
+
+# Onbewerkte video-masters — alleen de gecomprimeerde versies in public/videos
+# gaan mee naar productie.
+video-originals
+
+# Build-output; Vercel bouwt zelf opnieuw.
+dist
+dist-ssr
+
+# Lokale rommel
+node_modules
+.DS_Store
+**/.DS_Store
+.env
+.env.local
+*.log

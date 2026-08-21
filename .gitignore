@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build-output
+dist/
+dist-ssr/
+.next/
+**/.next/
+*.local
+
+# Secrets - NOOIT committen. Alleen .env.example hoort in de repo.
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Aparte portaal-applicatie. Hoort NIET in deze publieke repo:
+# client-portal/SETUP.md beschrijft het NAS-adres en de doorgestuurde
+# router-poort. Geef het portaal een eigen PRIVE-repo als het live gaat.
+client-portal/
+
+# Onbewerkte video-masters (94MB) - horen niet in versiebeheer
+video-originals/
+
+# Half-geschreven ffmpeg-output
+*.tmp.mp4
+
+# Vercel
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editors
+.idea/
+.vscode/
+*.swp
