@@ -35,11 +35,11 @@ const staticPages = {
     description: "Een vacature vertelt wat iemand gaat doen, niet waarom iemand bij jou wil werken. Recruitmentvideo en werken-bij content die laat zien hoe het er echt aan toegaat.",
   },
   "/oplossingen/duidelijk-uitleggen": {
-    title: "Complex product of dienst duidelijk uitleggen | TVM Productions",
+    title: "Je product of dienst duidelijk uitleggen | TVM Productions",
     description: "Een klant die het niet snapt, koopt niet. Zo maak je een technisch product, proces of dienst in één keer begrijpelijk met beeld, en wanneer een uitlegvideo past.",
   },
   "/hoe-ik-help": {
-    title: "Hoe ik help: meer klanten of juiste medewerkers | TVM Productions",
+    title: "Hoe ik help bedrijven met video en foto | TVM Productions",
     description: "Niet beginnen bij welke video je wilt, maar bij wat er in je bedrijf moet veranderen. Zo bepaal ik welke video of foto klanten overtuigt of kandidaten aantrekt.",
   },
   "/werkwijze": {
@@ -56,15 +56,15 @@ const staticPages = {
   },
   "/tarieven": {
     title: "Tarieven voor video en fotografie | TVM Productions",
-    description: "Wat bepaalt de prijs van een videoproductie of fotoshoot? Omvang, uitwerking en oplevering. Je ontvangt vooraf één vaste offerte zonder verrassingen achteraf.",
+    description: "Wat bepaalt de prijs van een videoproductie of fotoshoot? Omvang, uitwerking en oplevering. Bekijk de vanaf-prijzen per dienst en ontvang vooraf één vaste offerte.",
   },
   "/videoproductie-purmerend": {
     title: "Videoproductie in Purmerend en Waterland | TVM Productions",
     description: "Video en fotografie voor bedrijven in Purmerend, Waterland en omliggende plaatsen. Snel op locatie en bekend met de regio.",
   },
   "/kennisbank": {
-    title: "Kennisbank: praktische vragen over video & foto | TVM Productions",
-    description: "Heldere antwoorden voor wie een bedrijfsvideo of fotoshoot overweegt: wat kost het, hoe bereid je een draaidag voor, bedrijfsvideo of promotievideo?",
+    title: "Kennisbank over video en fotografie | TVM Productions",
+    description: "Praktische antwoorden voor wie een bedrijfsvideo of fotoshoot overweegt: wat het kost, hoe je een draaidag voorbereidt en welke videovorm bij je doel past.",
   },
   "/veelgestelde-vragen": {
     title: "Veelgestelde vragen over video en fotografie | TVM Productions",
@@ -79,16 +79,16 @@ const staticPages = {
     description: "Je aanvraag is verstuurd. Je hoort meestal binnen één werkdag van ons.",
   },
   "/particulier": {
-    title: "Video voor particulieren: trouwfilm en event | TVM Productions",
-    description: "Trouwfilms en video van privé-events met aandacht voor mensen, sfeer en de kleine momenten. Gemaakt door TVM Productions vanuit Purmerend.",
+    title: "Video voor particulieren: trouwfilm & event | TVM Productions",
+    description: "Trouwfilms en video van privé-events met aandacht voor mensen, sfeer en de kleine momenten die je zelf bijna mist. Rustig voorbereid, aanwezig zonder op te vallen.",
   },
   "/particulier/trouwfilm": {
-    title: "Trouwfilm laten maken | TVM Productions",
-    description: "Een trouwfilm die jullie dag laat voelen zoals hij was: de mensen, stemmen en kleine momenten, zonder dat de dag geregisseerd wordt.",
+    title: "Trouwfilm laten maken: jullie dag, zonder regie | TVM Productions",
+    description: "Een trouwfilm laten maken die jullie dag laat voelen zoals hij was: de mensen, de stemmen en de kleine momenten, zonder dat de dag geregisseerd wordt.",
   },
   "/particulier/event": {
     title: "Privé-event laten vastleggen op video | TVM Productions",
-    description: "Een jubileum, feest of bijzonder moment vastgelegd op video, zonder dat de camera de aandacht overneemt.",
+    description: "Een jubileum, feest of ander bijzonder moment vastgelegd op video, zonder dat de camera de aandacht overneemt. Vooraf besproken wat belangrijk is.",
   },
   "/privacy": {
     title: "Privacyverklaring | TVM Productions",

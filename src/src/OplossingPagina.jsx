@@ -60,7 +60,9 @@ export default function OplossingPagina({ data, slug, cases = {} }) {
         image={beeld?.image}
         imageAlt={beeld ? (beeld.kop ?? `${beeld.type} voor ${beeld.title}`) : ""}
         breadcrumbs={[
-          { label: "Oplossingen", href: "/oplossingen/zichtbaar-worden/" },
+          // Er is geen /oplossingen/-hub; het overzicht van de drie oplossingen
+          // staat op /hoe-ik-help/. Zo blijft het kruimelpad een echte hiërarchie.
+          { label: "Hoe ik help", href: "/hoe-ik-help/" },
           { label: data.eyebrow, href: `/oplossingen/${slug}/` },
         ]}
       />
