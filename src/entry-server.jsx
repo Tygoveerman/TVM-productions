@@ -8,4 +8,4 @@ export function render(path) {
   return { html, meta };
 }
 
-export { getAllRoutes } from "./site/seo.js";
+export { getAllRoutes, getSitemapRoutes, SITE_URL } from "./site/seo.js";

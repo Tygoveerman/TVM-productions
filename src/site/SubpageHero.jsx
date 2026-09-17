@@ -52,9 +52,9 @@ export default function SubpageHero({
       className={`text-[clamp(2rem,2.4vw,2.85rem)] font-black leading-[1.12] tracking-[-0.03em] ${licht ? "text-[#F3F0EA]" : "text-black"}`}
       aria-label={volledigeKop}
     >
-      {headline.map((regel) => (
+      {headline.map((regel, i) => (
         <span key={regel} className="block">
-          {regel}
+          {i > 0 ? " " : ""}{regel}
         </span>
       ))}
     </h1>
@@ -89,9 +89,9 @@ export default function SubpageHero({
               className={`mt-8 -ml-[0.04em] text-[clamp(1.9rem,3.2vw,3.5rem)] font-black leading-[1.08] tracking-[-0.03em] ${navy ? "text-[#F3F0EA]" : "text-black"}`}
               aria-label={volledigeKop}
             >
-              {headline.map((regel) => (
+              {headline.map((regel, i) => (
                 <span key={regel} className="block">
-                  {regel}
+                  {i > 0 ? " " : ""}{regel}
                 </span>
               ))}
             </h1>
@@ -227,9 +227,9 @@ export default function SubpageHero({
                 className="mt-7 -ml-[0.04em] max-w-4xl text-[clamp(1.9rem,3.2vw,3.5rem)] font-black leading-[1.08] tracking-[-0.03em] text-[#F3F0EA]"
                 aria-label={volledigeKop}
               >
-                {headline.map((regel) => (
+                {headline.map((regel, i) => (
                   <span key={regel} className="block">
-                    {regel}
+                    {i > 0 ? " " : ""}{regel}
                   </span>
                 ))}
               </h1>

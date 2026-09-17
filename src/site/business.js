@@ -1,12 +1,13 @@
-// Central place for business facts used across SEO, schema and legal pages.
-// TODO: replace every placeholder below with real data before launch.
+// Centrale bedrijfsgegevens voor SEO, structured data en de footer.
+// Alleen feiten die ook zichtbaar op de site staan. Lege velden worden
+// automatisch weggelaten uit schema en footer — vul ze pas in als ze kloppen.
 
-export const SITE_URL = "https://tvm-productions.nl";
+export const SITE_URL = "https://www.tvm-productions.nl";
 
 export const business = {
   name: "TVM Productions",
   founder: "Tygo Veerman",
-  email: "Tygo@tvm-productions.nl",
+  email: "tygo@tvm-productions.nl",
   telephone: "", // TODO: telefoonnummer toevoegen (nu nergens op de site zichtbaar)
   kvk: "", // TODO: KvK-nummer (verschijnt vanzelf in de footer zodra ingevuld)
   btw: "", // TODO: BTW-nummer, optioneel

@@ -19,7 +19,9 @@ import Footer from "./Footer";
 import { caseData } from "./SitePages.jsx";
 import ArrowSwap from "../site/ArrowSwap.jsx";
 import { videoUrl } from "../site/media.js";
-import { organizationSchema, localBusinessSchema } from "../site/schema.js";
+import { faqNode } from "../site/schema.js";
+import JsonLd from "../site/JsonLd.jsx";
+import { SITE_URL } from "../site/business.js";
 import StickyCta from "../site/StickyCta.jsx";
 import Testimonials from "../site/Testimonials.jsx";
 import { titleProps } from "../site/typography.js";
@@ -81,7 +83,7 @@ const ROUTES = [
     probleem: "Je levert goed werk, maar potentiële klanten zien onvoldoende wat jullie anders of beter maakt.",
     punten: ["Expertise zichtbaar maken", "Vertrouwen opbouwen", "Bewijs laten zien", "Meer relevante aanvragen"],
     image: sunforce,
-    alt: "Bedrijfsvideo-opname voor Sunforce",
+    alt: "Monteur van Sunforce installeert zonnepanelen op een dak",
   },
   {
     nummer: "02",
@@ -90,7 +92,7 @@ const ROUTES = [
     probleem: "Je hebt een goed bedrijf en leuk werk, maar kandidaten krijgen daar online nauwelijks iets van mee.",
     punten: ["Het echte werk laten zien", "Medewerkers aan het woord", "Cultuur voelbaar maken", "Kandidaten enthousiast maken"],
     image: kesWerk,
-    alt: "Medewerker aan het werk op een project van Kes Sloopwerk",
+    alt: "Graafmachine aan het werk op een bouwplaats van Kes Sloopwerk",
   },
   {
     nummer: "03",
@@ -100,7 +102,7 @@ const ROUTES = [
     // De vormen hieronder verwijzen naar dienstpagina's die daadwerkelijk bestaan.
     punten: ["Uitlegvideo", "Projectvideo", "Productfotografie", "Processen in beeld"],
     image: vestoProduct,
-    alt: "Productfotografie voor Vesto",
+    alt: "Elektrische bladblazer van Vesto op het gras",
   },
 ];
 
@@ -185,13 +187,6 @@ function PillButton({ children, href, yellow = false }) {
   );
 }
 
-function JsonLd({ data }) { return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />; }
-
-function FAQSchema({ items }) {
-  const schema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: items.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
-  return <JsonLd data={schema} />;
-}
-
 function BrandLogo({ compact = false }) {
   return (
     <span className={`relative block shrink-0 transition-all duration-500 ${compact ? "h-7 w-[5.2rem]" : "h-11 w-32"}`}>
@@ -217,8 +212,8 @@ export default function Homepage() {
 
   return (
     <div id="top" className="overflow-x-hidden bg-[#f4f3ee] text-[#111]">
-      <JsonLd data={organizationSchema()} />
-      <JsonLd data={localBusinessSchema()} />
+      {/* Eén JSON-LD-graaf: bedrijf, Tygo, website en de zichtbare FAQ hieronder. */}
+      <JsonLd nodes={[faqNode(faqs, `${SITE_URL}/`)]} />
       <header className={`fixed inset-x-0 top-0 z-50 px-3 transition-[padding] duration-500 sm:px-5 ${scrolled ? "pt-3 sm:pt-5" : "pt-[calc(0.75rem+20px)] sm:pt-[calc(1.25rem+20px)]"}`}>
         <div className={`mx-auto flex h-14 w-full max-w-[960px] items-center justify-between rounded-full border border-black/[0.07] bg-[#faf9f6]/80 pl-5 pr-2 backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] sm:pl-6 sm:pr-2 ${
           scrolled ? "shadow-[0_2px_14px_rgba(0,0,0,.05)]" : "shadow-[0_1px_8px_rgba(0,0,0,.03)]"
@@ -373,7 +368,7 @@ export default function Homepage() {
                 className="flex items-center gap-3 eyebrow text-[#F3F0EA]/50"
               >
                 <span className="size-2 shrink-0 rounded-full bg-[#f5ca3c]" aria-hidden="true" />
-                Strategie · Video · Content
+                Videoproductie · Fotografie · Purmerend
               </Motion.p>
 
               <Motion.h1
@@ -395,7 +390,7 @@ export default function Homepage() {
                 className="mt-7"
               >
                 <p className="t-lead text-[#F3F0EA]/70">
-                  Ik help bedrijven met videocontent die zichtbaar maakt wat ze doen, mensen overtuigt en complexe verhalen begrijpelijk maakt.
+                  Videoproductie en bedrijfsfotografie voor bedrijven in Purmerend en Noord-Holland. Beeld dat zichtbaar maakt wat je doet, mensen overtuigt en complexe verhalen begrijpelijk maakt.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
                   <PillButton href="/contact/" yellow>Bespreek je uitdaging</PillButton>
@@ -539,7 +534,7 @@ export default function Homepage() {
                       <div className="relative min-h-[20rem] overflow-hidden rounded-[16px] bg-black lg:min-h-[28rem]">
                         <img
                           src={item.image}
-                          alt={`${item.title} — ${item.type}`}
+                          alt={item.kop ?? `${item.type} voor ${item.title}`}
                           loading="lazy"
                           decoding="async"
                           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.05]"
@@ -695,7 +690,6 @@ export default function Homepage() {
             gezet, en zonder de vaste antwoordhoogte van 128px — daar viel tekst
             achter weg zodra de bodytekst groter werd. */}
         <section className="bg-white px-3 py-24 sm:px-5 sm:py-32">
-          <FAQSchema items={faqs} />
           <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
             <Reveal className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
               <div>
@@ -784,11 +778,11 @@ export default function Homepage() {
 
                 <div className="mx-auto mt-14 flex max-w-2xl flex-col items-center gap-4 border-t border-[#F3F0EA]/15 pt-8 text-lg font-bold text-[#F3F0EA]/55 sm:flex-row sm:justify-center sm:gap-10">
                   <a
-                    href="mailto:Tygo@tvm-productions.nl"
+                    href="mailto:tygo@tvm-productions.nl"
                     className="flex items-center gap-3 transition-colors hover:text-[#F3F0EA]"
                   >
                     <Mail className="size-5 shrink-0 text-[#f5ca3c]" aria-hidden="true" />
-                    Tygo@tvm-productions.nl
+                    tygo@tvm-productions.nl
                   </a>
                   <span className="flex items-center gap-3">
                     <MapPin className="size-5 shrink-0 text-[#f5ca3c]" aria-hidden="true" />

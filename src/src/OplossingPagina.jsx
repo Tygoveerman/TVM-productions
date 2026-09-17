@@ -58,7 +58,7 @@ export default function OplossingPagina({ data, slug, cases = {} }) {
         headline={data.headline}
         description={data.description}
         image={beeld?.image}
-        imageAlt={beeld ? `${beeld.title} — ${beeld.type}` : ""}
+        imageAlt={beeld ? (beeld.kop ?? `${beeld.type} voor ${beeld.title}`) : ""}
         breadcrumbs={[
           { label: "Oplossingen", href: "/oplossingen/zichtbaar-worden/" },
           { label: data.eyebrow, href: `/oplossingen/${slug}/` },
@@ -136,7 +136,7 @@ export default function OplossingPagina({ data, slug, cases = {} }) {
                     <div className="relative min-h-[18rem] overflow-hidden rounded-[16px] bg-black">
                       <img
                         src={c.image}
-                        alt={`${c.title} — ${c.type}`}
+                        alt={c.kop ?? `${c.type} voor ${c.title}`}
                         loading="lazy"
                         decoding="async"
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.05]"

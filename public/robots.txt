@@ -1,4 +1,8 @@
+# Alle publieke content mag gecrawld worden, inclusief CSS, JS en afbeeldingen.
+# Pagina's die niet in de index horen (bv. /privacy/) gebruiken een
+# noindex-metatag; ze staan bewust NIET hier in Disallow, anders kan Google
+# die tag niet lezen.
 User-agent: *
 Allow: /
 
-Sitemap: https://tvm-productions.nl/sitemap.xml
+Sitemap: https://www.tvm-productions.nl/sitemap.xml

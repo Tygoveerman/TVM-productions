@@ -1,6 +1,6 @@
 import { oplossingRoutes } from "./oplossingen.js";
-// Used only by the prerender step (scripts/prerender.mjs via src/entry-server.jsx).
-// Never imported by client code — keeps this out of the browser bundle.
+// Used only by the prerender step (scripts/prerender.mjs via src/entry-server.jsx)
+// and for document.title after hydration.
 import { serviceData, caseData, articleData } from "../src/SitePages.jsx";
 import { SITE_URL } from "./business.js";
 import fallbackImage from "../assets/portfolio/hero/tygo-camera.jpeg";
@@ -12,78 +12,83 @@ function truncate(text, max = 155) {
   return text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}…`;
 }
 
+// Bereikbaar voor bezoekers, maar niet in de index en niet in de sitemap.
+const NOINDEX = new Set(["/privacy", "/voorwaarden", "/contact/bedankt", "/videoproductie-purmerend"]);
+
+// Titel ~50–60 tekens, description ~140–160. Eén primaire intentie per pagina;
+// de dienst- en casepagina's halen hun tekst uit hun eigen data (seo-veld).
 const staticPages = {
   "/": {
-    title: "Zakelijke video & fotografie Purmerend | TVM Productions",
-    description: "Zakelijke video en fotografie die klanten oplevert. Voor bedrijven in Purmerend en regio Waterland.",
+    title: "Videoproductie & bedrijfsfotografie Purmerend | TVM Productions",
+    description: "Zakelijke video en bedrijfsfotografie vanuit Purmerend voor bedrijven in Noord-Holland. Beeld dat zichtbaar maakt wat je doet en klanten en medewerkers overtuigt.",
   },
   "/diensten": {
-    title: "Diensten — video en fotografie voor bedrijven | TVM Productions",
-    description: "Bedrijfsvideo, promotievideo, klantcasevideo, uitlegvideo, projectvideo, eventregistratie, bedrijfs- en productfotografie.",
+    title: "Diensten: video en fotografie voor bedrijven | TVM Productions",
+    description: "Alle video- en fotografiediensten van TVM Productions op een rij: bedrijfsvideo, promotievideo, klantcase, uitlegvideo, eventvideo, bedrijfs- en productfotografie.",
   },
   "/oplossingen/zichtbaar-worden": {
-    title: "Zichtbaar worden — laat zien waarom klanten voor jou kiezen | TVM Productions",
-    description: "Je levert goed werk, maar klanten zien het niet. Videocontent die je expertise, resultaten en manier van werken zichtbaar maakt.",
+    title: "Bedrijf zichtbaar maken met video en foto | TVM Productions",
+    description: "Je levert goed werk, maar klanten zien het niet. Zo maak je je bedrijf zichtbaar met video en foto die expertise, resultaat en werkwijze laten zien.",
   },
   "/oplossingen/medewerkers-aantrekken": {
-    title: "Medewerkers aantrekken met video | TVM Productions",
-    description: "Een vacature vertelt wat iemand gaat doen. Recruitmentcontent laat zien waarom iemand het bij jou zou willen doen.",
+    title: "Recruitmentvideo: medewerkers aantrekken | TVM Productions",
+    description: "Een vacature vertelt wat iemand gaat doen, niet waarom iemand bij jou wil werken. Recruitmentvideo en werken-bij content die laat zien hoe het er echt aan toegaat.",
   },
   "/oplossingen/duidelijk-uitleggen": {
-    title: "Complexe producten en processen duidelijk uitleggen | TVM Productions",
-    description: "Een klant die het niet snapt, koopt niet. Uitlegvideo en beeld dat je product, dienst of proces in één keer begrijpelijk maakt.",
+    title: "Complex product of dienst duidelijk uitleggen | TVM Productions",
+    description: "Een klant die het niet snapt, koopt niet. Zo maak je een technisch product, proces of dienst in één keer begrijpelijk met beeld, en wanneer een uitlegvideo past.",
   },
   "/hoe-ik-help": {
-    title: "Hoe ik help — meer klanten of de juiste medewerkers | TVM Productions",
-    description: "Niet beginnen bij wat we maken, maar bij wat je wilt bereiken. Videocontent om klanten te overtuigen of kandidaten aan te trekken.",
+    title: "Hoe ik help: meer klanten of juiste medewerkers | TVM Productions",
+    description: "Niet beginnen bij welke video je wilt, maar bij wat er in je bedrijf moet veranderen. Zo bepaal ik welke video of foto klanten overtuigt of kandidaten aantrekt.",
   },
   "/werkwijze": {
-    title: "Werkwijze — van kennismaking tot oplevering | TVM Productions",
-    description: "Vijf duidelijke stappen: kennismaking, concept, draaidag, montage en oplevering. Je weet vooraf wat er gebeurt.",
+    title: "Werkwijze: zo verloopt een videoproductie | TVM Productions",
+    description: "Van kennismaking tot oplevering in vijf duidelijke stappen: doel, concept, draaidag, montage en oplevering. Je weet vooraf wat er gebeurt en wat ik nodig heb.",
   },
   "/cases": {
-    title: "Cases — video- en fotoproducties uit de praktijk | TVM Productions",
-    description: "Een selectie van zakelijke video- en fotoproducties voor bedrijven in Purmerend en Noord-Holland.",
+    title: "Cases: voorbeelden van video en fotografie | TVM Productions",
+    description: "Voorbeelden van bedrijfsvideo, eventvideo, bedrijfsfotografie en productfotografie voor bedrijven in Volendam, Purmerend en de rest van Noord-Holland.",
   },
   "/over": {
-    title: "Over Tygo Veerman | TVM Productions",
-    description: "Tygo Veerman maakt vanuit Purmerend video en fotografie voor bedrijven die willen laten zien wie ze zijn.",
+    title: "Over Tygo Veerman, videograaf in Purmerend | TVM Productions",
+    description: "Tygo Veerman is videograaf en bedrijfsfotograaf in Purmerend. Met TVM Productions maakt hij video en foto voor bedrijven die willen laten zien wat ze doen.",
   },
   "/tarieven": {
-    title: "Tarieven — video en fotografie op maat | TVM Productions",
-    description: "Iedere productie krijgt een vaste prijs op basis van omvang, uitwerking en oplevering. Geen verrassingen achteraf.",
+    title: "Tarieven voor video en fotografie | TVM Productions",
+    description: "Wat bepaalt de prijs van een videoproductie of fotoshoot? Omvang, uitwerking en oplevering. Je ontvangt vooraf één vaste offerte zonder verrassingen achteraf.",
   },
   "/videoproductie-purmerend": {
-    title: "Videoproductie Purmerend | TVM Productions",
-    description: "Video en fotografie voor bedrijven in Purmerend, Waterland en omliggende plaatsen. Snel op locatie.",
+    title: "Videoproductie in Purmerend en Waterland | TVM Productions",
+    description: "Video en fotografie voor bedrijven in Purmerend, Waterland en omliggende plaatsen. Snel op locatie en bekend met de regio.",
   },
   "/kennisbank": {
-    title: "Kennisbank — praktische vragen over video en foto | TVM Productions",
-    description: "Praktische antwoorden over de kosten, voorbereiding en keuze tussen bedrijfsvideo en promotievideo.",
+    title: "Kennisbank: praktische vragen over video & foto | TVM Productions",
+    description: "Heldere antwoorden voor wie een bedrijfsvideo of fotoshoot overweegt: wat kost het, hoe bereid je een draaidag voor, bedrijfsvideo of promotievideo?",
   },
   "/veelgestelde-vragen": {
-    title: "Veelgestelde vragen | TVM Productions",
-    description: "Directe antwoorden op praktische vragen over voorbereiding, opnames, planning en oplevering.",
+    title: "Veelgestelde vragen over video en fotografie | TVM Productions",
+    description: "Directe antwoorden op praktische vragen over een videoproductie of fotoshoot: lengte, voorbereiding, medewerkers voor de camera, planning en oplevering.",
   },
   "/contact": {
-    title: "Contact | TVM Productions",
-    description: "Vertel wat je wilt maken. Meestal binnen één werkdag reactie op je aanvraag.",
+    title: "Contact: bespreek je video- of fotoproductie | TVM Productions",
+    description: "Vertel waar het bij jou vastloopt of wat je wilt maken. Je krijgt meestal binnen één werkdag reactie van Tygo Veerman, TVM Productions in Purmerend.",
   },
   "/contact/bedankt": {
     title: "Bedankt voor je aanvraag | TVM Productions",
     description: "Je aanvraag is verstuurd. Je hoort meestal binnen één werkdag van ons.",
   },
   "/particulier": {
-    title: "Video voor particulieren | TVM Productions",
-    description: "Trouwfilms en eventvideo's met aandacht voor mensen, sfeer en de kleine momenten.",
+    title: "Video voor particulieren: trouwfilm en event | TVM Productions",
+    description: "Trouwfilms en video van privé-events met aandacht voor mensen, sfeer en de kleine momenten. Gemaakt door TVM Productions vanuit Purmerend.",
   },
   "/particulier/trouwfilm": {
     title: "Trouwfilm laten maken | TVM Productions",
-    description: "Een trouwfilm die jullie dag laat voelen zoals hij was, zonder het te regisseren.",
+    description: "Een trouwfilm die jullie dag laat voelen zoals hij was: de mensen, stemmen en kleine momenten, zonder dat de dag geregisseerd wordt.",
   },
   "/particulier/event": {
-    title: "Privé-event vastleggen | TVM Productions",
-    description: "Een jubileum, feest of bijzonder moment vastgelegd zonder dat de camera opvalt.",
+    title: "Privé-event laten vastleggen op video | TVM Productions",
+    description: "Een jubileum, feest of bijzonder moment vastgelegd op video, zonder dat de camera de aandacht overneemt.",
   },
   "/privacy": {
     title: "Privacyverklaring | TVM Productions",
@@ -94,8 +99,8 @@ const staticPages = {
     description: "Praktische afspraken rond offertes, planning, gebruik en oplevering.",
   },
   "/avg-fotografie-video": {
-    title: "AVG bij fotografie en video | TVM Productions",
-    description: "Praktische aandachtspunten wanneer medewerkers, klanten of bezoekers in beeld komen.",
+    title: "AVG bij fotografie en video op de werkvloer | TVM Productions",
+    description: "Praktische aandachtspunten voor toestemming en privacy wanneer medewerkers, klanten of bezoekers herkenbaar in beeld komen bij een bedrijfsvideo of fotoshoot.",
   },
 };
 
@@ -105,38 +110,45 @@ export function getMeta(rawPath) {
   let title;
   let description;
   let image;
+  let known = true;
 
   if (path.startsWith("/diensten/") && serviceData[segments[1]]) {
     const service = serviceData[segments[1]];
-    title = `${service.title} | ${SITE_NAME}`;
-    description = truncate(service.answer || service.intro);
+    title = service.seo?.title ?? `${service.title} | ${SITE_NAME}`;
+    description = service.seo?.description ?? truncate(service.answer || service.intro);
     image = service.image;
   } else if (path.startsWith("/cases/") && caseData[segments[1]]) {
     const item = caseData[segments[1]];
-    title = `${item.title} — ${item.type} | ${SITE_NAME}`;
-    description = truncate(item.intro);
+    title = item.seo?.title ?? `${item.title} — ${item.type} | ${SITE_NAME}`;
+    description = item.seo?.description ?? truncate(item.intro);
     image = item.image;
   } else if (path.startsWith("/kennisbank/") && articleData[segments[1]]) {
     const article = articleData[segments[1]];
-    title = `${article.title} | ${SITE_NAME}`;
-    description = truncate(article.intro);
+    title = article.seo?.title ?? `${article.title} | ${SITE_NAME}`;
+    description = article.seo?.description ?? truncate(article.intro);
   } else if (staticPages[path]) {
     ({ title, description } = staticPages[path]);
   } else {
+    known = false;
     title = `Pagina niet gevonden | ${SITE_NAME}`;
     description = "Deze pagina bestaat niet (meer). Ga terug naar de homepage van TVM Productions.";
   }
 
   const canonicalPath = path === "/" ? "/" : `${path}/`;
+  const noindex = !known || NOINDEX.has(path);
 
   return {
     title,
     description,
     canonical: `${SITE_URL}${canonicalPath}`,
     image: image ? `${SITE_URL}${image}` : `${SITE_URL}${fallbackImage}`,
+    robots: noindex ? "noindex, follow" : "index, follow",
+    noindex,
   };
 }
 
+// Alle routes die geprerenderd worden (ook de noindex-pagina's: die moeten
+// gewoon bereikbaar zijn).
 export function getAllRoutes() {
   return [
     "/",
@@ -163,3 +175,10 @@ export function getAllRoutes() {
     "/avg-fotografie-video/",
   ];
 }
+
+// Alleen indexeerbare pagina's horen in de sitemap.
+export function getSitemapRoutes() {
+  return getAllRoutes().filter((route) => !getMeta(route).noindex);
+}
+
+export { SITE_URL };

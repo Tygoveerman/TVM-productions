@@ -31,7 +31,7 @@ export const oplossingen = {
     oplossing: {
       kop: "Wat ik daarvoor doe",
       inleiding:
-        "Ik maak zichtbaar waarom klanten voor jou zouden moeten kiezen — met beeld dat het werk, de mensen en het resultaat laat zien.",
+        "Ik maak je bedrijf online zichtbaar met video en fotografie die het werk, de mensen en het resultaat laten zien — zodat klanten zien waarom ze voor jou moeten kiezen.",
       items: [
         ["Klantcases", "Bestaande klanten vertellen zelf waarom ze voor je kozen en wat het opleverde.", "/diensten/klantcasevideo/"],
         ["Bedrijfsvideo", "Eén verhaal over wie je bent, wat je doet en voor wie.", "/diensten/bedrijfsvideo/"],
@@ -65,9 +65,9 @@ export const oplossingen = {
     oplossing: {
       kop: "Wat ik daarvoor doe",
       inleiding:
-        "Ik breng het echte werk, de collega's en de sfeer in beeld, zodat een kandidaat al vóór het sollicitatiegesprek weet waar hij aan begint.",
+        "Met recruitmentvideo en werken-bij content breng ik het echte werk, de collega's en de sfeer in beeld, zodat een kandidaat al vóór het sollicitatiegesprek weet waar hij aan begint.",
       items: [
-        ["Recruitmentvideo", "Laat zien hoe een werkdag er echt uitziet, op locatie en zonder script.", "/diensten/bedrijfsvideo/"],
+        ["Recruitmentvideo", "Een bedrijfsvideo met recruitment als doel: laat zien hoe een werkdag er echt uitziet, op locatie en zonder script.", "/diensten/bedrijfsvideo/"],
         ["Medewerkers aan het woord", "Collega's vertellen zelf waarom ze hier werken. Geloofwaardiger dan elke vacaturetekst.", "/diensten/klantcasevideo/"],
         ["Werken-bij content", "Korte video's die passen bij waar kandidaten je tegenkomen: social, vacaturesites, je eigen pagina.", "/diensten/promotievideo/"],
         ["Teamfotografie", "Echte foto's van echte mensen, in plaats van stockbeeld dat niemand gelooft.", "/diensten/bedrijfsfotografie/"],
@@ -99,9 +99,9 @@ export const oplossingen = {
     oplossing: {
       kop: "Wat ik daarvoor doe",
       inleiding:
-        "Ik vertaal wat je doet naar beeld dat iemand zonder voorkennis begrijpt — zodat je het niet elke keer opnieuw hoeft uit te leggen.",
+        "Ik vertaal wat je doet naar beeld dat iemand zonder voorkennis begrijpt — meestal een uitlegvideo — zodat je het niet elke keer opnieuw hoeft uit te leggen.",
       items: [
-        ["Uitlegvideo", "Eén video die je product, dienst of proces stap voor stap duidelijk maakt.", "/diensten/uitlegvideo/"],
+        ["Uitlegvideo laten maken", "Eén video die je product, dienst of proces stap voor stap duidelijk maakt. Bekijk wat een uitlegvideo kost en hoe ik hem maak.", "/diensten/uitlegvideo/"],
         ["Projectvideo", "Laat een compleet traject zien, zodat een klant begrijpt wat er allemaal bij komt kijken.", "/diensten/projectvideo/"],
         ["Productfotografie", "Beeld dat laat zien wat een product is en wat het doet.", "/diensten/productfotografie/"],
         ["Processen in beeld", "Maak zichtbaar wat er achter de schermen gebeurt, van eerste stap tot oplevering.", "/diensten/projectvideo/"],

@@ -24,7 +24,9 @@ import tygoPortrait from "../assets/portfolio/tygo-portrait.jpeg";
 import Footer from "./Footer";
 import { getMeta } from "../site/seo.js";
 import { videoUrl } from "../site/media.js";
-import { organizationSchema, localBusinessSchema, serviceSchema } from "../site/schema.js";
+import { serviceNode, faqNode } from "../site/schema.js";
+import JsonLd from "../site/JsonLd.jsx";
+import { SITE_URL } from "../site/business.js";
 import StickyCta from "../site/StickyCta.jsx";
 import ArrowSwap from "../site/ArrowSwap.jsx";
 import Breadcrumbs from "../site/Breadcrumbs.jsx";
@@ -45,17 +47,20 @@ import wines24VideoPoster from "../assets/portfolio/cases/24wines-video-poster.j
 import wines24InpakkenPoster from "../assets/portfolio/cases/24wines-inpakken-poster.jpg";
 import terLeedeVideoPoster from "../assets/portfolio/cases/ter-leede-video-poster.jpg";
 
-function selectieGallery(globResult, label) {
-  return Object.keys(globResult).sort().map((key, i) => ({ src: globResult[key], alt: `${label} — foto ${i + 1}` }));
+// `omschrijving` zegt wat de serie laat zien; per foto komt daar alleen het
+// volgnummer bij, omdat de losse beelden niet apart beschreven zijn.
+function selectieGallery(globResult, omschrijving) {
+  const keys = Object.keys(globResult).sort();
+  return keys.map((key, i) => ({ src: globResult[key], alt: `${omschrijving} (${i + 1} van ${keys.length})` }));
 }
 
-const wines24Selectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/24wines-selectie/*.jpg", { eager: true, import: "default" }), "24Wines");
-const hsbSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/hsb-selectie/*.jpg", { eager: true, import: "default" }), "HSB x FC Volendam");
-const kesSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/kes-selectie/*.jpg", { eager: true, import: "default" }), "Kes Sloopwerk");
-const bladergroenSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/bladergroen-selectie/*.jpg", { eager: true, import: "default" }), "SG WJ Bladergroen");
-const stichtingSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/stichting-selectie/*.jpg", { eager: true, import: "default" }), "Stichting voor het Kind");
-const sunforceSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/sunforce-selectie/*.jpg", { eager: true, import: "default" }), "Sunforce");
-const terLeedeSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/ter-leede-selectie/*.jpg", { eager: true, import: "default" }), "Ter Leede");
+const wines24Selectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/24wines-selectie/*.jpg", { eager: true, import: "default" }), "Bedrijfsvideo en productfotografie voor 24Wines in Volendam: winkel, assortiment en inpakproces");
+const hsbSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/hsb-selectie/*.jpg", { eager: true, import: "default" }), "Eventfotografie voor HSB x FC Volendam: presentaties, zaal en vestiging");
+const kesSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/kes-selectie/*.jpg", { eager: true, import: "default" }), "Projectfotografie voor Kes Sloopwerk: materieel, mensen en uitvoering op locatie");
+const bladergroenSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/bladergroen-selectie/*.jpg", { eager: true, import: "default" }), "Campagnefotografie voor SG WJ Bladergroen: leerlingen in de les, praktijkvakken en schoolplein");
+const stichtingSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/stichting-selectie/*.jpg", { eager: true, import: "default" }), "Fotoreportage voor Stichting voor het Kind: opnamesessie van de single in de studio");
+const sunforceSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/sunforce-selectie/*.jpg", { eager: true, import: "default" }), "Bedrijfsfotografie voor Sunforce: installatie van zonnepanelen, techniek en team");
+const terLeedeSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/ter-leede-selectie/*.jpg", { eager: true, import: "default" }), "Eventfotografie van het Business Diner van Business Club Ter Leede");
 import jaimmRuimte1 from "../assets/portfolio/cases/jaimm-gallery/ruimte-01.jpg";
 import jaimmRuimte2 from "../assets/portfolio/cases/jaimm-gallery/ruimte-02.jpg";
 import jaimmRuimte3 from "../assets/portfolio/cases/jaimm-gallery/ruimte-03.jpg";
@@ -90,8 +95,10 @@ export const serviceData = {
     title: "Bedrijfsvideo laten maken",
     short: "Bedrijfsfilm",
     label: "Je bedrijf helder in beeld",
+    seo: { title: "Bedrijfsvideo of bedrijfsfilm laten maken | TVM Productions", description: "Een bedrijfsvideo laten maken die laat zien wie je bent, wat je doet en hoe je werkt. Bedrijfsfilm of corporate video voor website, sales en recruitment." },
+    related: { oplossing: "zichtbaar-worden", diensten: ["klantcasevideo", "bedrijfsfotografie"] },
     intro: "Laat in een paar minuten zien wie je bent, wat je doet en hoe je bedrijf werkt. Een goede basis voor je website — geen wondermiddel voor meer aanvragen.",
-    answer: "Een bedrijfsvideo laat in grote lijnen zien wie je organisatie is, welke mensen er werken en hoe jullie klanten helpen. Handig als brede basis voor je website of een eerste kennismaking, maar niet de snelste weg naar meer aanvragen of sollicitanten. Heb je één concreet doel, zoals sales of recruitment? Dan werkt een video met een scherpere insteek meestal beter.",
+    answer: "Een bedrijfsvideo — ook wel bedrijfsfilm of corporate video — laat in grote lijnen zien wie je organisatie is, welke mensen er werken en hoe jullie klanten helpen. Handig als brede basis voor je website of een eerste kennismaking, maar niet de snelste weg naar meer aanvragen of sollicitanten. Heb je één concreet doel, zoals sales of recruitment? Dan werkt een video met een scherpere insteek meestal beter.",
     image: sunforce,
     situations: ["Je website vertelt nog niet goed wat je bedrijf anders maakt", "Nieuwe klanten willen eerst zien met wie ze zaken doen", "Je wilt één sterke video die op meerdere plekken werkt"],
     deliverables: ["Concept en duidelijke verhaallijn", "Opnames op locatie", "Hoofdfilm voor website en presentaties", "Korte versies voor social media", "Ondertiteling en exports per kanaal"],
@@ -101,8 +108,10 @@ export const serviceData = {
     title: "Promotievideo laten maken",
     short: "Promotievideo",
     label: "Eén aanbod. Eén duidelijke actie.",
+    seo: { title: "Promotievideo of promotiefilm laten maken | TVM Productions", description: "Een promotievideo laten maken die één product, dienst of campagne scherp neerzet en de kijker naar een concrete actie stuurt. Voor landingspagina, ads en social." },
+    related: { oplossing: "zichtbaar-worden", diensten: ["bedrijfsvideo", "productfotografie"] },
     intro: "Zet een product, dienst of campagne scherp neer met een video die snel tot de kern komt.",
-    answer: "Een promotievideo zet één product, dienst of campagne centraal en stuurt de kijker naar een concrete volgende stap. De video is kort, visueel en direct opgebouwd. Je gebruikt hem op een landingspagina, in advertenties of op social media om snel duidelijk te maken wat je aanbiedt en waarom dat relevant is.",
+    answer: "Een promotievideo of promotiefilm zet één product, dienst of campagne centraal en stuurt de kijker naar een concrete volgende stap. De video is kort, visueel en direct opgebouwd. Je gebruikt hem op een landingspagina, in advertenties of op social media om snel duidelijk te maken wat je aanbiedt en waarom dat relevant is.",
     image: vestoProduct,
     situations: ["Je introduceert een nieuw product of nieuwe dienst", "Je campagne heeft sterk beeld nodig", "Je wilt advertenties maken die direct duidelijk zijn"],
     deliverables: ["Campagneconcept", "Shotlist en productieplanning", "Hoofdvideo", "Verticale en vierkante versies", "Varianten voor advertenties"],
@@ -112,8 +121,10 @@ export const serviceData = {
     title: "Klantcasevideo laten maken",
     short: "Klantcasevideo",
     label: "Laat klanten het bewijs leveren",
+    seo: { title: "Testimonial video & klantcase video laten maken | TVM Productions", description: "Een klantcasevideo of testimonial video waarin een echte klant vertelt over de samenwerking en het resultaat. Geloofwaardig bewijs voor website en sales." },
+    related: { oplossing: "zichtbaar-worden", diensten: ["bedrijfsvideo", "projectvideo"] },
     intro: "Een tevreden klant vertelt geloofwaardiger waarom jouw aanpak werkt dan welke verkooppagina ook.",
-    answer: "In een klantcasevideo vertelt een echte klant over de beginsituatie, jullie samenwerking en de uiteindelijke uitkomst. Daardoor wordt je belofte concreet en geloofwaardig. Je gebruikt de video op je website, LinkedIn of in salesgesprekken om twijfelaars te laten zien hoe jouw aanpak in de praktijk werkt.",
+    answer: "In een klantcasevideo (testimonial video of referentievideo) vertelt een echte klant over de beginsituatie, jullie samenwerking en de uiteindelijke uitkomst. Daardoor wordt je belofte concreet en geloofwaardig. Je gebruikt de video op je website, LinkedIn of in salesgesprekken om twijfelaars te laten zien hoe jouw aanpak in de praktijk werkt.",
     image: behindTheScenes,
     situations: ["Klanten vragen vaak om voorbeelden", "Je wilt je aanpak bewijzen zonder zelf harder te roepen", "Je hebt een samenwerking waar een goed verhaal in zit"],
     deliverables: ["Voorinterview met klant", "Interview en sfeerbeelden", "Volledige casevideo", "Korte quotevideo's", "Ondertiteling voor gebruik zonder geluid"],
@@ -123,8 +134,10 @@ export const serviceData = {
     title: "Uitlegvideo laten maken",
     short: "Uitlegvideo",
     label: "Maak een ingewikkeld verhaal simpel",
+    seo: { title: "Uitlegvideo of explainer video laten maken | TVM Productions", description: "Een uitlegvideo laten maken die een product, proces of dienst in één keer begrijpelijk maakt. Explainer of instructievideo met praktijkbeeld, voice-over of demo." },
+    related: { oplossing: "duidelijk-uitleggen", diensten: ["projectvideo", "productfotografie"] },
     intro: "Leg een proces, product of dienst uit zonder dat mensen afhaken in lange tekst.",
-    answer: "Een uitlegvideo brengt een ingewikkeld product, proces of dienst terug tot een logische en visuele lijn. Met praktijkbeeld, demonstratie, tekst of voice-over ziet de kijker snel hoe iets werkt. Dat maakt uitlegvideo’s geschikt voor onder meer zorg, techniek, software en zakelijke dienstverlening.",
+    answer: "Een uitlegvideo (explainer video of instructievideo) brengt een ingewikkeld product, proces of dienst terug tot een logische en visuele lijn. Met praktijkbeeld, demonstratie, tekst of voice-over ziet de kijker snel hoe iets werkt. Dat maakt uitlegvideo’s geschikt voor onder meer zorg, techniek, software en zakelijke dienstverlening.",
     image: woonmaandInterior,
     situations: ["Je dienst kost nu te veel woorden om uit te leggen", "Klanten stellen steeds dezelfde vragen", "Sales heeft behoefte aan een duidelijke visuele uitleg"],
     deliverables: ["Inhoudelijke sessie", "Script in gewone taal", "Opnames of visuele demonstratie", "Heldere montage met titels", "Versies voor website en social"],
@@ -134,8 +147,10 @@ export const serviceData = {
     title: "Projectvideo laten maken",
     short: "Projectvideo",
     label: "Laat zien wat je bouwt en oplost",
+    seo: { title: "Projectvideo laten maken voor bouw en techniek | TVM Productions", description: "Een projectvideo of bouwvideo die uitvoering, vakmanschap en eindresultaat van een project in beeld brengt. Bewijs richting opdrachtgevers en nieuwe medewerkers." },
+    related: { oplossing: "duidelijk-uitleggen", diensten: ["bedrijfsvideo", "bedrijfsfotografie"] },
     intro: "Breng een bouwproject, installatie of technisch traject overtuigend in beeld—van uitvoering tot eindresultaat.",
-    answer: "Een projectvideo maakt zichtbaar wat normaal achter hekken, op een dak of in een werkplaats gebeurt. De video laat proces, vakmanschap en eindresultaat in samenhang zien. Daardoor kun je een uitgevoerd project gebruiken als bewijs richting nieuwe opdrachtgevers, medewerkers en andere betrokken partijen.",
+    answer: "Een projectvideo, bouwvideo of projectfilm maakt zichtbaar wat normaal achter hekken, op een dak of in een werkplaats gebeurt. De video laat proces, vakmanschap en eindresultaat in samenhang zien. Daardoor kun je een uitgevoerd project gebruiken als bewijs richting nieuwe opdrachtgevers, medewerkers en andere betrokken partijen.",
     image: kesProject,
     situations: ["Je wilt een afgerond project als case gebruiken", "De kwaliteit van je werk is lastig in woorden uit te leggen", "Je hebt beeld nodig voor opdrachtgevers en nieuwe collega's"],
     deliverables: ["Locatiescan en veiligheidsafstemming", "Opnames van mensen, proces en resultaat", "Projectfilm", "Fotoreportage als optie", "Korte social edits"],
@@ -145,8 +160,10 @@ export const serviceData = {
     title: "Eventvideo en fotografie",
     short: "Eventregistratie",
     label: "De sfeer én inhoud vastgelegd",
+    seo: { title: "Eventvideo en aftermovie laten maken | TVM Productions", description: "Eventvideo, aftermovie en eventfotografie voor zakelijke evenementen. Sfeer, sprekers en momenten vastgelegd als terugblik en promotie voor de volgende editie." },
+    related: { oplossing: "zichtbaar-worden", diensten: ["bedrijfsfotografie", "promotievideo"] },
     intro: "Gebruik je evenement langer dan één dag met een aftermovie, foto's en korte content voor de volgende editie.",
-    answer: "Eventvideo en eventfotografie leggen de sfeer, bezoekers, sprekers en belangrijkste momenten van een bijeenkomst vast. Het materiaal werkt na afloop door als terugblik, promotie voor een volgende editie en content voor interne communicatie of social media. Vooraf spreken we af welke momenten en personen zeker in beeld moeten.",
+    answer: "Eventvideo (een aftermovie) en eventfotografie leggen de sfeer, bezoekers, sprekers en belangrijkste momenten van een bijeenkomst vast. Het materiaal werkt na afloop door als terugblik, promotie voor een volgende editie en content voor interne communicatie of social media. Vooraf spreken we af welke momenten en personen zeker in beeld moeten.",
     image: terLeedeEvent,
     situations: ["Je organiseert een zakelijk event of netwerkdag", "De volgende editie moet direct goed kunnen worden gepromoot", "Je wilt foto en video door één partij laten verzorgen"],
     deliverables: ["Vooraf een helder draaiplan", "Sfeer- en inhoudelijke registratie", "Aftermovie", "Selectie nabewerkte foto's", "Korte clips voor social"],
@@ -156,8 +173,10 @@ export const serviceData = {
     title: "Bedrijfsfotografie in Purmerend",
     short: "Bedrijfsfotografie",
     label: "Een beeldbank die bij je bedrijf past",
+    seo: { title: "Bedrijfsfotografie & bedrijfsfotograaf Purmerend | TVM Productions", description: "Bedrijfsfotografie op locatie: portretten, mensen aan het werk en sfeerbeeld van je bedrijf. Zakelijke fotografie voor website, vacatures en social media." },
+    related: { oplossing: "zichtbaar-worden", diensten: ["productfotografie", "bedrijfsvideo"] },
     intro: "Geen willekeurige stockfoto's, maar echte mensen, echte locaties en werk dat herkenbaar in beeld staat.",
-    answer: "Bedrijfsfotografie levert een samenhangende serie portretten, sfeerbeelden, locaties en mensen aan het werk op. Daarmee vervang je willekeurige stockfoto’s door beeld dat echt bij je organisatie past. De foto’s zijn inzetbaar op je website, in vacatures, presentaties, drukwerk en social media.",
+    answer: "Bedrijfsfotografie (zakelijke fotografie of een bedrijfsreportage) levert een samenhangende serie portretten, sfeerbeelden, locaties en mensen aan het werk op. Daarmee vervang je willekeurige stockfoto’s door beeld dat echt bij je organisatie past. De foto’s zijn inzetbaar op je website, in vacatures, presentaties, drukwerk en social media.",
     image: tygoCamera,
     situations: ["Je website gebruikt verouderde of verschillende beeldstijlen", "Nieuwe medewerkers en klanten willen de mensen achter het bedrijf zien", "Je hebt regelmatig beeld nodig voor marketing"],
     deliverables: ["Visuele voorbereiding", "Portretten en mensen aan het werk", "Locatie- en detailbeelden", "Professionele selectie en nabewerking", "Bestanden voor web en drukwerk"],
@@ -167,8 +186,10 @@ export const serviceData = {
     title: "Productfotografie laten maken",
     short: "Productfotografie",
     label: "Laat het product in gebruik zien",
+    seo: { title: "Productfotografie voor webshop en campagne | TVM Productions", description: "Productfotografie laten maken: productfoto's in gebruik en in context voor webshop, campagne en social media. Consistente series met overzicht en details." },
+    related: { oplossing: "duidelijk-uitleggen", diensten: ["promotievideo", "bedrijfsfotografie"] },
     intro: "Van een strakke productfoto tot een complete lifestyleserie voor campagne, webshop en social media.",
-    answer: "Productfotografie laat niet alleen zien hoe een product eruitziet, maar ook waar, hoe en door wie het wordt gebruikt. Dat maakt de toepassing direct begrijpelijk. Je ontvangt een consistente serie voor webshop, campagne en social media, met overzichtsbeelden, details en uitsneden die passen bij ieder kanaal.",
+    answer: "Productfotografie laat niet alleen zien hoe een product eruitziet — productfoto's voor webshop of campagne tonen ook waar, hoe en door wie het wordt gebruikt. Dat maakt de toepassing direct begrijpelijk. Je ontvangt een consistente serie voor webshop, campagne en social media, met overzichtsbeelden, details en uitsneden die passen bij ieder kanaal.",
     image: vestoProduct,
     situations: ["Je productbeelden zijn niet consistent", "Je wilt naast webshopfoto's ook campagnebeeld", "Je product moet in een echte gebruikssituatie worden getoond"],
     deliverables: ["Moodboard en shotlist", "Product- of locatieshoot", "Detail- en gebruiksbeelden", "Selectie en nabewerking", "Uitsneden voor webshop en social"],
@@ -178,7 +199,10 @@ export const serviceData = {
 
 export const caseData = {
   sunforce: {
-    title: "Sunforce", type: "Bedrijfsvideo", image: sunforceSelectie[5]?.src ?? sunforce,
+    title: "Sunforce", type: "Bedrijfsfotografie", image: sunforceSelectie[5]?.src ?? sunforce,
+    kop: "Bedrijfsfotografie voor Sunforce",
+    dienst: "bedrijfsfotografie",
+    seo: { title: "Sunforce — bedrijfsfotografie zonnepanelen | TVM Productions", description: "Bedrijfsfotografie voor Sunforce, installateur van zonnepanelen in Noord-Holland: installatie op het dak, technische keuring en het team op kantoor." },
     intro: "Technisch werk op hoogte, in de meterkast en op kantoor vertaald naar een helder verhaal voor klanten en nieuwe medewerkers.",
     facts: { Klant: "Sunforce", Sector: "Zonne-energie & installatietechniek", Opgeleverd: "Bedrijfsfotografie", Locatie: "Noord-Holland" },
     situation: "Veel van het vakmanschap gebeurt op locatie en blijft voor klanten onzichtbaar. Van de technische keuring in de meterkast tot de installatie op het dak — en het team erachter.",
@@ -188,6 +212,9 @@ export const caseData = {
   },
   "kes-sloopwerk": {
     title: "Kes Sloopwerk", type: "Projectfotografie", image: kesSelectie[2]?.src ?? kesProject,
+    kop: "Projectfotografie voor Kes Sloopwerk",
+    dienst: "projectvideo",
+    seo: { title: "Kes Sloopwerk — projectfotografie sloopwerk | TVM Productions", description: "Projectfotografie voor Kes Sloopwerk: materieel, mensen en uitvoering van sloop- en grondwerk, vastgelegd van het eerste graafwerk tot de afronding." },
     intro: "Projectwerk vastgelegd zonder de energie en schaal van de locatie kwijt te raken.",
     facts: { Klant: "Kes Sloopwerken", Sector: "Sloop- en grondwerk", Opgeleverd: "Projectfotografie", Locatie: "Wieringenlaan" },
     situation: "Telefoonbeelden deden geen recht aan het materieel, de mensen en de uitvoering.",
@@ -195,9 +222,12 @@ export const caseData = {
     result: "Een bruikbare beeldserie voor website, projecten en online zichtbaarheid.",
     gallery: kesSelectie,
   },
-  vesto: { title: "Vesto", type: "Productfotografie", image: vestoProduct, intro: "Een productserie die het gereedschap niet alleen toont, maar in zijn omgeving laat werken.", situation: "Het product had helder en aantrekkelijk beeld nodig voor online gebruik.", made: "Productfoto's op locatie met aandacht voor vorm, materiaal en gebruik.", result: "Een frisse beeldbank voor productpagina's en campagnes." },
+  vesto: { title: "Vesto", type: "Productfotografie", image: vestoProduct, kop: "Productfotografie voor Vesto", dienst: "productfotografie", seo: { title: "Vesto — productfotografie gereedschap | TVM Productions", description: "Productfotografie voor Vesto: gereedschap gefotografeerd op locatie, in gebruik en in zijn omgeving. Een frisse beeldserie voor productpagina's en campagnes." }, intro: "Een productserie die het gereedschap niet alleen toont, maar in zijn omgeving laat werken.", situation: "Het product had helder en aantrekkelijk beeld nodig voor online gebruik.", made: "Productfoto's op locatie met aandacht voor vorm, materiaal en gebruik.", result: "Een frisse beeldbank voor productpagina's en campagnes." },
   "ter-leede": {
     title: "Ter Leede", type: "Eventreportage", image: terLeedeSelectie[5]?.src,
+    kop: "Eventvideo en fotografie voor Business Club Ter Leede",
+    dienst: "eventvideo-fotografie",
+    seo: { title: "Ter Leede — aftermovie en eventfotografie | TVM Productions", description: "Aftermovie en eventfotografie van het Business Diner van Business Club Ter Leede: ontvangst, speeches, sponsormomenten en show, voor terugblik en social media." },
     intro: "Een zakelijk diner met entertainment, sponsoractiviteiten en een feestelijke show vastgelegd van ontvangst tot late avond.",
     facts: { Klant: "Business Club Ter Leede", Sector: "Zakelijk netwerkevent", Opgeleverd: "Eventvideo + fotografie", Locatie: "De Rustende Jager" },
     situation: "De organisatie wilde de sfeer bewaren en tegelijk materiaal voor een volgende editie.",
@@ -208,6 +238,9 @@ export const caseData = {
   },
   "24wines": {
     title: "24Wines", type: "Bedrijfsvideo", image: wines24Selectie[6]?.src,
+    kop: "Bedrijfsvideo voor 24Wines in Volendam",
+    dienst: "bedrijfsvideo",
+    seo: { title: "24Wines — bedrijfsvideo in Volendam | TVM Productions", description: "Bedrijfsvideo en productfotografie voor slijterij 24Wines in Volendam: winkel, assortiment en inpakproces in beeld, zodat een online bestelling een gezicht krijgt." },
     intro: "Een slijterij vol verhalen — van het assortiment tot de laatste stap voordat een bestelling de deur uitgaat.",
     facts: { Klant: "24Wines", Sector: "Slijterij & wijnhandel", Opgeleverd: "Bedrijfsvideo + fotografie", Locatie: "Volendam" },
     situation: "24Wines wilde laten zien wat er achter een online bestelling schuilgaat: het assortiment, de sfeer in de zaak en de zorg waarmee iedere fles wordt ingepakt.",
@@ -219,6 +252,9 @@ export const caseData = {
   },
   "hsb-fc-volendam": {
     title: "HSB x FC Volendam", type: "Eventfotografie", image: hsbSelectie[1]?.src,
+    kop: "Eventfotografie voor HSB x FC Volendam",
+    dienst: "eventvideo-fotografie",
+    seo: { title: "HSB x FC Volendam — eventfotografie in Volendam | TVM Productions", description: "Eventfotografie van de bijeenkomst rond de samenwerking tussen HSB en FC Volendam, in opdracht van Qstylez: presentaties, volle zaal en de vestiging in beeld." },
     intro: "Een bedrijfsevenement vastgelegd in opdracht van Qstylez, van de volle zaal tot de vestiging zelf.",
     facts: { Klant: "HSB x FC Volendam", Sector: "Retail — in opdracht van Qstylez", Opgeleverd: "Eventfotografie", Locatie: "Volendam" },
     situation: "Voor de samenwerking tussen HSB en FC Volendam organiseerde het team een bijeenkomst voor medewerkers en relaties. Qstylez wilde de sfeer en inhoud van die dag professioneel vastleggen.",
@@ -228,6 +264,9 @@ export const caseData = {
   },
   "jaimm-pmu": {
     title: "Jaimm PMU", type: "Bedrijfsfotografie", image: jaimmBehandeling5,
+    kop: "Bedrijfsfotografie voor Jaimm PMU",
+    dienst: "bedrijfsfotografie",
+    seo: { title: "Jaimm PMU — bedrijfsfotografie PMU-praktijk | TVM Productions", description: "Bedrijfsfotografie voor Jaimm PMU, praktijk voor permanente make-up: portret, praktijkruimte en behandeling in beeld voor website, social en boekingspagina." },
     intro: "Een praktijk voor permanente make-up in beeld: de ruimte, de behandeling en de vakvrouw erachter.",
     facts: { Klant: "Jaimm PMU", Sector: "Permanente make-up", Opgeleverd: "Bedrijfsfotografie", Locatie: "Praktijk aan huis" },
     situation: "Klanten boeken een behandeling het liefst bij iemand die ze al een beetje kennen. Jaimm had beeld nodig dat vertrouwen wekt, nog vóór het eerste gesprek.",
@@ -249,7 +288,10 @@ export const caseData = {
     ],
   },
   "sg-wj-bladergroen": {
-    title: "SG WJ Bladergroen", type: "Bedrijfsfotografie", image: bladergroenSelectie[14]?.src,
+    title: "SG WJ Bladergroen", type: "Campagnefotografie", image: bladergroenSelectie[14]?.src,
+    kop: "Campagnefotografie voor SG WJ Bladergroen",
+    dienst: "bedrijfsfotografie",
+    seo: { title: "SG WJ Bladergroen — campagnefotografie school | TVM Productions", description: "Campagnefotografie voor SG WJ Bladergroen: leerlingen in de les, praktijkvakken, sport en het team achter de school, voor website en wervingsmateriaal." },
     intro: "Een doorsnede van het schoolleven bij SG WJ Bladergroen: van het klaslokaal tot het schoolplein.",
     facts: { Klant: "SG WJ Bladergroen", Sector: "Voortgezet onderwijs", Opgeleverd: "Campagnefotografie", Locatie: "Noord-Holland" },
     situation: "De school wilde laten zien hoe divers een schooldag is: praktijkvakken, toetsen, sport en het team achter de school, niet alleen het klaslokaal.",
@@ -258,7 +300,10 @@ export const caseData = {
     gallery: bladergroenSelectie,
   },
   "stichting-voor-het-kind": {
-    title: "Stichting voor het Kind", type: "Bedrijfsfotografie", image: stichtingSelectie[1]?.src,
+    title: "Stichting voor het Kind", type: "Fotoreportage", image: stichtingSelectie[1]?.src,
+    kop: "Fotoreportage voor Stichting voor het Kind",
+    dienst: "bedrijfsfotografie",
+    seo: { title: "Stichting voor het Kind — studioreportage | TVM Productions", description: "Fotoreportage van de opnamesessie van een goede-doelen-single voor Stichting voor het Kind: de zangers, de techniek en de concentratie in de studio." },
     intro: "Het ontstaan van een goede-doelen-single vastgelegd, van de studio-opnames tot de mannen achter de microfoons.",
     facts: { Klant: "Stichting voor het Kind", Sector: "Goed doel — muziekproductie", Opgeleverd: "Bedrijfsfotografie", Locatie: "Opnamestudio" },
     situation: "Voor een single ten bate van het goede doel moest het verhaal achter de opname net zo overtuigend in beeld komen als het nummer zelf.",
@@ -266,6 +311,18 @@ export const caseData = {
     result: "Beeld dat het verhaal achter de single versterkt en inzetbaar is voor promotie van de actie.",
     gallery: stichtingSelectie,
   },
+};
+
+// Wat er daadwerkelijk op het herobeeld van iedere dienstpagina te zien is.
+const serviceImageAlt = {
+  bedrijfsvideo: "Monteur van Sunforce installeert zonnepanelen op een dak",
+  promotievideo: "Elektrische bladblazer van Vesto op het gras, gefotografeerd voor de productcampagne",
+  klantcasevideo: "Camera op statief tijdens een opname op locatie in een koffiezaak",
+  uitlegvideo: "Badkamer met wastafels en spiegels, gefotografeerd voor Woonmaand",
+  projectvideo: "Graafmachine aan het werk op een bouwplaats van Kes Sloopwerk",
+  "eventvideo-fotografie": "Gasten op het terras tijdens het Business Diner van Ter Leede",
+  bedrijfsfotografie: "Tygo Veerman met camera op gimbal tijdens een opname buiten",
+  productfotografie: "Elektrische bladblazer van Vesto op het gras, gefotografeerd voor de productcampagne",
 };
 
 const servicePageDetails = {
@@ -278,7 +335,7 @@ const servicePageDetails = {
     ],
     deliverables: ["Hoofdfilm van circa 1–3 minuten", "Korte versie van 30–60 seconden", "Liggend 16:9 en verticaal 9:16", "Ondertiteling voor gebruik zonder geluid", "Twee gebundelde feedbackrondes"],
     process: [["Doel en verhaal", "We bepalen wat iemand na het kijken moet begrijpen en doen."], ["Voorbereiding", "Ik maak de verhaallijn, planning, interviewvragen en shotlist."], ["Draaidag", "Interviews en werksituaties worden efficiënt op locatie vastgelegd."], ["Montage en oplevering", "Je ontvangt een eerste versie, geeft feedback en krijgt alle afgesproken formaten."]],
-    proof: { client: "Sunforce", type: "Bedrijfsvideo", image: sunforce, challenge: "Technisch werk op hoogte bleef voor klanten grotendeels onzichtbaar.", made: "Een film met medewerkers, installatiebeelden en duidelijke uitleg.", result: "Eén verhaal dat inzetbaar is op website, in sales en op social media.", href: "/cases/sunforce/" },
+    proof: { client: "24Wines", type: "Bedrijfsvideo", image: wines24Selectie[6]?.src, challenge: "Een webshop voelt anoniem. Klanten zien niet wie erachter zit.", made: "Een bedrijfsvideo in de zaak, aangevuld met productfotografie en het inpakproces in beeld.", result: "Beeld dat vertrouwen wekt en 24Wines onderscheidt van een anonieme webshop.", href: "/cases/24wines/" },
     alternatives: {
       label: "Eerst het doel, dan de vorm",
       title: "EEN BEDRIJFSVIDEO IS NIET VOOR ELK DOEL DE BESTE KEUZE.",
@@ -344,8 +401,8 @@ const servicePageDetails = {
 
 const serviceWork = {
   bedrijfsvideo: [
-    { title: "Sunforce", type: "Bedrijfsvideo", image: sunforce, href: "/cases/sunforce/" },
     { title: "24Wines", type: "Bedrijfsvideo", image: wines24Selectie[6]?.src, href: "/cases/24wines/" },
+    { title: "Sunforce", type: "Bedrijfsfotografie", image: sunforce, href: "/cases/sunforce/" },
     { title: "Van Baarsen Vastgoed", type: "Presentatievideo", image: daanVastgoed },
   ],
   promotievideo: [
@@ -386,9 +443,9 @@ const serviceWork = {
 };
 
 export const articleData = {
-  "wat-kost-een-bedrijfsvideo": { title: "Wat kost een bedrijfsvideo?", label: "Kosten & voorbereiding", intro: "De prijs wordt vooral bepaald door voorbereiding, draaidagen, crew en het aantal eindversies.", sections: [["Waar betaal je voor?", "Niet alleen voor de uren met een camera. Concept, planning, montage, feedback en exports bepalen samen de productie."], ["Begin bij het doel", "Een duidelijke vraag voorkomt dat je te veel maakt. Soms is één sterke video genoeg; soms leveren meerdere korte versies meer op."], ["Hoe krijg je een goede prijsindicatie?", "Beschrijf doelgroep, gebruik, deadline, locaties en gewenste formaten. Daarmee kan een voorstel veel scherper worden."]] },
-  "voorbereiden-op-videoshoot": { title: "Hoe bereid je een videoshoot voor?", label: "Praktische gids", intro: "Een goede draaidag voelt rustig omdat de belangrijke keuzes al eerder zijn gemaakt.", sections: [["Bepaal één hoofdboodschap", "Schrijf op wat iemand na het kijken moet begrijpen. Alles wat daar niet aan bijdraagt kan uit de productie."], ["Maak de locatie klaar", "Let op geluid, licht, logo's, persoonlijke gegevens en spullen die niet in beeld mogen."], ["Bereid mensen praktisch voor", "Geef kledingadvies en gespreksonderwerpen, maar laat mensen geen complete teksten uit het hoofd leren."]] },
-  "bedrijfsvideo-of-promotievideo": { title: "Bedrijfsvideo of promotievideo?", label: "Welke vorm past?", intro: "Een bedrijfsvideo verkoopt het vertrouwen in je organisatie. Een promotievideo verkoopt één concreet aanbod.", sections: [["Kies een bedrijfsvideo als…", "je wilt uitleggen wie je bent, hoe je werkt en waarom mensen voor je kiezen."], ["Kies een promotievideo als…", "je één product, actie of campagne snel en overtuigend onder de aandacht wilt brengen."], ["Kun je ze combineren?", "Ja, maar alleen als de hoofdboodschap helder blijft. Vaak is het slimmer om vanuit één draaidag meerdere gerichte video's te maken."]] },
+  "wat-kost-een-bedrijfsvideo": { title: "Wat kost een bedrijfsvideo?", label: "Kosten & voorbereiding", seo: { title: "Wat kost een bedrijfsvideo? | TVM Productions", description: "Wat kost een bedrijfsvideo laten maken? De prijs hangt af van voorbereiding, draaidagen, crew en het aantal versies. Zo krijg je een scherpe prijsindicatie." }, intro: "De prijs wordt vooral bepaald door voorbereiding, draaidagen, crew en het aantal eindversies.", sections: [["Waar betaal je voor?", "Niet alleen voor de uren met een camera. Concept, planning, montage, feedback en exports bepalen samen de productie."], ["Begin bij het doel", "Een duidelijke vraag voorkomt dat je te veel maakt. Soms is één sterke video genoeg; soms leveren meerdere korte versies meer op."], ["Hoe krijg je een goede prijsindicatie?", "Beschrijf doelgroep, gebruik, deadline, locaties en gewenste formaten. Daarmee kan een voorstel veel scherper worden."]] },
+  "voorbereiden-op-videoshoot": { title: "Hoe bereid je een videoshoot voor?", label: "Praktische gids", seo: { title: "Hoe bereid je een videoshoot voor? | TVM Productions", description: "Een goede draaidag begint bij de voorbereiding: één hoofdboodschap, een locatie die klaar is en mensen die weten wat ze kunnen verwachten. Praktische tips." }, intro: "Een goede draaidag voelt rustig omdat de belangrijke keuzes al eerder zijn gemaakt.", sections: [["Bepaal één hoofdboodschap", "Schrijf op wat iemand na het kijken moet begrijpen. Alles wat daar niet aan bijdraagt kan uit de productie."], ["Maak de locatie klaar", "Let op geluid, licht, logo's, persoonlijke gegevens en spullen die niet in beeld mogen."], ["Bereid mensen praktisch voor", "Geef kledingadvies en gespreksonderwerpen, maar laat mensen geen complete teksten uit het hoofd leren."]] },
+  "bedrijfsvideo-of-promotievideo": { title: "Bedrijfsvideo of promotievideo?", label: "Welke vorm past?", seo: { title: "Bedrijfsvideo of promotievideo: wat past? | TVM Productions", description: "Een bedrijfsvideo verkoopt vertrouwen in je organisatie, een promotievideo verkoopt één concreet aanbod. Zo kies je de vorm die past bij je doel." }, intro: "Een bedrijfsvideo verkoopt het vertrouwen in je organisatie. Een promotievideo verkoopt één concreet aanbod.", sections: [["Kies een bedrijfsvideo als…", "je wilt uitleggen wie je bent, hoe je werkt en waarom mensen voor je kiezen."], ["Kies een promotievideo als…", "je één product, actie of campagne snel en overtuigend onder de aandacht wilt brengen."], ["Kun je ze combineren?", "Ja, maar alleen als de hoofdboodschap helder blijft. Vaak is het slimmer om vanuit één draaidag meerdere gerichte video's te maken."]] },
 };
 
 function Reveal({ children, className = "", delay = 0 }) {
@@ -419,7 +476,9 @@ function Header() {
   </header>;
 }
 
-function Layout({ children }) { return <div id="top" className="min-h-screen bg-[#f4f3ee] text-[#111]"><SiteSchema /><Header /><main>{children}</main><Footer /><StickyCta /></div>; }
+// `schema`: extra JSON-LD nodes voor deze pagina (Service, FAQPage); de
+// basisentiteiten (bedrijf, Tygo, website) zitten er altijd in.
+function Layout({ children, schema = [] }) { return <div id="top" className="min-h-screen bg-[#f4f3ee] text-[#111]"><JsonLd nodes={schema} /><Header /><main>{children}</main><Footer /><StickyCta /></div>; }
 
 function PageHero({ label, title, intro, image, imageAlt = "", compact = false, breadcrumbs }) {
   return <section className="px-3 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-36">{breadcrumbs && <div className="mx-auto mb-10 max-w-[1440px]"><Breadcrumbs items={breadcrumbs} /></div>}<div className={`mx-auto grid max-w-[1440px] gap-10 ${image ? "lg:grid-cols-[1.05fr_.95fr] lg:items-center" : ""}`}><Motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5, ease: [0.22, 1, 0.36, 1] }} className={image ? "" : "max-w-5xl"}><p className="eyebrow text-black/40">{label}</p><h1 {...titleProps(title, image || compact ? "section" : "hero", "mt-6")}>{title}</h1><p className="mt-7 t-lead text-black/55">{intro}</p><div className="mt-8"><Action>Plan een kennismaking</Action></div></Motion.div>{image && <Motion.div initial={{ opacity: 0, scale: .98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .55, delay: .06, ease: [0.22, 1, 0.36, 1] }}><div className="relative min-h-[30rem] overflow-hidden rounded-[2rem] sm:min-h-[40rem] sm:rounded-[3rem]"><img src={image} alt={imageAlt} className="absolute inset-0 h-full w-full object-cover" /></div></Motion.div>}</div></section>;
@@ -436,22 +495,13 @@ function Accordion({ items }) {
   return <div className="border-t border-black/15">{items.map(([q, a], index) => { const active = open === index; return <div key={q} className="border-b border-black/15"><button onClick={() => setOpen(active ? null : index)} className="flex w-full items-center justify-between gap-4 py-6 text-left"><h2 {...titleProps(q, "card")}>{q}</h2><Motion.span animate={{ rotate: active ? 180 : 0, backgroundColor: active ? "#f5ca3c" : "rgba(0,0,0,0)" }} className="grid size-11 shrink-0 place-items-center rounded-full border border-black/15"><ChevronDown className="size-4" /></Motion.span></button><Motion.div initial={false} animate={{ height: active ? "auto" : 0, opacity: active ? 1 : 0 }} className="overflow-hidden"><p className="max-w-3xl pb-7 pr-12 leading-relaxed text-black/50 t-body">{a}</p></Motion.div></div>; })}</div>;
 }
 
-function FAQSchema({ items }) {
-  const schema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: items.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
-}
-
-function JsonLd({ data }) { return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />; }
-
-function SiteSchema() { return <><JsonLd data={organizationSchema()} /><JsonLd data={localBusinessSchema()} /></>; }
-
 
 function WorkSelection({ work }) {
-  return <section className="px-3 py-16 sm:px-6 sm:py-24"><div className="mx-auto max-w-[1440px]"><Reveal className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow text-black/40">Gemaakt voor echte bedrijven</p><h2 {...titleProps("EEN SELECTIE UIT MIJN WERK.", "section", "mt-6")}>EEN SELECTIE UIT MIJN WERK.</h2></div><a href="/cases/" className="inline-flex shrink-0 items-center gap-2 font-black">Bekijk alle cases <ArrowUpRight className="size-4" /></a></Reveal><div className="grid gap-3 lg:grid-cols-12">{work.map((item, i) => { const card = <><img src={item.image} alt={`${item.title} — ${item.type}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" /><div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/0 to-black/0" /><div className="absolute inset-x-0 bottom-0 p-7 text-white sm:p-9"><p className="eyebrow text-white/60">{item.type}</p><h3 {...titleProps(item.title, "card", "mt-2")}>{item.title}</h3></div></>; const className = `group relative block h-full overflow-hidden rounded-[2rem] ${i === 0 ? "min-h-[32rem] lg:min-h-[43rem]" : "min-h-[24rem] lg:min-h-[21rem]"}`; return <Reveal key={`${item.title}-${item.type}`} delay={i * .05} className={i === 0 ? "lg:col-span-7 lg:row-span-2" : "lg:col-span-5"}>{item.href ? <a href={item.href} className={className}>{card}</a> : <div className={className}>{card}</div>}</Reveal>; })}</div></div></section>;
+  return <section className="px-3 py-16 sm:px-6 sm:py-24"><div className="mx-auto max-w-[1440px]"><Reveal className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow text-black/40">Gemaakt voor echte bedrijven</p><h2 {...titleProps("EEN SELECTIE UIT MIJN WERK.", "section", "mt-6")}>EEN SELECTIE UIT MIJN WERK.</h2></div><a href="/cases/" className="inline-flex shrink-0 items-center gap-2 font-black">Bekijk alle cases <ArrowUpRight className="size-4" /></a></Reveal><div className="grid gap-3 lg:grid-cols-12">{work.map((item, i) => { const card = <><img src={item.image} alt={`${item.type} voor ${item.title}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" /><div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/0 to-black/0" /><div className="absolute inset-x-0 bottom-0 p-7 text-white sm:p-9"><p className="eyebrow text-white/60">{item.type}</p><h3 {...titleProps(item.title, "card", "mt-2")}>{item.title}</h3></div></>; const className = `group relative block h-full overflow-hidden rounded-[2rem] ${i === 0 ? "min-h-[32rem] lg:min-h-[43rem]" : "min-h-[24rem] lg:min-h-[21rem]"}`; return <Reveal key={`${item.title}-${item.type}`} delay={i * .05} className={i === 0 ? "lg:col-span-7 lg:row-span-2" : "lg:col-span-5"}>{item.href ? <a href={item.href} className={className}>{card}</a> : <div className={className}>{card}</div>}</Reveal>; })}</div></div></section>;
 }
 
 function ServicesHub() {
-  return <Layout><PageHero label="Diensten" title="WAT WIL JE LATEN ZIEN?" intro="Kies niet eerst een videovorm. Begin bij wat je klant, medewerker of opdrachtgever na het kijken moet begrijpen." image={behindTheScenes} /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-[1440px]"><SectionTitle label="Alle diensten" title="BEELD VOOR IEDER ZAKELIJK DOEL." /><div className="grid gap-3 md:grid-cols-2">{Object.entries(serviceData).map(([slug, service], index) => <Reveal key={slug} delay={(index % 2) * .05}><a href={`/diensten/${slug}/`} className="group block h-full overflow-hidden rounded-[2rem] border border-black/10 bg-[#f4f3ee] sm:rounded-[2.5rem]"><div className="relative h-72 overflow-hidden"><img src={service.image} alt={service.short} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /><span className="absolute left-6 top-6 rounded-full bg-white/90 px-4 py-2 text-sm font-black backdrop-blur">{String(index + 1).padStart(2, "0")}</span></div><div className="flex items-end justify-between gap-5 p-7 sm:p-9"><div><h2 {...titleProps(service.short, "card")}>{service.short}</h2><p className="mt-3 max-w-xl text-black/50 t-body">{service.intro}</p></div><span className="grid size-12 shrink-0 place-items-center rounded-full bg-black text-white"><ArrowUpRight /></span></div></a></Reveal>)}</div></div></section><CTA /></Layout>;
+  return <Layout><PageHero label="Diensten — video en fotografie voor bedrijven" title="WAT WIL JE LATEN ZIEN?" intro="Kies niet eerst een videovorm. Begin bij wat je klant, medewerker of opdrachtgever na het kijken moet begrijpen. Van bedrijfsvideo tot productfotografie: hieronder staat wat ik maak en wanneer dat past." image={behindTheScenes} imageAlt="Camera op statief tijdens een opname op locatie in een koffiezaak" /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-[1440px]"><SectionTitle label="Alle diensten" title="BEELD VOOR IEDER ZAKELIJK DOEL." /><div className="grid gap-3 md:grid-cols-2">{Object.entries(serviceData).map(([slug, service], index) => <Reveal key={slug} delay={(index % 2) * .05}><a href={`/diensten/${slug}/`} className="group block h-full overflow-hidden rounded-[2rem] border border-black/10 bg-[#f4f3ee] sm:rounded-[2.5rem]"><div className="relative h-72 overflow-hidden"><img src={service.image} alt={serviceImageAlt[slug] ?? ""} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /><span className="absolute left-6 top-6 rounded-full bg-white/90 px-4 py-2 text-sm font-black backdrop-blur">{String(index + 1).padStart(2, "0")}</span></div><div className="flex items-end justify-between gap-5 p-7 sm:p-9"><div><h2 {...titleProps(service.short, "card")}>{service.short}</h2><p className="mt-3 max-w-xl text-black/50 t-body">{service.intro}</p></div><span className="grid size-12 shrink-0 place-items-center rounded-full bg-black text-white"><ArrowUpRight /></span></div></a></Reveal>)}</div></div></section><CTA /></Layout>;
 }
 
 function ServicePage({ service, slug }) {
@@ -464,12 +514,17 @@ function ServicePage({ service, slug }) {
   ];
   const proof = detail.proof;
   const work = serviceWork[slug];
-  return <Layout>
-    <FAQSchema items={faqs} />
-    <JsonLd data={serviceSchema(service, slug)} />
-    <PageHero label={service.label} title={service.title.toUpperCase()} intro={service.intro} image={service.image} imageAlt={`${service.title} door TVM Productions`} compact breadcrumbs={[{ label: "Diensten", href: "/diensten/" }, { label: service.short, href: `/diensten/${slug}/` }]} />
+  const pageUrl = `${SITE_URL}/diensten/${slug}/`;
+  // Verwante pagina's: de oplossing waar deze dienst bij hoort en twee
+  // aangrenzende diensten. Zo is iedere dienst vanuit zijn buren bereikbaar.
+  const related = [
+    ...(service.related?.oplossing && oplossingen[service.related.oplossing] ? [[oplossingen[service.related.oplossing].eyebrow, `/oplossingen/${service.related.oplossing}/`]] : []),
+    ...(service.related?.diensten ?? []).filter((s) => serviceData[s]).map((s) => [serviceData[s].short, `/diensten/${s}/`]),
+  ];
+  return <Layout schema={[serviceNode(service, slug, { price: detail.price }), faqNode(faqs, pageUrl)]}>
+    <PageHero label={service.label} title={service.title.toUpperCase()} intro={service.intro} image={service.image} imageAlt={serviceImageAlt[slug] ?? ""} compact breadcrumbs={[{ label: "Diensten", href: "/diensten/" }, { label: service.short, href: `/diensten/${slug}/` }]} />
 
-    <section className="relative z-10 -mt-4 px-3 pb-20 sm:px-6 sm:pb-28"><Reveal className="mx-auto max-w-6xl rounded-[2rem] bg-white p-7 shadow-[0_18px_60px_rgba(17,17,17,.05)] sm:p-12"><div className="grid gap-6 lg:grid-cols-[.3fr_1.7fr]"><p className="eyebrow text-black/40">Kort gezegd</p><p className="text-2xl font-semibold leading-snug tracking-[-.03em] sm:text-4xl">{service.answer}</p></div></Reveal></section>
+    <section className="relative z-10 -mt-4 px-3 pb-20 sm:px-6 sm:pb-28"><Reveal className="mx-auto max-w-6xl rounded-[2rem] bg-white p-7 shadow-[0_18px_60px_rgba(17,17,17,.05)] sm:p-12"><div className="grid gap-6 lg:grid-cols-[.3fr_1.7fr]"><p className="eyebrow text-black/40">Kort gezegd</p><div><p className="text-2xl font-semibold leading-snug tracking-[-.03em] sm:text-4xl">{service.answer}</p>{related.length > 0 && <p className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm font-semibold text-black/45"><span>Lees ook:</span>{related.map(([label, href], i) => <span key={href} className="flex items-center gap-2">{i > 0 && <span aria-hidden="true">·</span>}<a href={href} className="text-black/70 underline decoration-black/20 underline-offset-4 transition-colors hover:text-black hover:decoration-black">{label}</a></span>)}</p>}</div></div></Reveal></section>
 
     <WorkSelection work={work} />
 
@@ -479,7 +534,7 @@ function ServicePage({ service, slug }) {
 
     <section className="px-3 py-20 sm:px-6 sm:py-28"><div className="mx-auto max-w-[1440px]"><Reveal className="mb-12 grid gap-7 lg:grid-cols-[1.15fr_.85fr] lg:items-end"><div><p className="eyebrow text-black/40">Zo werken we samen</p><h2 {...titleProps("DUIDELIJK VANAF HET EERSTE GESPREK.", "section", "mt-6")}>DUIDELIJK VANAF HET EERSTE GESPREK.</h2></div><p className="max-w-xl t-body text-black/50 lg:justify-self-end">Je weet wat er gebeurt, wat ik van jou nodig heb en wanneer alles klaarstaat.</p></Reveal><Reveal className="grid gap-3 rounded-[2.5rem] bg-white p-4 sm:p-6 lg:grid-cols-2">{detail.process.map(([title, text], i) => <div key={title} className="grid gap-5 rounded-[1.75rem] bg-[#f4f3ee] p-6 sm:grid-cols-[auto_1fr] sm:p-7"><span className="text-sm font-black text-black/30">0{i + 1}</span><div><h3 {...titleProps(title, "card")}>{title}</h3><p className="mt-3 leading-relaxed text-black/50 t-body">{text}</p></div></div>)}</Reveal></div></section>
 
-    <section className="px-3 py-20 sm:px-6 sm:py-28"><div className="mx-auto grid max-w-[1440px] gap-4 lg:grid-cols-[1.05fr_.95fr] lg:items-stretch"><Reveal><div className="relative min-h-[34rem] h-full overflow-hidden rounded-[2.5rem]"><img src={proof.image} alt={`${proof.type} — ${proof.client}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" /></div></Reveal><Reveal delay={.06} className="flex flex-col justify-between rounded-[2.5rem] bg-white p-8 sm:p-11"><div className="flex items-start justify-between gap-5"><div><p className="eyebrow text-black/40">{proof.href ? "Uitgelicht werk" : "Voorbeeld van de aanpak"}</p><h2 {...titleProps(proof.client, "section", "mt-5")}>{proof.client}</h2><p className="mt-2 eyebrow text-[#9c7900]">{proof.type}</p></div>{proof.href && <a href={proof.href} aria-label="Bekijk de volledige case" className="grid size-12 shrink-0 place-items-center rounded-full bg-black text-white"><ArrowUpRight className="size-5" /></a>}</div><div className="mt-12 grid gap-8"><div><strong className="eyebrow text-black/35">De vraag</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.challenge}</p></div><div><strong className="eyebrow text-black/35">Wat ik maakte</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.made}</p></div><div><strong className="eyebrow text-black/35">Het resultaat</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.result}</p></div></div></Reveal></div></section>
+    <section className="px-3 py-20 sm:px-6 sm:py-28"><div className="mx-auto grid max-w-[1440px] gap-4 lg:grid-cols-[1.05fr_.95fr] lg:items-stretch"><Reveal><div className="relative min-h-[34rem] h-full overflow-hidden rounded-[2.5rem]"><img src={proof.image} alt={`${proof.type} voor ${proof.client}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" /></div></Reveal><Reveal delay={.06} className="flex flex-col justify-between rounded-[2.5rem] bg-white p-8 sm:p-11"><div className="flex items-start justify-between gap-5"><div><p className="eyebrow text-black/40">{proof.href ? "Uitgelicht werk" : "Voorbeeld van de aanpak"}</p><h2 {...titleProps(proof.client, "section", "mt-5")}>{proof.client}</h2><p className="mt-2 eyebrow text-[#9c7900]">{proof.type}</p></div>{proof.href && <a href={proof.href} aria-label="Bekijk de volledige case" className="grid size-12 shrink-0 place-items-center rounded-full bg-black text-white"><ArrowUpRight className="size-5" /></a>}</div><div className="mt-12 grid gap-8"><div><strong className="eyebrow text-black/35">De vraag</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.challenge}</p></div><div><strong className="eyebrow text-black/35">Wat ik maakte</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.made}</p></div><div><strong className="eyebrow text-black/35">Het resultaat</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.result}</p></div></div></Reveal></div></section>
 
     <section className="px-3 py-20 sm:px-6 sm:py-28"><Reveal className="mx-auto max-w-6xl rounded-[2.5rem] bg-white p-7 sm:p-10"><div className="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-end"><div><p className="eyebrow text-black/40">Investering</p><h2 {...titleProps("EEN PRIJS DIE PAST BIJ HET PLAN.", "section", "mt-5")}>EEN PRIJS DIE PAST BIJ HET PLAN.</h2></div><p className="max-w-2xl t-body text-black/55">Iedere productie wordt afgestemd op het doel, de draaidag en waar je het materiaal wilt gebruiken. Na een korte kennismaking ontvang je een helder voorstel met één vaste prijs.</p></div><div className="mt-10 flex flex-col gap-5 rounded-[1.75rem] bg-[#f4f3ee] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"><div><p className="eyebrow text-black/35">Indicatieve investering</p><p className="mt-2 text-2xl font-black tracking-[-.035em] sm:text-3xl">{detail.price}</p></div><a href="/contact/" className="inline-flex w-fit items-center gap-3 rounded-full bg-black py-2 pl-5 pr-2 font-black text-white">Bespreek je productie <span className="grid size-10 place-items-center rounded-full bg-[#f5ca3c] text-black"><ArrowUpRight className="size-5" /></span></a></div></Reveal></section>
 
@@ -492,10 +547,10 @@ function ServicePage({ service, slug }) {
 
 function ProcessPage() {
   const process = [["01", "Kennismaking", "We bespreken doel, doelgroep, gebruik en deadline."], ["02", "Concept", "Ik maak de verhaallijn, shotlist en een duidelijke planning."], ["03", "Draaidag", "We leggen gericht vast wat nodig is, zonder onnodige chaos."], ["04", "Montage", "Je ontvangt een eerste versie en geeft gericht feedback."], ["05", "Oplevering", "Alle afgesproken formaten staan klaar voor website, social en presentatie."]];
-  return <Layout><PageHero label="Werkwijze" title="ZO KOMEN WE TOT GOED BEELD." intro="Je weet vooraf wat er gebeurt, wat ik van jou nodig heb en wanneer alles klaarstaat." image={behindTheScenes} compact /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-[1440px]"><SectionTitle label="Het proces" title="VIJF DUIDELIJKE STAPPEN." /><div className="border-t border-black/15">{process.map(([n, t, d]) => <Reveal key={n}><div className="grid gap-4 border-b border-black/15 py-8 md:grid-cols-[.2fr_.6fr_1.2fr] md:items-center"><span className="text-sm font-black text-black/30">{n}</span><h2 {...titleProps(t, "card")}>{t}</h2><p className="max-w-2xl text-black/50 t-body">{d}</p></div></Reveal>)}</div></div></section><CTA /></Layout>;
+  return <Layout><PageHero label="Werkwijze" title="ZO KOMEN WE TOT GOED BEELD." intro="Zo verloopt een videoproductie of fotoshoot bij TVM Productions: je weet vooraf wat er gebeurt, wat ik van jou nodig heb en wanneer alles klaarstaat." image={behindTheScenes} imageAlt="Camera op statief tijdens een opname op locatie in een koffiezaak" compact /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-[1440px]"><SectionTitle label="Het proces" title="VIJF DUIDELIJKE STAPPEN." /><div className="border-t border-black/15">{process.map(([n, t, d]) => <Reveal key={n}><div className="grid gap-4 border-b border-black/15 py-8 md:grid-cols-[.2fr_.6fr_1.2fr] md:items-center"><span className="text-sm font-black text-black/30">{n}</span><h2 {...titleProps(t, "card")}>{t}</h2><p className="max-w-2xl text-black/50 t-body">{d}</p></div></Reveal>)}</div></div></section><CTA /></Layout>;
 }
 
-function CasesHub() { return <Layout><PageHero label="Cases" title="WERK DAT VOOR ZICHZELF SPREEKT." intro="Een selectie van zakelijke producties, fotografie en projecten uit de praktijk." /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto grid max-w-[1440px] gap-3 md:grid-cols-2">{Object.entries(caseData).map(([slug, item], i) => <Reveal key={slug} delay={(i % 2) * .05}><a href={`/cases/${slug}/`} className="group relative block min-h-[34rem] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]"><img src={item.image} alt={`${item.title} — ${item.type}`} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" /><div className="absolute inset-x-0 bottom-0 p-8 text-white"><p className="eyebrow text-white/60">{item.type}</p><h2 {...titleProps(item.title, "card", "mt-2")}>{item.title}</h2>{item.result && <p className="mt-4 max-w-lg border-l-2 border-[#f5ca3c] pl-4 text-lg leading-snug text-white/85">{item.result}</p>}</div></a></Reveal>)}</div></section><CTA /></Layout>; }
+function CasesHub() { return <Layout><PageHero label="Cases" title="WERK DAT VOOR ZICHZELF SPREEKT." intro="Voorbeelden van bedrijfsvideo, eventvideo, bedrijfsfotografie en productfotografie die ik maakte voor bedrijven in Volendam, Purmerend en de rest van Noord-Holland." /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto grid max-w-[1440px] gap-3 md:grid-cols-2">{Object.entries(caseData).map(([slug, item], i) => <Reveal key={slug} delay={(i % 2) * .05}><a href={`/cases/${slug}/`} className="group relative block min-h-[34rem] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]"><img src={item.image} alt={item.kop ?? `${item.type} voor ${item.title}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" /><div className="absolute inset-x-0 bottom-0 p-8 text-white"><p className="eyebrow text-white/60">{item.type}</p><h2 {...titleProps(item.title, "card", "mt-2")}>{item.title}</h2>{item.result && <p className="mt-4 max-w-lg border-l-2 border-[#f5ca3c] pl-4 text-lg leading-snug text-white/85">{item.result}</p>}</div></a></Reveal>)}</div></section><CTA /></Layout>; }
 
 function CaseFacts({ facts }) {
   return <section className="relative z-10 -mt-4 px-3 pb-4 sm:px-6"><Reveal className="mx-auto max-w-[1440px] rounded-[2rem] bg-white p-6 shadow-[0_18px_60px_rgba(17,17,17,.05)] sm:rounded-[2.5rem] sm:p-9"><div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{Object.entries(facts).map(([label, value]) => <div key={label}><p className="eyebrow text-black/35">{label}</p><p className="mt-2 text-xl font-black tracking-[-.03em] sm:text-2xl">{value}</p></div>)}</div></Reveal></section>;
@@ -506,8 +561,9 @@ function CaseVideo({ video, eyebrow }) {
 }
 
 function CasePage({ item, slug }) {
+  const dienst = item.dienst ? serviceData[item.dienst] : null;
   return <Layout>
-    <PageHero label={item.type} title={item.title.toUpperCase()} intro={item.intro} image={item.image} imageAlt={`${item.title} — ${item.type}`} compact breadcrumbs={[{ label: "Cases", href: "/cases/" }, { label: item.title, href: `/cases/${slug}/` }]} />
+    <PageHero label={item.type} title={(item.kop ?? item.title).toUpperCase()} intro={item.intro} image={item.image} imageAlt={item.gallery?.find((shot) => shot.src === item.image)?.alt ?? `${item.type} voor ${item.title}`} compact breadcrumbs={[{ label: "Cases", href: "/cases/" }, { label: item.title, href: `/cases/${slug}/` }]} />
 
     {item.facts && <CaseFacts facts={item.facts} />}
 
@@ -515,12 +571,14 @@ function CasePage({ item, slug }) {
 
     {item.gallery && item.gallery.length > 0 && <section className="px-3 pb-4 sm:px-6"><div className="mx-auto max-w-[1440px]"><div className={`grid gap-3 ${item.gallery.length >= 3 ? "sm:grid-cols-2 lg:grid-cols-3" : item.gallery.length === 2 ? "sm:grid-cols-2" : ""}`}>{item.gallery.map((shot, i) => <Reveal key={shot.src} delay={i * .05}><figure className={`group relative overflow-hidden rounded-[2rem] bg-[#ddd] sm:rounded-[2.5rem] ${item.gallery.length === 1 ? "min-h-[26rem] sm:min-h-[34rem]" : "min-h-[22rem] sm:min-h-[26rem]"}`}><img src={shot.src} alt={shot.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />{shot.caption && <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent p-6 text-sm font-semibold text-white sm:p-7">{shot.caption}</figcaption>}</figure></Reveal>)}</div></div></section>}
 
-    <section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto grid max-w-[1440px] gap-3 lg:grid-cols-3">{[["De situatie", item.situation], ["Wat ik maakte", item.made], ["Het resultaat", item.result]].map(([t, d], i) => <Reveal key={t} delay={i * .05}><div className={`min-h-80 rounded-[2rem] p-8 ${i === 1 ? "bg-[#f5ca3c]" : "bg-[#f4f3ee]"}`}><p className="eyebrow text-black/40">0{i + 1}</p><h2 {...titleProps(t, "card", "mt-16")}>{t}</h2><p className="mt-4 leading-relaxed text-black/55 t-body">{d}</p></div></Reveal>)}</div></section>
+    <section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto grid max-w-[1440px] gap-3 lg:grid-cols-3">{[["De situatie", item.situation], ["Wat ik maakte", item.made], ["Het resultaat", item.result]].map(([t, d], i) => <Reveal key={t} delay={i * .05}><div className={`min-h-80 rounded-[2rem] p-8 ${i === 1 ? "bg-[#f5ca3c]" : "bg-[#f4f3ee]"}`}><p className="eyebrow text-black/40">0{i + 1}</p><h2 {...titleProps(t, "card", "mt-16")}>{t}</h2><p className="mt-4 leading-relaxed text-black/55 t-body">{d}</p></div></Reveal>)}</div>
+      {/* Doorverwijzen: de dienst achter deze case en het overzicht. */}
+      <Reveal className="mx-auto mt-10 flex max-w-[1440px] flex-wrap items-center gap-x-8 gap-y-3 text-base font-bold">{dienst && <a href={`/diensten/${item.dienst}/`} className="inline-flex items-center gap-2 transition-colors hover:text-[#9c7900]">Meer over {dienst.short.toLowerCase()} <ArrowRight className="size-4 text-[#b78d00]" strokeWidth={2.5} aria-hidden="true" /></a>}<a href="/cases/" className="inline-flex items-center gap-2 transition-colors hover:text-[#9c7900]">Alle cases bekijken <ArrowRight className="size-4 text-[#b78d00]" strokeWidth={2.5} aria-hidden="true" /></a></Reveal></section>
     <CTA />
   </Layout>;
 }
 
-function AboutPage() { return <Layout><PageHero label="Over Tygo" title="EERST HET DOEL. DAN DE CAMERA." intro="Ik ben Tygo Veerman. Vanuit Purmerend maak ik video en fotografie voor bedrijven die duidelijk willen laten zien wat ze doen." image={tygoPortrait} compact /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto grid max-w-[1440px] gap-14 lg:grid-cols-2"><SectionTitle label="Mijn aanpak" title="IK WIL EERST WETEN WAT JE WILT BEREIKEN." narrow /><Reveal><p className="text-2xl font-semibold leading-relaxed tracking-[-.025em]">Ik wil eerst begrijpen wat jouw bedrijf bijzonder maakt. Daarna vertaal ik dat naar beelden die professioneel voelen, zonder dat het gemaakt wordt.</p><div className="mt-10 grid gap-3">{["Goed voorbereid, zodat de draaidag rustig blijft", "Direct contact over inhoud en keuzes", "Oog voor de details die een verhaal geloofwaardig maken"].map(x => <div key={x} className="flex gap-3 rounded-2xl bg-[#f4f3ee] p-5 font-bold"><Check />{x}</div>)}</div></Reveal></div></section><CTA /></Layout>; }
+function AboutPage() { return <Layout><PageHero label="Over Tygo" title="EERST HET DOEL. DAN DE CAMERA." intro="Ik ben Tygo Veerman, videograaf en bedrijfsfotograaf in Purmerend. Met TVM Productions maak ik video en fotografie voor bedrijven in Noord-Holland die duidelijk willen laten zien wat ze doen." image={tygoPortrait} imageAlt="Portret van Tygo Veerman" compact /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto grid max-w-[1440px] gap-14 lg:grid-cols-2"><SectionTitle label="Mijn aanpak" title="IK WIL EERST WETEN WAT JE WILT BEREIKEN." narrow /><Reveal><p className="text-2xl font-semibold leading-relaxed tracking-[-.025em]">Ik wil eerst begrijpen wat jouw bedrijf bijzonder maakt. Daarna vertaal ik dat naar beelden die professioneel voelen, zonder dat het gemaakt wordt.</p><div className="mt-10 grid gap-3">{["Goed voorbereid, zodat de draaidag rustig blijft", "Direct contact over inhoud en keuzes", "Oog voor de details die een verhaal geloofwaardig maken"].map(x => <div key={x} className="flex gap-3 rounded-2xl bg-[#f4f3ee] p-5 font-bold"><Check />{x}</div>)}</div></Reveal></div></section><CTA /></Layout>; }
 
 function PricingPage() { return <Layout><PageHero label="Tarieven" title="EEN HELDERE PRIJS BEGINT MET EEN HELDERE VRAAG." intro="Geen productie is hetzelfde. Je krijgt vooraf een vaste offerte waarin voorbereiding, draaidag, montage en oplevering duidelijk zijn opgenomen." /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-[1440px]"><SectionTitle label="Investering" title="WAAR DE PRIJS VAN AFHANGT." /><div className="grid gap-3 md:grid-cols-3">{[["Omvang", "Aantal locaties, draaidagen en mensen voor en achter de camera."], ["Uitwerking", "De hoeveelheid voorbereiding, montage, animatie en feedback."], ["Oplevering", "Het aantal video's, foto's, formaten en varianten dat je nodig hebt."]].map(([t, d], i) => <div key={t} className={`min-h-72 rounded-[2rem] p-8 ${i === 1 ? "bg-[#f5ca3c]" : "bg-[#f4f3ee]"}`}><span className="text-sm font-black">0{i + 1}</span><h2 {...titleProps(t, "card", "mt-20")}>{t}</h2><p className="mt-3 text-black/55 t-body">{d}</p></div>)}</div><p className="mt-10 max-w-3xl text-lg text-black/50">Ik publiceer geen verzonnen vanaf-prijs zonder jouw productie te kennen. Na een korte kennismaking ontvang je een concrete prijs en weet je precies wat daar wel en niet in zit.</p></div></section><CTA /></Layout>; }
 
@@ -530,7 +588,7 @@ function KnowledgeHub() { return <Layout><PageHero label="Kennisbank" title="PRA
 
 function ArticlePage({ article, slug }) { return <Layout><PageHero label={article.label} title={article.title.toUpperCase()} intro={article.intro} compact breadcrumbs={[{ label: "Kennisbank", href: "/kennisbank/" }, { label: article.title, href: `/kennisbank/${slug}/` }]} /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><article className="mx-auto max-w-4xl">{article.sections.map(([title, text], i) => <Reveal key={title} className="border-t border-black/15 py-10"><span className="text-sm font-black text-black/30">0{i + 1}</span><h2 {...titleProps(title, "card", "mt-5")}>{title}</h2><p className="mt-5 t-body text-black/55">{text}</p></Reveal>)}</article></section><CTA /></Layout>; }
 
-function FAQPage() { const all = [...serviceData.bedrijfsvideo.faqs, ...serviceData["eventvideo-fotografie"].faqs, ["Hoe snel ontvang ik een voorstel?", "Na de kennismaking ontvang je meestal binnen enkele werkdagen een duidelijk productievoorstel."]]; return <Layout><PageHero label="Veelgestelde vragen" title="ALLES WAT JE VOORAF WILT WETEN." intro="Direct antwoord op praktische vragen over voorbereiding, opnames, planning en oplevering." /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-4xl"><Accordion items={all} /></div></section><CTA /></Layout>; }
+function FAQPage() { const all = [...serviceData.bedrijfsvideo.faqs, ...serviceData["eventvideo-fotografie"].faqs, ["Hoe snel ontvang ik een voorstel?", "Na de kennismaking ontvang je meestal binnen enkele werkdagen een duidelijk productievoorstel."]]; return <Layout schema={[faqNode(all, `${SITE_URL}/veelgestelde-vragen/`)]}><PageHero label="Veelgestelde vragen" title="ALLES WAT JE VOORAF WILT WETEN." intro="Direct antwoord op praktische vragen over voorbereiding, opnames, planning en oplevering." /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-4xl"><Accordion items={all} /></div></section><CTA /></Layout>; }
 
 function ContactPage() {
   const [status, setStatus] = useState("idle");
@@ -679,9 +737,9 @@ function ContactPage() {
               </ol>
 
               <div className="mt-9 grid gap-3 border-t border-black/15 pt-7 text-base font-semibold text-black/60">
-                <a href="mailto:Tygo@tvm-productions.nl" className="flex w-fit items-center gap-3 transition-colors hover:text-black">
+                <a href="mailto:tygo@tvm-productions.nl" className="flex w-fit items-center gap-3 transition-colors hover:text-black">
                   <Mail className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />
-                  Tygo@tvm-productions.nl
+                  tygo@tvm-productions.nl
                 </a>
                 <span className="flex items-center gap-3">
                   <MapPin className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />
@@ -713,7 +771,7 @@ export const privateData = {
 function PrivatePage({ data }) { return <Layout><PageHero label={data.label} title={data.title} intro={data.intro} image={data.image} compact /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-[1440px]"><SectionTitle label="Persoonlijk vastgelegd" title="AANWEZIG, ZONDER OP TE VALLEN." intro="Vooraf spreken we door wat belangrijk is. Op de dag zelf houd ik ruimte voor wat spontaan gebeurt." /><div className="grid gap-3 md:grid-cols-3">{["Rustige voorbereiding", "Oog voor mensen en details", "Een film die natuurlijk blijft"].map((x, i) => <div key={x} className={`min-h-64 rounded-[2rem] p-8 ${i === 1 ? "bg-[#f5ca3c]" : "bg-[#f4f3ee]"}`}><span className="text-sm font-black">0{i + 1}</span><p className="mt-24 text-2xl font-black">{x}</p></div>)}</div></div></section><CTA /></Layout>; }
 
 export const legalData = {
-  privacy: { title: "Privacyverklaring", intro: "Hoe TVM Productions omgaat met persoonsgegevens.", sections: [["Contactgegevens", "TVM Productions verwerkt gegevens die je zelf verstrekt wanneer je contact opneemt, zoals naam, e-mailadres, telefoonnummer en bedrijfsnaam."], ["Waarom deze gegevens worden gebruikt", "Voor het beantwoorden van aanvragen, maken van offertes, uitvoeren van opdrachten en voldoen aan administratieve verplichtingen."], ["Bewaartermijnen en delen", "Gegevens worden niet langer bewaard dan nodig en alleen gedeeld met partijen die noodzakelijk zijn voor de uitvoering of wanneer de wet dit vereist."], ["Jouw rechten", "Je kunt vragen om inzage, correctie of verwijdering via Tygo@tvm-productions.nl. Voeg vóór publicatie het volledige bedrijfsadres, KvK-nummer en eventuele verwerkers toe."]] },
+  privacy: { title: "Privacyverklaring", intro: "Hoe TVM Productions omgaat met persoonsgegevens.", sections: [["Contactgegevens", "TVM Productions verwerkt gegevens die je zelf verstrekt wanneer je contact opneemt, zoals naam, e-mailadres, telefoonnummer en bedrijfsnaam."], ["Waarom deze gegevens worden gebruikt", "Voor het beantwoorden van aanvragen, maken van offertes, uitvoeren van opdrachten en voldoen aan administratieve verplichtingen."], ["Bewaartermijnen en delen", "Gegevens worden niet langer bewaard dan nodig en alleen gedeeld met partijen die noodzakelijk zijn voor de uitvoering of wanneer de wet dit vereist."], ["Jouw rechten", "Je kunt vragen om inzage, correctie of verwijdering via tygo@tvm-productions.nl. Voeg vóór publicatie het volledige bedrijfsadres, KvK-nummer en eventuele verwerkers toe."]] },
   voorwaarden: { title: "Algemene voorwaarden", intro: "Praktische afspraken rond offertes, planning, gebruik en oplevering.", sections: [["Conceptversie", "Deze pagina is een inhoudelijke placeholder en geen definitieve juridische set voorwaarden."], ["Offerte en opdracht", "Leg vóór publicatie vast wanneer een offerte bindend wordt, welke werkzaamheden zijn inbegrepen en hoe meerwerk wordt behandeld."], ["Planning en annulering", "Neem afspraken op over verplaatsen, annuleren, weersomstandigheden, toegang tot locaties en inzet van derden."], ["Gebruiksrechten", "Leg vast welke gebruiksrechten de klant ontvangt en hoe bronmateriaal, muzieklicenties en portfoliogebruik worden behandeld."]] },
   "avg-fotografie-video": { title: "AVG bij fotografie en video", intro: "Praktische aandachtspunten wanneer medewerkers, klanten of bezoekers in beeld komen.", sections: [["Wie regelt toestemming?", "De opdrachtgever is doorgaans verantwoordelijk voor een geldige grondslag en voor het informeren van mensen die herkenbaar in beeld komen."], ["Maak afspraken vooraf", "Bepaal wie wel en niet in beeld mag, waar het materiaal wordt gepubliceerd en hoe lang toestemming geldt."], ["Evenementen", "Werk met duidelijke informatie bij registratie en entree. Bied waar mogelijk een herkenbare route voor bezoekers die niet in beeld willen."], ["Laat dit controleren", "De juiste aanpak hangt af van doel, context en publicatie. Laat deze pagina vóór publicatie toetsen aan jouw werkwijze en actuele privacyverplichtingen."]] },
 };

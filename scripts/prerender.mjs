@@ -11,7 +11,7 @@ const root = dirname(fileURLToPath(import.meta.url)) + "/..";
 const distDir = join(root, "dist");
 const ssrEntry = join(root, "dist-ssr", "entry-server.js");
 
-const { render, getAllRoutes } = await import(ssrEntry);
+const { render, getAllRoutes, getSitemapRoutes, SITE_URL } = await import(ssrEntry);
 
 const template = readFileSync(join(distDir, "index.html"), "utf-8");
 
@@ -29,10 +29,12 @@ function pageHtml(route) {
   const description = escapeHtml(meta.description);
   const canonical = escapeHtml(meta.canonical);
   const image = escapeHtml(meta.image);
+  const robots = escapeHtml(meta.robots);
 
   return template
     .replace(/<title>.*?<\/title>/s, `<title>${title}</title>`)
     .replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`)
+    .replace(/<meta name="robots" content=".*?" \/>/, `<meta name="robots" content="${robots}" />`)
     .replace(/<link rel="canonical" href=".*?" \/>/, `<link rel="canonical" href="${canonical}" />`)
     .replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${title}" />`)
     .replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${description}" />`)
@@ -56,13 +58,15 @@ for (const route of routes) writeRoute(route);
 // Real 404 page (see vercel.json for the routing that serves this with a 404 status).
 writeFileSync(join(distDir, "404.html"), pageHtml("/__unknown__"));
 
-const SITE_URL = "https://tvm-productions.nl";
+// Sitemap: alleen indexeerbare pagina's. Noindex-routes (zoals /privacy/)
+// worden wel geprerenderd en blijven bereikbaar, maar staan hier niet in.
+const sitemapRoutes = getSitemapRoutes();
 const today = new Date().toISOString().slice(0, 10);
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapRoutes
   .map((route) => `  <url>\n    <loc>${SITE_URL}${route}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`)
   .join("\n")}\n</urlset>\n`;
 writeFileSync(join(distDir, "sitemap.xml"), sitemap);
 
 if (existsSync(join(root, "dist-ssr"))) rmSync(join(root, "dist-ssr"), { recursive: true, force: true });
 
-console.log(`Prerendered ${routes.length} routes + 404.html + sitemap.xml`);
+console.log(`Prerendered ${routes.length} routes + 404.html + sitemap.xml (${sitemapRoutes.length} URLs)`);

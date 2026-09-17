@@ -8,15 +8,19 @@ import { business } from "../site/business.js";
 // van de site juist naar twee routes toewerkt. Die twee staan hier nog één keer.
 
 const navigatie = [
+  ["Diensten", "/diensten/"],
   ["Werk", "/cases/"],
   ["Werkwijze", "/werkwijze/"],
   ["Over Tygo", "/over/"],
+  ["Kennisbank", "/kennisbank/"],
+  ["Veelgestelde vragen", "/veelgestelde-vragen/"],
   ["Contact", "/contact/"],
 ];
 
 const routes = [
-  ["Klanten aantrekken", "/diensten/"],
-  ["Medewerkers aantrekken", "/diensten/"],
+  ["Zichtbaar worden", "/oplossingen/zichtbaar-worden/"],
+  ["Medewerkers aantrekken", "/oplossingen/medewerkers-aantrekken/"],
+  ["Duidelijk uitleggen", "/oplossingen/duidelijk-uitleggen/"],
 ];
 
 function FooterLogo() {

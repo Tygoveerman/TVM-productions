@@ -2,7 +2,7 @@
 // Vereist RESEND_API_KEY in de environment variables van het Vercel-project.
 import { Resend } from "resend";
 
-const TO_EMAIL = "Tygo@tvm-productions.nl";
+const TO_EMAIL = "tygo@tvm-productions.nl";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_FILL_TIME_MS = 3000;
 
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
   }
 
   if (rateLimited(clientIp(req))) {
-    res.status(429).json({ error: "Te veel aanvragen. Probeer het over een uur opnieuw of mail rechtstreeks naar Tygo@tvm-productions.nl." });
+    res.status(429).json({ error: "Te veel aanvragen. Probeer het over een uur opnieuw of mail rechtstreeks naar tygo@tvm-productions.nl." });
     return;
   }
 
@@ -121,7 +121,7 @@ export default async function handler(req, res) {
   }
 
   if (!process.env.RESEND_API_KEY) {
-    res.status(500).json({ error: "E-mailversturen is nog niet geconfigureerd. Mail rechtstreeks naar Tygo@tvm-productions.nl." });
+    res.status(500).json({ error: "E-mailversturen is nog niet geconfigureerd. Mail rechtstreeks naar tygo@tvm-productions.nl." });
     return;
   }
 

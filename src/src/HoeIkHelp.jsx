@@ -177,7 +177,7 @@ export default function HoeIkHelp({ cases = {} }) {
         headline={["Zichtbaar maken waarom klanten", "en medewerkers voor jou kiezen."]}
         description="Ik begin bij wat er moet veranderen in je bedrijf, niet bij de vraag welke video je wilt. Vanuit dat doel bepaal ik wat er nodig is."
         image={productieBreed}
-        imageAlt="Opname op locatie tijdens een productie"
+        imageAlt="Camera op statief tijdens een opname op locatie in een koffiezaak"
         breadcrumbs={[{ label: "Hoe ik help", href: "/hoe-ik-help/" }]}
       />
 
@@ -243,7 +243,7 @@ export default function HoeIkHelp({ cases = {} }) {
                         <div className="relative min-h-[22rem] overflow-hidden rounded-[20px] bg-black lg:min-h-[26rem]">
                           <img
                             src={bewijs.image}
-                            alt={`${bewijs.title} — ${bewijs.type}`}
+                            alt={bewijs.kop ?? `${bewijs.type} voor ${bewijs.title}`}
                             loading="lazy"
                             decoding="async"
                             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.05]"
@@ -356,7 +356,7 @@ export default function HoeIkHelp({ cases = {} }) {
                       <div className="relative min-h-[18rem] overflow-hidden rounded-[16px] bg-black">
                         <img
                           src={c.image}
-                          alt={`${c.title} — ${c.type}`}
+                          alt={c.kop ?? `${c.type} voor ${c.title}`}
                           loading="lazy"
                           decoding="async"
                           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.05]"
