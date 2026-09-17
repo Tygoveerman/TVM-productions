@@ -194,7 +194,7 @@ function FAQSchema({ items }) {
 
 function BrandLogo({ compact = false }) {
   return (
-    <span className={`relative block shrink-0 transition-all duration-500 ${compact ? "h-9 w-[6.6rem]" : "h-11 w-32"}`}>
+    <span className={`relative block shrink-0 transition-all duration-500 ${compact ? "h-7 w-[5.2rem]" : "h-11 w-32"}`}>
       <img src={tvmLogo} alt="TVM Productions" decoding="async" className="absolute inset-0 h-full w-full object-contain brightness-0" />
       <span className="absolute left-[0.3%] right-[0.7%] top-[67.45%] h-[3.7%] bg-[#f5aa00]" aria-hidden="true" />
     </span>
@@ -220,13 +220,13 @@ export default function Homepage() {
       <JsonLd data={organizationSchema()} />
       <JsonLd data={localBusinessSchema()} />
       <header className={`fixed inset-x-0 top-0 z-50 px-3 transition-[padding] duration-500 sm:px-5 ${scrolled ? "pt-3 sm:pt-5" : "pt-[calc(0.75rem+20px)] sm:pt-[calc(1.25rem+20px)]"}`}>
-        <div className={`mx-auto flex h-[4.25rem] w-full max-w-[920px] items-center justify-between rounded-full border border-black/[0.07] bg-[#faf9f6]/80 pl-6 pr-2.5 backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] sm:pl-7 sm:pr-3 ${
+        <div className={`mx-auto flex h-14 w-full max-w-[960px] items-center justify-between rounded-full border border-black/[0.07] bg-[#faf9f6]/80 pl-5 pr-2 backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] sm:pl-6 sm:pr-2 ${
           scrolled ? "shadow-[0_2px_14px_rgba(0,0,0,.05)]" : "shadow-[0_1px_8px_rgba(0,0,0,.03)]"
         }`}>
           <a href="#top" className="flex items-center" aria-label="TVM Productions home">
             <BrandLogo compact />
           </a>
-          <nav className="hidden items-center gap-9 lg:flex" aria-label="Hoofdnavigatie">
+          <nav className="hidden items-center gap-10 lg:flex" aria-label="Hoofdnavigatie">
             {navItems.map((item) => item.dropdown ? (
               <div key={item.label} className="group relative">
                 <a href={item.href} className="flex items-center gap-1.5 text-sm font-semibold text-black/50 transition-colors hover:text-black">
@@ -286,7 +286,7 @@ export default function Homepage() {
           </nav>
           {/* Zelfde beweging als de knoppen in de pagina: vulling schuift in,
               pijl wisselt. Compacter, want hij moet in de pill passen. */}
-          <a href="/contact/" className="group relative hidden h-[44px] items-center gap-2 overflow-hidden rounded-full bg-[#f5ca3c] px-5 text-sm font-bold text-black transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-0.5 sm:flex">
+          <a href="/contact/" className="group relative hidden h-10 items-center gap-2 overflow-hidden rounded-full bg-[#f5ca3c] px-5 text-sm font-bold text-black transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-0.5 sm:flex">
             <span className="absolute -inset-px origin-left scale-x-0 bg-[#ffda58] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden="true" />
             <span className="relative hidden xl:inline">Bespreek je uitdaging</span>
             <span className="relative inline xl:hidden">Bespreek</span>
