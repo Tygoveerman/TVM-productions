@@ -341,7 +341,7 @@ export default function Homepage() {
             initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative isolate flex min-h-[74svh] items-end overflow-hidden sm:min-h-[calc(100svh-13rem)] rounded-[18px] bg-[#15130f] sm:rounded-[24px]"
+            className="relative isolate flex min-h-[74svh] items-end overflow-hidden sm:min-h-[calc(100svh-3.5rem)] rounded-[18px] bg-[#15130f] sm:rounded-[24px]"
           >
             <img src={heroPoster} alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover" fetchPriority="high" decoding="async" />
             {/* De poster blijft liggen tot de video kan spelen, zodat er geen zwart
