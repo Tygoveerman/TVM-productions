@@ -56,7 +56,7 @@ for (const route of routes) writeRoute(route);
 // Real 404 page (see vercel.json for the routing that serves this with a 404 status).
 writeFileSync(join(distDir, "404.html"), pageHtml("/__unknown__"));
 
-const SITE_URL = "https://tvmproductions.nl";
+const SITE_URL = "https://tvm-productions.nl";
 const today = new Date().toISOString().slice(0, 10);
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes
   .map((route) => `  <url>\n    <loc>${SITE_URL}${route}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`)

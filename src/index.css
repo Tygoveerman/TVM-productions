@@ -2,10 +2,14 @@
 
 @theme {
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Figtree", "Manrope", ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Eén schaal voor de hele site. Alles wat in rem staat (tekst, marges, ronding)
+   groeit hiermee mee, zodat de verhoudingen kloppen en de pagina op een groot
+   scherm ruim oogt in plaats van uitvergroot. */
 html {
+  font-size: clamp(16px, 0.42vw + 14.5px, 19px);
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
 }
@@ -31,17 +35,102 @@ a {
   background: #f5ca3c;
 }
 
+/* Figtree voor de koppen: even ronde vormen als Manrope, maar het loopt door
+   tot gewicht 900 waar Manrope op 800 stopt. Bodytekst blijft Manrope. */
 h1,
 h2,
 h3 {
-  font-family: "Space Grotesk", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Figtree", "Manrope", ui-sans-serif, system-ui, sans-serif;
 }
 
 .section-label {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.18em;
   color: rgb(255 255 255 / 0.45);
+}
+
+/* Bovenkopje boven een titel. Klein mag, maar niet zo klein dat het moeite
+   kost; de ruimte eronder doet het werk, niet de kleur. */
+.eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Titels op maximaal twee regels.
+   De maat in ch doet het werk: een titel krijgt een maximale regelbreedte van
+   ongeveer de helft van zijn eigen tekst, dus past hij niet op één regel en
+   precies op twee. text-wrap: balance verdeelt die twee regels gelijkmatig, zodat
+   er geen staartregel van twee woorden overblijft. De ch-waarde komt uit
+   titleProps() in src/site/typography.js, want die hangt af van de titel zelf.
+
+   Het plafond per tier is afgestemd op de kolom waarin de titel staat: te groot
+   en de kolom breekt hem alsnog over drie regels. Verhoog een plafond dus niet
+   zonder de koppen op /diensten/ en /over/ na te lopen; dat zijn de langste. */
+.t-hero,
+.t-section,
+.t-card {
+  font-weight: 900;
+  text-wrap: balance;
+}
+
+.t-hero {
+  font-size: clamp(1.95rem, 4.6vw, 5.6rem);
+  line-height: 0.94;
+  letter-spacing: -0.032em;
+}
+
+.t-section {
+  font-size: clamp(1.75rem, 3.6vw, 3.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.028em;
+}
+
+.t-card {
+  font-size: clamp(1.35rem, 2.1vw, 2.3rem);
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+}
+
+/* Doorlopende klantenband.
+   De lijst staat twee keer in de DOM en de baan schuift precies over de helft
+   van zijn eigen breedte; op het moment dat kopie 1 uit beeld is, staat kopie 2
+   exact op de startpositie, dus de overgang is onzichtbaar.
+   Het masker laat de randen oplossen in plaats van ze hard af te snijden. */
+.marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 13%, #000 87%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 46s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Introtekst onder een titel. Bewust groot: dit is de zin die de bezoeker
+   daadwerkelijk leest. */
+/* Eén maat voor lopende tekst, gelijk aan die in de hero. Het verschil tussen
+   lead en body zit alleen in de regelbreedte: een intro leest korter, een
+   tekstblok mag verder doorlopen. */
+.t-lead {
+  font-size: clamp(1.2rem, 1.35vw, 1.65rem);
+  line-height: 1.5;
+  max-inline-size: 42ch;
+}
+
+.t-body {
+  font-size: clamp(1.2rem, 1.35vw, 1.65rem);
+  line-height: 1.55;
+  max-inline-size: 56ch;
 }
 
 .hero-grain {
@@ -93,4 +182,15 @@ h3 {
   *::after {
     transition-duration: 0.01ms !important;
   }
+
+  /* Zonder beweging is de band niet meer leesbaar door te wachten, dus mag je
+     hem in plaats daarvan zelf opzij schuiven. */
+  .marquee-track {
+    animation: none;
+  }
+
+  .marquee {
+    overflow-x: auto;
+  }
+
 }

@@ -8,7 +8,7 @@ export default function Testimonials() {
   return (
     <section className="bg-white px-3 py-24 sm:px-6 sm:py-32">
       <div className="mx-auto max-w-[1440px]">
-        <p className="text-xs font-black uppercase tracking-[.16em] text-black/40">Wat klanten zeggen</p>
+        <p className="eyebrow text-black/40">Wat klanten zeggen</p>
         <div className="mt-8 grid gap-3 md:grid-cols-3">
           {testimonials.map((item) => (
             <blockquote key={item.name} className="rounded-[2rem] bg-[#f4f3ee] p-8">

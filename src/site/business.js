@@ -1,14 +1,17 @@
 // Central place for business facts used across SEO, schema and legal pages.
 // TODO: replace every placeholder below with real data before launch.
 
-export const SITE_URL = "https://tvmproductions.nl"; // TODO: confirm final domain (www vs non-www)
+export const SITE_URL = "https://tvm-productions.nl";
 
 export const business = {
   name: "TVM Productions",
   founder: "Tygo Veerman",
-  email: "info@tvmproductions.nl",
+  email: "Tygo@tvm-productions.nl",
   telephone: "", // TODO: telefoonnummer toevoegen (nu nergens op de site zichtbaar)
-  kvk: "", // TODO: KvK-nummer
+  kvk: "", // TODO: KvK-nummer (verschijnt vanzelf in de footer zodra ingevuld)
+  btw: "", // TODO: BTW-nummer, optioneel
+  linkedin: "", // TODO: volledige URL naar je LinkedIn-pagina
+  instagram: "", // TODO: volledige URL naar je Instagram
   streetAddress: "", // TODO: straat + huisnummer
   postalCode: "", // TODO: postcode
   addressLocality: "Purmerend",

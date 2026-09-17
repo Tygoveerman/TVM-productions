@@ -1,3 +1,4 @@
+import { oplossingRoutes } from "./oplossingen.js";
 // Used only by the prerender step (scripts/prerender.mjs via src/entry-server.jsx).
 // Never imported by client code — keeps this out of the browser bundle.
 import { serviceData, caseData, articleData } from "../src/SitePages.jsx";
@@ -19,6 +20,22 @@ const staticPages = {
   "/diensten": {
     title: "Diensten — video en fotografie voor bedrijven | TVM Productions",
     description: "Bedrijfsvideo, promotievideo, klantcasevideo, uitlegvideo, projectvideo, eventregistratie, bedrijfs- en productfotografie.",
+  },
+  "/oplossingen/zichtbaar-worden": {
+    title: "Zichtbaar worden — laat zien waarom klanten voor jou kiezen | TVM Productions",
+    description: "Je levert goed werk, maar klanten zien het niet. Videocontent die je expertise, resultaten en manier van werken zichtbaar maakt.",
+  },
+  "/oplossingen/medewerkers-aantrekken": {
+    title: "Medewerkers aantrekken met video | TVM Productions",
+    description: "Een vacature vertelt wat iemand gaat doen. Recruitmentcontent laat zien waarom iemand het bij jou zou willen doen.",
+  },
+  "/oplossingen/duidelijk-uitleggen": {
+    title: "Complexe producten en processen duidelijk uitleggen | TVM Productions",
+    description: "Een klant die het niet snapt, koopt niet. Uitlegvideo en beeld dat je product, dienst of proces in één keer begrijpelijk maakt.",
+  },
+  "/hoe-ik-help": {
+    title: "Hoe ik help — meer klanten of de juiste medewerkers | TVM Productions",
+    description: "Niet beginnen bij wat we maken, maar bij wat je wilt bereiken. Videocontent om klanten te overtuigen of kandidaten aan te trekken.",
   },
   "/werkwijze": {
     title: "Werkwijze — van kennismaking tot oplevering | TVM Productions",
@@ -125,6 +142,8 @@ export function getAllRoutes() {
     "/",
     "/diensten/",
     ...Object.keys(serviceData).map((slug) => `/diensten/${slug}/`),
+    "/hoe-ik-help/",
+    ...oplossingRoutes,
     "/werkwijze/",
     "/cases/",
     ...Object.keys(caseData).map((slug) => `/cases/${slug}/`),

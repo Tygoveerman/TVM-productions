@@ -2,13 +2,13 @@
 // Vereist RESEND_API_KEY in de environment variables van het Vercel-project.
 import { Resend } from "resend";
 
-const TO_EMAIL = "info@tvmproductions.nl";
+const TO_EMAIL = "Tygo@tvm-productions.nl";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_FILL_TIME_MS = 3000;
 
 // Maximale veldlengtes. Zonder deze limieten kan iemand een bericht van
 // megabytes insturen dat vervolgens in je mailbox belandt.
-const LIMITS = { naam: 100, bedrijf: 120, email: 254, bericht: 5000 };
+const LIMITS = { naam: 100, bedrijf: 120, email: 254, bericht: 5000, uitdaging: 80 };
 
 // Rate limiting: max 5 inzendingen per IP per uur.
 //
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
   }
 
   if (rateLimited(clientIp(req))) {
-    res.status(429).json({ error: "Te veel aanvragen. Probeer het over een uur opnieuw of mail rechtstreeks naar info@tvmproductions.nl." });
+    res.status(429).json({ error: "Te veel aanvragen. Probeer het over een uur opnieuw of mail rechtstreeks naar Tygo@tvm-productions.nl." });
     return;
   }
 
@@ -86,7 +86,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { naam, bedrijf, email, bericht, website, startedAt } = body;
+  const { naam, bedrijf, email, bericht, uitdaging, website, startedAt } = body;
 
   // Honeypot: echte bezoekers vullen dit verborgen veld nooit in.
   // Stopt simpele bots; een gericht script omzeilt dit moeiteloos.
@@ -110,7 +110,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (tooLong(naam, LIMITS.naam) || tooLong(bedrijf, LIMITS.bedrijf) || tooLong(email, LIMITS.email) || tooLong(bericht, LIMITS.bericht)) {
+  if (tooLong(naam, LIMITS.naam) || tooLong(bedrijf, LIMITS.bedrijf) || tooLong(email, LIMITS.email) || tooLong(bericht, LIMITS.bericht) || tooLong(uitdaging, LIMITS.uitdaging)) {
     res.status(400).json({ error: "Een van de velden is te lang. Kort je bericht in en probeer het opnieuw." });
     return;
   }
@@ -121,21 +121,21 @@ export default async function handler(req, res) {
   }
 
   if (!process.env.RESEND_API_KEY) {
-    res.status(500).json({ error: "E-mailversturen is nog niet geconfigureerd. Mail rechtstreeks naar info@tvmproductions.nl." });
+    res.status(500).json({ error: "E-mailversturen is nog niet geconfigureerd. Mail rechtstreeks naar Tygo@tvm-productions.nl." });
     return;
   }
 
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const { error } = await resend.emails.send({
-      // TODO: geverifieerd verzenddomein instellen in Resend, dan dit adres bijwerken.
-      from: "TVM Productions website <website@tvmproductions.nl>",
+      // Vereist dat tvm-productions.nl als verzenddomein is geverifieerd in Resend.
+      from: "TVM Productions website <website@tvm-productions.nl>",
       to: TO_EMAIL,
       replyTo: email,
       // Nieuwe regels uit het invoerveld strippen zodat de onderwerpregel
       // altijd één regel blijft.
       subject: `Aanvraag via website — ${String(bedrijf || naam).replace(/[\r\n]+/g, " ").trim()}`,
-      text: `Naam: ${naam}\nBedrijf: ${bedrijf || "-"}\nE-mail: ${email}\n\n${bericht}`,
+      text: `Uitdaging: ${uitdaging || "-"}\nNaam: ${naam}\nBedrijf: ${bedrijf || "-"}\nE-mail: ${email}\n\n${bericht}`,
     });
     if (error) throw new Error(error.message || "Resend gaf een fout terug.");
     res.status(200).json({ ok: true });

@@ -43,3 +43,7 @@ npm-debug.log*
 .idea/
 .vscode/
 *.swp
+
+# Video's staan op Cloudflare R2 (zie src/site/media.js). Lokaal mogen ze in
+# public/videos/ blijven staan voor ontwikkelen, maar niet in de repo/deploy.
+public/videos/
