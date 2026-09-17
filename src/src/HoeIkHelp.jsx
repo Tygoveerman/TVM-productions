@@ -99,7 +99,7 @@ function Knop({ href, children }) {
 }
 
 function Kader({ children, className = "" }) {
-  return <div className={`mx-auto max-w-[1750px] px-2.5 sm:px-3.5 ${className}`}>{children}</div>;
+  return <div className={`mx-auto max-w-[1440px] px-2.5 sm:px-3.5 ${className}`}>{children}</div>;
 }
 
 // De twee routes als beeldvlakken, binnen dezelfde kolom als de rest van de site.

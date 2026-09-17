@@ -64,7 +64,7 @@ export default function SubpageHero({
     return (
       <section className={`relative isolate px-3 pb-16 pt-28 sm:px-5 sm:pb-20 sm:pt-36 ${navy ? "bg-[#101E33] text-[#F3F0EA]" : ""}`}>
         {navy ? <div className="hero-grain absolute inset-0 -z-10" aria-hidden="true" /> : null}
-        <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+        <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
           {breadcrumbs ? (
             <div className="mb-14 sm:mb-16">
               <Breadcrumbs items={breadcrumbs} licht={navy} />
@@ -170,7 +170,7 @@ export default function SubpageHero({
   if (variant === "beeld") {
     return (
       <section className="px-3 pb-8 pt-24 sm:px-5 sm:pb-10 sm:pt-28">
-        <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+        <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
           {breadcrumbs ? (
             <div className="mb-6 sm:mb-8">
               <Breadcrumbs items={breadcrumbs} />
@@ -246,7 +246,7 @@ export default function SubpageHero({
 
   return (
     <section className="px-3 pb-16 pt-32 sm:px-5 sm:pb-20 sm:pt-40">
-      <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+      <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
         {breadcrumbs ? (
           <div className="mb-12 sm:mb-14">
             <Breadcrumbs items={breadcrumbs} />

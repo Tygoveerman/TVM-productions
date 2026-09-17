@@ -580,7 +580,7 @@ function ContactPage() {
         gegevens vragen. Wie eerst één keuze maakt, maakt het formulier eerder af
         dan wie meteen tegen zes lege velden aankijkt. */}
     <section className="bg-white px-3 py-24 sm:px-5 sm:py-32">
-      <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+      <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
         <form onSubmit={submit} className="grid gap-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
           <div>
             <div className="border-t border-black/15 pt-8">

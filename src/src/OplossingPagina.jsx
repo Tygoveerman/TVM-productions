@@ -28,7 +28,7 @@ function Reveal({ children, className = "", delay = 0 }) {
 }
 
 function Kader({ children, className = "" }) {
-  return <div className={`mx-auto max-w-[1750px] px-2.5 sm:px-3.5 ${className}`}>{children}</div>;
+  return <div className={`mx-auto max-w-[1440px] px-2.5 sm:px-3.5 ${className}`}>{children}</div>;
 }
 
 function Knop({ href, children }) {

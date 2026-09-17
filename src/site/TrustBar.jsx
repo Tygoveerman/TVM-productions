@@ -71,7 +71,7 @@ export default function TrustBar() {
           zonder marges tegen elkaar weg te hoeven rekenen. Verander je hier de
           maten, verander ze dan ook in de hero. */}
       <div className="px-3 sm:px-5">
-        <div className="mx-auto flex w-full max-w-[1750px] flex-col gap-7 px-2.5 sm:px-3.5 lg:flex-row lg:items-center lg:gap-10">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-7 px-2.5 sm:px-3.5 lg:flex-row lg:items-center lg:gap-10">
           <h2 id="klanten-kop" className="shrink-0 text-[0.95rem] font-extrabold uppercase leading-snug tracking-[0.15em] text-black/45 sm:text-[1.05rem] lg:max-w-[12rem]">
             Eerder gewerkt voor
           </h2>

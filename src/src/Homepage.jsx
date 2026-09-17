@@ -365,7 +365,7 @@ export default function Homepage() {
             )}
             <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#0F0E0B] via-[#0F0E0B]/75 to-[#0F0E0B]/20" aria-hidden="true" />
 
-            <div className="mx-auto w-full max-w-[1750px] px-2.5 pb-8 pt-24 text-[#F3F0EA] sm:px-3.5">
+            <div className="mx-auto w-full max-w-[1440px] px-2.5 pb-8 pt-24 text-[#F3F0EA] sm:px-3.5">
               <Motion.p
                 initial={reduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -432,7 +432,7 @@ export default function Homepage() {
             Gecentreerd en met een expliciet "of" tussen de twee kaarten, zodat het
             als één keuze leest in plaats van als twee losse blokken naast elkaar. */}
         <section id="probleem" className="px-3 py-24 sm:px-5 sm:py-32">
-          <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+          <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
             <Reveal className="mx-auto max-w-3xl text-center">
               <p className="eyebrow text-black/40">Waar loop je tegenaan?</p>
               <h2 {...titleProps("Goed bedrijf. Maar ziet de buitenwereld dat ook?", "section", "mt-6 mx-auto")}>
@@ -510,7 +510,7 @@ export default function Homepage() {
             probleem was, wat ik maakte en wat het opleverde — dat is waar iemand
             op afgaat als hij zichzelf net herkend heeft in sectie 2. */}
         <section id="werk" className="bg-white px-3 py-24 sm:px-5 sm:py-32">
-          <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+          <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
             <Reveal className="mb-16 flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <p className="eyebrow text-black/40">Selectie uit mijn werk</p>
@@ -598,7 +598,7 @@ export default function Homepage() {
             plaats van ertussen te zitten. De knop is eruit: die staat al in de
             navigatie, in de hero en onderaan de pagina. */}
         <section id="over" className="bg-white px-3 py-24 sm:px-5 sm:py-32">
-          <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+          <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
             <div className="grid gap-12 border-t border-black/15 pt-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20 lg:pt-16">
               <Reveal>
                 <p className="flex items-center gap-3 eyebrow text-black/45">
@@ -669,7 +669,7 @@ export default function Homepage() {
         {/* Werkwijze in één regel. De uitgebreide uitleg staat op /werkwijze/;
             op de homepage is dit alles wat iemand hoeft te weten. */}
         <section id="werkwijze" className="px-3 py-16 sm:px-5 sm:py-20">
-          <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+          <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
             <Reveal>
               <p className="eyebrow text-black/40">Zo werkt het</p>
               <ol className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-4 border-t border-black/15 pt-8 sm:gap-x-6">
@@ -696,7 +696,7 @@ export default function Homepage() {
             achter weg zodra de bodytekst groter werd. */}
         <section className="bg-white px-3 py-24 sm:px-5 sm:py-32">
           <FAQSchema items={faqs} />
-          <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+          <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
             <Reveal className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
               <div>
                 <p className="eyebrow text-black/40">Kort antwoord</p>
@@ -752,7 +752,7 @@ export default function Homepage() {
             De scale-110 op het beeld is nodig: blur trekt randpixels naar binnen,
             waardoor je zonder die overmaat een lichte zoom langs de randen ziet. */}
         <section id="contact" className="bg-white px-3 pb-5 pt-24 sm:px-5 sm:pt-32">
-          <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+          <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
             <Reveal className="relative isolate overflow-hidden rounded-[24px] bg-[#0F0E0B] px-6 py-24 text-center sm:px-12 sm:py-28">
               <img
                 src={heroPoster}

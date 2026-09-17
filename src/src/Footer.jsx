@@ -56,7 +56,7 @@ export default function Footer({ elevated = false }) {
 
   return (
     <footer className={`${elevated ? "bg-white" : "bg-[#f4f3ee]"} px-3 pb-10 pt-24 sm:px-5 sm:pb-12 sm:pt-28`}>
-      <div className="mx-auto max-w-[1750px] px-2.5 sm:px-3.5">
+      <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
         <div className="grid gap-x-12 gap-y-14 border-t border-black/15 pt-14 lg:grid-cols-[1.6fr_1fr_1.1fr_1fr] lg:gap-x-16 lg:pt-16">
           {/* Links de positionering, niet alleen een logo: wie helemaal naar
               beneden scrollt eindigt met dezelfde gedachte als waarmee hij boven
