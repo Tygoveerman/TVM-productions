@@ -5,7 +5,6 @@ import {
   ArrowUpRight,
   Check,
   ChevronDown,
-  Clock,
   Mail,
   MapPin,
   Menu,
@@ -30,10 +29,10 @@ import { SITE_URL } from "../site/business.js";
 import StickyCta from "../site/StickyCta.jsx";
 import ArrowSwap from "../site/ArrowSwap.jsx";
 import Breadcrumbs from "../site/Breadcrumbs.jsx";
-import SubpageHero from "../site/SubpageHero.jsx";
 import HoeIkHelp from "./HoeIkHelp.jsx";
 import OplossingPagina from "./OplossingPagina.jsx";
 import { oplossingen } from "../site/oplossingen.js";
+import { VOORWAARDEN } from "../site/voorwaarden.js";
 import { titleProps } from "../site/typography.js";
 import Testimonials from "../site/Testimonials.jsx";
 import { trackEvent } from "../site/analytics.js";
@@ -694,10 +693,26 @@ function ArticlePage({ article, slug }) { return <Layout><PageHero label={articl
 
 function FAQPage() { const all = [...serviceData.bedrijfsvideo.faqs, ...serviceData["eventvideo-fotografie"].faqs, ["Hoe snel ontvang ik een voorstel?", "Na de kennismaking ontvang je meestal binnen enkele werkdagen een duidelijk productievoorstel."]]; return <Layout schema={[faqNode(all, `${SITE_URL}/veelgestelde-vragen/`)]}><PageHero label="Veelgestelde vragen" title="ALLES WAT JE VOORAF WILT WETEN." intro="Direct antwoord op praktische vragen over voorbereiding, opnames, planning en oplevering." /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><div className="mx-auto max-w-4xl"><Accordion items={all} /></div></section><CTA /></Layout>; }
 
+// Label en slug van de bijbehorende oplossingspagina (voor ?uitdaging=).
+const UITDAGINGEN = [
+  ["Zichtbaar worden", "zichtbaar-worden"],
+  ["Medewerkers aantrekken", "medewerkers-aantrekken"],
+  ["Duidelijk uitleggen", "duidelijk-uitleggen"],
+  ["Iets anders", null],
+];
+
 function ContactPage() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const startedAt = useState(() => Date.now())[0];
+  // Voorselectie via /contact/?uitdaging=<slug>, zoals de oplossingspagina's
+  // linken. Pas na mount uitlezen: de server rendert zonder URL.
+  const [uitdaging, setUitdaging] = useState(UITDAGINGEN[0][0]);
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("uitdaging");
+    const match = UITDAGINGEN.find(([, s]) => s === slug);
+    if (match) setUitdaging(match[0]);
+  }, []);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -714,7 +729,7 @@ function ContactPage() {
       startedAt,
     };
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/contact/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -729,131 +744,70 @@ function ContactPage() {
     }
   };
 
+  const veld = "rounded-xl border border-black/15 bg-white px-4 py-3 text-base font-normal outline-none transition-colors focus:border-black";
   return <Layout>
-    <SubpageHero
-      variant="redactioneel"
-      eyebrow="Contact"
-      headline={["Wat is je uitdaging?"]}
-      description="Je hoeft nog niet te weten welke video je nodig hebt. Vertel waar het bij jou vastloopt, dan denk ik mee over wat daarvoor nodig is."
-      breadcrumbs={[{ label: "Contact", href: "/contact/" }]}
-    />
-
-    {/* Funnel in twee stappen: eerst kwalificeren op de uitdaging, dan pas de
-        gegevens vragen. Wie eerst één keuze maakt, maakt het formulier eerder af
-        dan wie meteen tegen zes lege velden aankijkt. */}
-    <section className="bg-white px-3 py-24 sm:px-5 sm:py-32">
+    {/* Alles boven de vouw: geen hero, kop en formulier direct bovenaan.
+        Keuze van de uitdaging als drie knoppen, velden compact eronder. */}
+    <section className="px-3 pb-20 pt-28 sm:px-5 sm:pt-32">
       <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
-        <form onSubmit={submit} className="grid gap-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
+        <Breadcrumbs items={[{ label: "Contact", href: "/contact/" }]} />
+        <form onSubmit={submit} className="mt-6 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <div>
-            <div className="border-t border-black/15 pt-8">
-              <p className="eyebrow text-[#9c7900]">01 — Waar loopt het vast?</p>
-              <h2 {...titleProps("Kies wat het dichtst in de buurt komt.", "card", "mt-5")}>
-                Kies wat het dichtst in de buurt komt.
-              </h2>
+            <h1 {...titleProps("Wat is je uitdaging?", "section")}>Wat is je uitdaging?</h1>
+            <p className="mt-4 max-w-xl t-body text-black/60">Je hoeft nog niet te weten welke video je nodig hebt. Kies waar het vastloopt en vertel er kort iets over.</p>
 
-              <div className="mt-8 grid gap-3">
-                {[
-                  ["Zichtbaar worden", "Klanten zien onvoldoende wat wij anders of beter doen."],
-                  ["Medewerkers aantrekken", "We krijgen onze vacatures niet gevuld met de juiste mensen."],
-                  ["Duidelijk uitleggen", "Wat wij doen is lastig uit te leggen aan klanten."],
-                  ["Iets anders", "Mijn uitdaging past hier niet tussen."],
-                ].map(([label, uitleg], i) => (
-                  <label
-                    key={label}
-                    className="group flex cursor-pointer items-start gap-4 rounded-[18px] border border-black/10 bg-[#f4f3ee] p-5 transition-colors duration-200 hover:border-black/25 has-[:checked]:border-[#c59d00] has-[:checked]:bg-[#fffaea] sm:p-6"
-                  >
-                    <input
-                      type="radio"
-                      name="uitdaging"
-                      value={label}
-                      defaultChecked={i === 0}
-                      className="mt-1 size-5 shrink-0 accent-[#c59d00]"
-                    />
-                    <span>
-                      <span className="block text-lg font-extrabold tracking-[-0.015em]">{label}</span>
-                      <span className="mt-1 block text-base leading-relaxed text-black/60">{uitleg}</span>
-                    </span>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {UITDAGINGEN.map(([label]) => {
+                const actief = uitdaging === label;
+                return (
+                  <label key={label} className={`cursor-pointer rounded-full border px-5 py-3 text-base font-bold transition-colors duration-200 focus-within:ring-2 focus-within:ring-[#c59d00] focus-within:ring-offset-2 ${actief ? "border-[#0F0E0B] bg-[#0F0E0B] text-[#F3F0EA]" : "border-black/15 bg-white text-black/70 hover:border-black/40 hover:text-black"}`}>
+                    <input type="radio" name="uitdaging" value={label} checked={actief} onChange={() => setUitdaging(label)} className="sr-only" />
+                    {label}
                   </label>
-                ))}
-              </div>
+                );
+              })}
             </div>
 
-            <div className="mt-14 border-t border-black/15 pt-8">
-              <p className="eyebrow text-[#9c7900]">02 — Vertel er iets meer over</p>
-              <h2 {...titleProps("Waar zit het precies?", "card", "mt-5")}>Waar zit het precies?</h2>
+            <div className="mt-8 grid gap-4">
+              <label className="grid gap-2 text-sm font-bold">
+                Waar loopt het vast?
+                <textarea required name="bericht" rows="4" maxLength={5000} className={`resize-y ${veld}`} />
+              </label>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="grid gap-2 text-sm font-bold">Naam<input required name="naam" maxLength={100} autoComplete="name" className={veld} /></label>
+                <label className="grid gap-2 text-sm font-bold">Bedrijf<input name="bedrijf" maxLength={120} autoComplete="organization" className={veld} /></label>
+              </div>
+              <label className="grid gap-2 text-sm font-bold">E-mail<input required type="email" name="email" maxLength={254} autoComplete="email" className={veld} /></label>
+              <label className="hidden" aria-hidden="true">Laat dit veld leeg<input tabIndex={-1} autoComplete="off" name="website" /></label>
 
-              <div className="mt-8 grid gap-4">
-                <label className="grid gap-2 text-sm font-bold">
-                  Wat wil je bereiken?
-                  <textarea required name="bericht" rows="5" maxLength={5000} className="resize-y rounded-2xl border border-black/10 bg-white px-5 py-4 text-base font-normal outline-none transition-colors focus:border-black" />
-                </label>
+              {status === "error" && <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{error}</p>}
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="grid gap-2 text-sm font-bold">
-                    Naam
-                    <input required name="naam" maxLength={100} autoComplete="name" className="rounded-2xl border border-black/10 bg-white px-5 py-4 text-base font-normal outline-none transition-colors focus:border-black" />
-                  </label>
-                  <label className="grid gap-2 text-sm font-bold">
-                    Bedrijf
-                    <input name="bedrijf" maxLength={120} autoComplete="organization" className="rounded-2xl border border-black/10 bg-white px-5 py-4 text-base font-normal outline-none transition-colors focus:border-black" />
-                  </label>
-                </div>
-
-                <label className="grid gap-2 text-sm font-bold">
-                  E-mail
-                  <input required type="email" name="email" maxLength={254} autoComplete="email" className="rounded-2xl border border-black/10 bg-white px-5 py-4 text-base font-normal outline-none transition-colors focus:border-black" />
-                </label>
-
-                <label className="hidden" aria-hidden="true">Laat dit veld leeg<input tabIndex={-1} autoComplete="off" name="website" /></label>
-
-                {status === "error" && <p role="alert" className="rounded-2xl bg-red-50 px-5 py-4 text-sm font-semibold text-red-700">{error}</p>}
-
-                <button disabled={status === "sending"} className="mt-3 w-fit rounded-full bg-[#f5ca3c] px-7 py-4 text-base font-bold text-[#0F0E0B] transition-transform duration-300 hover:-translate-y-0.5 disabled:opacity-50">
-                  {status === "sending" ? "Versturen…" : "Verstuur je uitdaging"}
+              <div className="mt-2 flex flex-wrap items-center gap-5">
+                <button disabled={status === "sending"} className="rounded-full bg-[#f5ca3c] px-7 py-4 text-base font-bold text-[#0F0E0B] transition-transform duration-300 hover:-translate-y-0.5 disabled:opacity-50">
+                  {status === "sending" ? "Versturen…" : "Verstuur"}
                 </button>
-
-                <p className="text-sm text-black/40">Je gegevens worden alleen gebruikt om je aanvraag te beantwoorden.</p>
+                <p className="text-sm text-black/40">Alleen gebruikt om je aanvraag te beantwoorden.</p>
               </div>
             </div>
           </div>
 
-          {/* Naast het formulier: wat er daarna gebeurt, en de directe route voor
-              wie liever niet invult. */}
-          <aside className="lg:pt-8">
-            <div className="rounded-[24px] bg-[#f4f3ee] p-7 sm:p-9">
-              <p className="eyebrow text-black/45">Wat er daarna gebeurt</p>
-              <ol className="mt-7 grid gap-6">
-                {[
-                  ["Ik reageer", "Meestal binnen één werkdag, met een paar concrete vragen."],
-                  ["We bellen kort", "Twintig minuten om te bepalen waar het echt om draait."],
-                  ["Je krijgt een voorstel", "Met wat we maken, waarom, en wat het kost."],
-                ].map(([stap, uitleg], i) => (
-                  <li key={stap} className="flex gap-4">
-                    <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-[#0F0E0B] text-xs font-black text-[#F3F0EA]">
-                      {i + 1}
-                    </span>
-                    <span>
-                      <span className="block font-bold">{stap}</span>
-                      <span className="mt-1 block text-base leading-relaxed text-black/55">{uitleg}</span>
-                    </span>
-                  </li>
-                ))}
-              </ol>
-
-              <div className="mt-9 grid gap-3 border-t border-black/15 pt-7 text-base font-semibold text-black/60">
-                <a href="mailto:tygo@tvm-productions.nl" className="flex w-fit items-center gap-3 transition-colors hover:text-black">
-                  <Mail className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />
-                  tygo@tvm-productions.nl
-                </a>
-                <span className="flex items-center gap-3">
-                  <MapPin className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />
-                  Purmerend, Noord-Holland
-                </span>
-                <span className="flex items-center gap-3">
-                  <Clock className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />
-                  Meestal binnen één werkdag
-                </span>
-              </div>
+          {/* Rechts: wat er daarna gebeurt, en de directe route. Kort. */}
+          <aside className="lg:pt-24">
+            <ol className="grid gap-5 border-t border-black/15 pt-6">
+              {[
+                ["Ik reageer", "Meestal binnen één werkdag."],
+                ["We bellen kort", "Twintig minuten om te bepalen waar het om draait."],
+                ["Je krijgt een voorstel", "Wat we maken, waarom, en wat het kost."],
+              ].map(([stap, uitleg], i) => (
+                <li key={stap} className="flex gap-4">
+                  <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-[#0F0E0B] text-xs font-black text-[#F3F0EA]">{i + 1}</span>
+                  <span><span className="block font-bold">{stap}</span><span className="mt-0.5 block text-base text-black/55">{uitleg}</span></span>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-8 grid gap-3 border-t border-black/15 pt-6 text-base font-semibold text-black/60">
+              <a href="mailto:tygo@tvm-productions.nl" className="flex w-fit items-center gap-3 transition-colors hover:text-black"><Mail className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />tygo@tvm-productions.nl</a>
+              <span className="flex items-center gap-3"><MapPin className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />Purmerend, Noord-Holland</span>
             </div>
           </aside>
         </form>
@@ -876,9 +830,42 @@ function PrivatePage({ data }) { return <Layout><PageHero label={data.label} tit
 
 export const legalData = {
   privacy: { title: "Privacyverklaring", intro: "Hoe TVM Productions omgaat met persoonsgegevens.", sections: [["Contactgegevens", "TVM Productions verwerkt gegevens die je zelf verstrekt wanneer je contact opneemt, zoals naam, e-mailadres, telefoonnummer en bedrijfsnaam."], ["Waarom deze gegevens worden gebruikt", "Voor het beantwoorden van aanvragen, maken van offertes, uitvoeren van opdrachten en voldoen aan administratieve verplichtingen."], ["Bewaartermijnen en delen", "Gegevens worden niet langer bewaard dan nodig en alleen gedeeld met partijen die noodzakelijk zijn voor de uitvoering of wanneer de wet dit vereist."], ["Jouw rechten", "Je kunt vragen om inzage, correctie of verwijdering via tygo@tvm-productions.nl."]] },
-  voorwaarden: { title: "Algemene voorwaarden", intro: "Praktische afspraken rond offertes, planning, gebruik en oplevering.", sections: [["Conceptversie", "Deze pagina is een inhoudelijke placeholder en geen definitieve juridische set voorwaarden."], ["Offerte en opdracht", "Leg vóór publicatie vast wanneer een offerte bindend wordt, welke werkzaamheden zijn inbegrepen en hoe meerwerk wordt behandeld."], ["Planning en annulering", "Neem afspraken op over verplaatsen, annuleren, weersomstandigheden, toegang tot locaties en inzet van derden."], ["Gebruiksrechten", "Leg vast welke gebruiksrechten de klant ontvangt en hoe bronmateriaal, muzieklicenties en portfoliogebruik worden behandeld."]] },
   "avg-fotografie-video": { title: "AVG bij fotografie en video", intro: "Praktische aandachtspunten wanneer medewerkers, klanten of bezoekers in beeld komen.", sections: [["Wie regelt toestemming?", "De opdrachtgever is doorgaans verantwoordelijk voor een geldige grondslag en voor het informeren van mensen die herkenbaar in beeld komen."], ["Maak afspraken vooraf", "Bepaal wie wel en niet in beeld mag, waar het materiaal wordt gepubliceerd en hoe lang toestemming geldt."], ["Evenementen", "Werk met duidelijke informatie bij registratie en entree. Bied waar mogelijk een herkenbare route voor bezoekers die niet in beeld willen."]] },
 };
+
+// Lid-tekst met optionele sub-opsomming (a., b., …) of tabel; zie voorwaarden.js.
+function VoorwaardenLid({ nummer, lid }) {
+  const l = typeof lid === "string" ? { tekst: lid } : lid;
+  return <li className="grid gap-x-5 gap-y-3 sm:grid-cols-[3.5rem_1fr]">
+    <span className="text-sm font-black tracking-[0.06em] text-black/35 sm:pt-1">{nummer}</span>
+    <div className="leading-relaxed text-black/65">
+      <p>{l.tekst}{l.link && <a href={l.link.href} className="font-semibold text-black underline decoration-[#f5ca3c] decoration-2 underline-offset-4 hover:text-[#9c7900]">{l.link.label}</a>}{l.tekstNa}</p>
+      {l.items && <ol className="mt-3 grid gap-2 pl-1">{l.items.map((item, i) => <li key={item} className="grid grid-cols-[1.5rem_1fr] gap-2"><span className="font-semibold text-black/45">{l.itemStijl === "streep" ? "–" : `${String.fromCharCode(97 + i)}.`}</span><span>{item}</span></li>)}</ol>}
+      {l.tabel && <div className="mt-4 overflow-hidden rounded-2xl border border-black/10"><table className="w-full text-left text-[0.95rem]"><thead className="bg-[#f4f3ee] text-xs font-black uppercase tracking-[0.12em] text-black/50"><tr>{l.tabel.kop.map((k) => <th key={k} className="px-4 py-3 font-black">{k}</th>)}</tr></thead><tbody>{l.tabel.rijen.map(([fase, vergoeding]) => <tr key={fase} className="border-t border-black/10"><td className="px-4 py-3 text-black/70">{fase}</td><td className="px-4 py-3 font-semibold text-black">{vergoeding}</td></tr>)}</tbody></table></div>}
+    </div>
+  </li>;
+}
+
+function VoorwaardenPage() {
+  const v = VOORWAARDEN;
+  return <Layout>
+    <PageHero label="Praktisch" title={v.titel.toUpperCase()} intro={`Deze voorwaarden gelden voor alle offertes en opdrachten van ${v.bedrijf}. Versie ${v.versie}, vastgesteld op ${v.vastgesteld}.`} compact breadcrumbs={[{ label: v.titel, href: "/voorwaarden/" }]} />
+    <section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><article className="mx-auto max-w-4xl">
+      <dl className="grid gap-x-8 gap-y-4 rounded-[2rem] bg-[#f4f3ee] p-7 sm:grid-cols-3 sm:p-9">{[["Bedrijf", v.bedrijf], ["KvK", v.kvk], ["Btw", v.btw], ["Adres", v.adres], ["Versie", `${v.versie} — ${v.vastgesteld}`]].map(([k, w]) => <div key={k}><dt className="eyebrow text-black/40">{k}</dt><dd className="mt-1.5 font-semibold">{w}</dd></div>)}</dl>
+
+      {/* Inhoudsopgave: vijftien artikelen is te veel om te scrollen zonder houvast. */}
+      <nav aria-label="Artikelen" className="mt-14"><p className="eyebrow text-black/40">Inhoud</p><ol className="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">{v.artikelen.map((a, i) => <li key={a.titel}><a href={`#artikel-${i + 1}`} className="inline-flex gap-3 font-semibold text-black/70 transition-colors hover:text-black"><span className="text-black/35">{String(i + 1).padStart(2, "0")}</span>{a.titel}</a></li>)}</ol></nav>
+
+      {v.artikelen.map((a, i) => <section key={a.titel} id={`artikel-${i + 1}`} className="scroll-mt-32 border-t border-black/15 py-10 sm:py-12">
+        <span className="text-sm font-black text-black/30">Artikel {i + 1}</span>
+        <h2 {...titleProps(a.titel, "card", "mt-3")}>{a.titel}</h2>
+        <ol className="mt-7 grid gap-5">{a.leden.map((lid, j) => <VoorwaardenLid key={j} nummer={`${i + 1}.${j + 1}`} lid={lid} />)}</ol>
+      </section>)}
+
+      <p className="border-t border-black/15 pt-8 text-sm text-black/45">{v.bedrijf} &nbsp;|&nbsp; KvK {v.kvk} &nbsp;|&nbsp; Btw {v.btw} &nbsp;|&nbsp; {v.adres}<br />Versie {v.versie} &nbsp;|&nbsp; Vastgesteld: {v.vastgesteld}</p>
+    </article></section>
+  </Layout>;
+}
 
 function LegalPage({ data, slug }) { return <Layout><PageHero label="Praktisch" title={data.title.toUpperCase()} intro={data.intro} compact breadcrumbs={[{ label: data.title, href: `/${slug}/` }]} /><section className="bg-white px-3 py-24 sm:px-6 sm:py-32"><article className="mx-auto max-w-4xl">{data.sections.map(([t, d], i) => <section key={t} className="border-t border-black/15 py-9"><span className="text-sm font-black text-black/30">0{i + 1}</span><h2 {...titleProps(t, "card", "mt-4")}>{t}</h2><p className="mt-4 leading-relaxed text-black/55 t-body">{d}</p></section>)}</article></section></Layout>; }
 
@@ -887,7 +874,10 @@ function NotFound() { return <Layout><PageHero label="404" title="DEZE PAGINA BE
 export default function SitePage({ path }) {
   const clean = path.replace(/\/+$/, "") || "/";
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Met een anker in de URL (bv. /voorwaarden/#artikel-8) niet naar boven
+    // springen maar naar dat element.
+    const doel = window.location.hash && document.getElementById(window.location.hash.slice(1));
+    if (doel) doel.scrollIntoView(); else window.scrollTo(0, 0);
     // Titel uit seo.js halen in plaats van uit een tweede, handmatige lijst.
     // Die lijst stond hier eerder en liep uiteen met wat de server rendert: de
     // browser overschreef na hydratie de volledige SEO-titel met een kortere.
@@ -917,7 +907,7 @@ export default function SitePage({ path }) {
   if (clean === "/particulier/trouwfilm") return <PrivatePage data={privateData.trouwfilm} />;
   if (clean === "/particulier/event") return <PrivatePage data={privateData.event} />;
   if (clean === "/privacy") return <LegalPage data={legalData.privacy} slug="privacy" />;
-  if (clean === "/voorwaarden") return <LegalPage data={legalData.voorwaarden} slug="voorwaarden" />;
+  if (clean === "/voorwaarden") return <VoorwaardenPage />;
   if (clean === "/avg-fotografie-video") return <LegalPage data={legalData["avg-fotografie-video"]} slug="avg-fotografie-video" />;
   return <NotFound />;
 }

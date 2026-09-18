@@ -96,7 +96,7 @@ const staticPages = {
   },
   "/voorwaarden": {
     title: "Algemene voorwaarden | TVM Productions",
-    description: "Praktische afspraken rond offertes, planning, gebruik en oplevering.",
+    description: "Algemene voorwaarden van TVM Networks (versie 1.0): offertes, betaling, annulering, gebruiksrecht en aansprakelijkheid.",
   },
   "/avg-fotografie-video": {
     title: "AVG bij fotografie en video op de werkvloer | TVM Productions",

@@ -202,7 +202,8 @@ export default function OplossingPagina({ data, slug, cases = {} }) {
             <p className="max-w-xl text-[clamp(1.2rem,1.4vw,1.6rem)] font-bold leading-[1.4] tracking-[-0.015em] text-black/85">
               Vertel me waar je tegenaan loopt. Ik denk met je mee over wat daarvoor nodig is.
             </p>
-            <Knop href="/contact/">Bespreek je uitdaging</Knop>
+            {/* De slug gaat mee zodat het contactformulier deze uitdaging al aanvinkt. */}
+            <Knop href={`/contact/?uitdaging=${slug}`}>Bespreek je uitdaging</Knop>
           </Reveal>
         </Kader>
       </section>
