@@ -2,7 +2,7 @@
 // Vereist RESEND_API_KEY in de environment variables van het Vercel-project.
 import { Resend } from "resend";
 
-const TO_EMAIL = "info@tvm-productions.nl";
+const TO_EMAIL = "tygo@tvm-productions.nl";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_FILL_TIME_MS = 3000;
 
