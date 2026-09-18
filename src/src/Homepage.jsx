@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion as Motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
@@ -89,8 +89,8 @@ const ROUTES = [
     nummer: "02",
     id: "medewerkers-aantrekken",
     titel: "Medewerkers aantrekken",
-    probleem: "Je hebt een goed bedrijf en leuk werk, maar kandidaten krijgen daar online nauwelijks iets van mee.",
-    punten: ["Het echte werk laten zien", "Medewerkers aan het woord", "Cultuur voelbaar maken", "Kandidaten enthousiast maken"],
+    probleem: "Je hebt een goed bedrijf en leuk werk, maar kandidaten krijgen daar online weinig van mee.",
+    punten: ["Het echte werk laten zien", "Medewerkers aan het woord", "Cultuur voelbaar maken", "Kandidaten enthousiasmeren"],
     image: kesWerk,
     alt: "Graafmachine aan het werk op een bouwplaats van Kes Sloopwerk",
   },
@@ -106,8 +106,9 @@ const ROUTES = [
   },
 ];
 
-// De drie sterkste cases. Titel, type en beeld komen uit caseData in SitePages,
-// zodat die niet uit de pas lopen met de casepagina zelf.
+// De zeven cases op de homepage, in deze volgorde. Titel, type en beeld komen
+// uit caseData in SitePages, zodat die niet uit de pas lopen met de casepagina
+// zelf.
 //
 // De drie regels hieronder zijn wél homepage-eigen: de teksten in caseData zijn
 // volzinnen die op een casepagina prima werken, maar hier moet je in één blik
@@ -115,32 +116,47 @@ const ROUTES = [
 // klik verderop.
 const FEATURED_CASES = [
   {
-    slug: "24wines",
-    uitdaging: "Een webshop voelt anoniem. Klanten zien niet wie erachter zit.",
-    aanpak: "Bedrijfsvideo in de zaak, productfotografie en het inpakproces in beeld.",
-    resultaat: "Beeld dat vertrouwen wekt en 24Wines onderscheidt van een anonieme webshop.",
+    slug: "b2-keyserkerk",
+    uitdaging: "Restauratiewerk gebeurt hoog in de steigers, buiten het zicht van opdrachtgevers.",
+    aanpak: "Projectvideo met dronebeeld van de Keyserkerk en het vakwerk op de steigers van dichtbij.",
+    resultaat: "Een film die het project en het vakmanschap van B2 Restauratie tastbaar maakt.",
   },
   {
-    slug: "sunforce",
-    uitdaging: "Het vakmanschap gebeurt op locatie en blijft voor klanten onzichtbaar.",
-    aanpak: "Reportage van de installatie op het dak tot het team op kantoor.",
-    resultaat: "Eén beeldbank die werkt voor website, sales én social.",
+    slug: "vijzelstraat-1",
+    uitdaging: "Een karakteristieke woning in Edam verdient meer dan een fotoreeks op Funda.",
+    aanpak: "Woningfilm waarin de makelaar zelf rondleidt, plus twee staande Meta-advertenties.",
+    resultaat: "Een presentatie die de woning én de makelaar een gezicht geeft.",
   },
   {
-    slug: "kes-sloopwerk",
-    uitdaging: "Telefoonbeelden deden geen recht aan het materieel en de mensen.",
-    aanpak: "Van het eerste graafwerk tot de afronding: overzicht, actie en details.",
-    resultaat: "Een beeldserie die het werk laat zien zoals het echt is.",
+    slug: "cc-topparken",
+    uitdaging: "Wat CoffeeClick over zichzelf zegt, overtuigt minder dan wat een klant zegt.",
+    aanpak: "Klantcase bij TopParken: interview met de operations manager tijdens de installatie.",
+    resultaat: "Een geloofwaardig verhaal van klant tot klant voor sales, website en social.",
   },
-];
-
-// Vier woorden volstaan: meer hoeft iemand op de homepage niet te weten over
-// de werkwijze.
-const steps = [
-  ["01", "Kennismaken"],
-  ["02", "Plan maken"],
-  ["03", "Produceren"],
-  ["04", "Opleveren"],
+  {
+    slug: "faceland",
+    uitdaging: "Bij een kliniekketen is de ontvangst onderdeel van de behandeling, koffie incluis.",
+    aanpak: "Interview bij Faceland Clinics, gecombineerd met de machine op de balie en de monteur aan het werk.",
+    resultaat: "Een tweede klantcase in dezelfde stijl, zodat CoffeeClick per branche kan laten zien wat ze doen.",
+  },
+  {
+    slug: "jaimm-pmu",
+    uitdaging: "Klanten boeken het liefst bij iemand die ze al een beetje kennen.",
+    aanpak: "Portret, praktijkruimte en close-ups van een behandeling in uitvoering.",
+    resultaat: "Een beeldbank die direct laat zien wie er achter de behandeltafel staat.",
+  },
+  {
+    slug: "ter-leede",
+    uitdaging: "De sfeer van het Business Diner bewaren én materiaal voor de volgende editie.",
+    aanpak: "Fotoreportage van ontvangst tot show, aangevuld met een aftermovie.",
+    resultaat: "Herbruikbaar beeld en video voor terugblik, uitnodiging en social media.",
+  },
+  {
+    slug: "sg-wj-bladergroen",
+    uitdaging: "Een schooldag is meer dan het klaslokaal, maar dat zag je online nergens terug.",
+    aanpak: "Sfeerfotografie door de hele school: praktijkvakken, sport, het plein en het team.",
+    resultaat: "Een herkenbare beeldserie voor de website en het wervingsmateriaal.",
+  },
 ];
 
 const faqs = [
@@ -479,7 +495,7 @@ export default function Homepage() {
                           {route.punten.map((punt) => (
                             <li
                               key={punt}
-                              className="flex items-center justify-center rounded-full border border-[#F3F0EA]/20 bg-[#F3F0EA]/[0.06] px-3 py-2 text-center text-[0.8125rem] font-semibold leading-snug text-[#F3F0EA]/85 backdrop-blur-sm"
+                              className="flex min-h-[3.25rem] items-center justify-center rounded-full border border-[#F3F0EA]/20 bg-[#F3F0EA]/[0.06] px-3 py-2 text-center text-[0.8125rem] font-semibold leading-snug text-[#F3F0EA]/85 backdrop-blur-sm"
                             >
                               {punt}
                             </li>
@@ -657,29 +673,11 @@ export default function Homepage() {
                   </li>
                 ))}
               </ol>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* Werkwijze in één regel. De uitgebreide uitleg staat op /werkwijze/;
-            op de homepage is dit alles wat iemand hoeft te weten. */}
-        <section id="werkwijze" className="px-3 py-16 sm:px-5 sm:py-20">
-          <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
-            <Reveal>
-              <p className="eyebrow text-black/40">Zo werkt het</p>
-              <ol className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-4 border-t border-black/15 pt-8 sm:gap-x-6">
-                {steps.map(([nummer, titel], index) => (
-                  <Fragment key={nummer}>
-                    {index > 0 && (
-                      <span className="text-2xl text-black/25" aria-hidden="true">&rarr;</span>
-                    )}
-                    <li className="flex items-baseline gap-3">
-                      <span className="text-sm font-black tracking-[0.14em] text-[#c59d00]">{nummer}</span>
-                      <span className="text-[clamp(1.35rem,2vw,2rem)] font-extrabold tracking-[-0.02em]">{titel}</span>
-                    </li>
-                  </Fragment>
-                ))}
-              </ol>
+              {/* De uitgebreide uitleg staat op /werkwijze/; hier volstaat één link. */}
+              <a href="/werkwijze/" className="mt-12 inline-flex items-center gap-2 text-base font-bold transition-colors hover:text-[#9c7900]">
+                Lees hoe een productie verloopt
+                <ArrowRight className="size-4 text-[#b78d00]" strokeWidth={2.5} aria-hidden="true" />
+              </a>
             </Reveal>
           </div>
         </section>

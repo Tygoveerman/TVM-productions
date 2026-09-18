@@ -37,8 +37,6 @@ import { oplossingen } from "../site/oplossingen.js";
 import { titleProps } from "../site/typography.js";
 import Testimonials from "../site/Testimonials.jsx";
 import { trackEvent } from "../site/analytics.js";
-import corkesProject from "../assets/portfolio/corkes-project.jpeg";
-import daanVastgoed from "../assets/portfolio/daan-vastgoed.jpeg";
 import droneProduction from "../assets/portfolio/drone-production.jpeg";
 import hsbBusiness from "../assets/portfolio/hsb-business.jpeg";
 import productShoot from "../assets/portfolio/product-shoot.jpeg";
@@ -46,6 +44,13 @@ import studioProduction from "../assets/portfolio/studio-production.jpeg";
 import wines24VideoPoster from "../assets/portfolio/cases/24wines-video-poster.jpg";
 import wines24InpakkenPoster from "../assets/portfolio/cases/24wines-inpakken-poster.jpg";
 import terLeedeVideoPoster from "../assets/portfolio/cases/ter-leede-video-poster.jpg";
+import keyserkerkVideoPoster from "../assets/portfolio/cases/b2-keyserkerk-video-poster.jpg";
+import vijzelstraatVideoPoster from "../assets/portfolio/cases/vijzelstraat-1-video-poster.jpg";
+import vijzelstraatDrone from "../assets/portfolio/cases/vijzelstraat-1-drone.jpg";
+import vijzelstraatSocial1Poster from "../assets/portfolio/cases/vijzelstraat-1-social-01-poster.jpg";
+import vijzelstraatSocial2Poster from "../assets/portfolio/cases/vijzelstraat-1-social-02-poster.jpg";
+import topparkenVideoPoster from "../assets/portfolio/cases/cc-topparken-video-poster.jpg";
+import facelandVideoPoster from "../assets/portfolio/cases/faceland-video-poster.jpg";
 
 // `omschrijving` zegt wat de serie laat zien; per foto komt daar alleen het
 // volgnummer bij, omdat de losse beelden niet apart beschreven zijn.
@@ -60,6 +65,12 @@ const kesSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/
 const bladergroenSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/bladergroen-selectie/*.jpg", { eager: true, import: "default" }), "Campagnefotografie voor SG WJ Bladergroen: leerlingen in de les, praktijkvakken en schoolplein");
 const stichtingSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/stichting-selectie/*.jpg", { eager: true, import: "default" }), "Fotoreportage voor Stichting voor het Kind: opnamesessie van de single in de studio");
 const sunforceSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/sunforce-selectie/*.jpg", { eager: true, import: "default" }), "Bedrijfsfotografie voor Sunforce: installatie van zonnepanelen, techniek en team");
+// Bij de video-cases hieronder zijn de stills uit de film zelf gehaald; er is
+// geen aparte fotoserie.
+const keyserkerkSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/b2-keyserkerk-selectie/*.jpg", { eager: true, import: "default" }), "Stills uit de projectvideo van B2 Restauratie over de restauratie van de Keyserkerk in Middenbeemster: toren, steigers en vakwerk");
+const vijzelstraatSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/vijzelstraat-1-selectie/*.jpg", { eager: true, import: "default" }), "Stills uit de woningpresentatie van Vijzelstraat 1 in Edam voor Van Baarsen Vastgoed: straat, gevel en interieur");
+const topparkenSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/cc-topparken-selectie/*.jpg", { eager: true, import: "default" }), "Stills uit de klantcasevideo van CoffeeClick bij TopParken in Lunteren: park, installatie en interview");
+const facelandSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/faceland-selectie/*.jpg", { eager: true, import: "default" }), "Stills uit de klantcasevideo van CoffeeClick bij Faceland Clinics: kliniek, koffiemachine en interview");
 const terLeedeSelectie = selectieGallery(import.meta.glob("../assets/portfolio/cases/ter-leede-selectie/*.jpg", { eager: true, import: "default" }), "Eventfotografie van het Business Diner van Business Club Ter Leede");
 import jaimmRuimte1 from "../assets/portfolio/cases/jaimm-gallery/ruimte-01.jpg";
 import jaimmRuimte2 from "../assets/portfolio/cases/jaimm-gallery/ruimte-02.jpg";
@@ -198,69 +209,68 @@ export const serviceData = {
 };
 
 export const caseData = {
-  sunforce: {
-    title: "Sunforce", type: "Bedrijfsfotografie", image: sunforceSelectie[5]?.src ?? sunforce,
-    kop: "Bedrijfsfotografie voor Sunforce",
-    dienst: "bedrijfsfotografie",
-    seo: { title: "Sunforce — bedrijfsfotografie zonnepanelen | TVM Productions", description: "Bedrijfsfotografie voor Sunforce, installateur van zonnepanelen in Noord-Holland: installatie op het dak, technische keuring en het team op kantoor." },
-    intro: "Technisch werk op hoogte, in de meterkast en op kantoor vertaald naar een helder verhaal voor klanten en nieuwe medewerkers.",
-    facts: { Klant: "Sunforce", Sector: "Zonne-energie & installatietechniek", Opgeleverd: "Bedrijfsfotografie", Locatie: "Noord-Holland" },
-    situation: "Veel van het vakmanschap gebeurt op locatie en blijft voor klanten onzichtbaar. Van de technische keuring in de meterkast tot de installatie op het dak — en het team erachter.",
-    made: "Een fotoreportage van de installatie op locatie, technische controles en de sfeer op kantoor.",
-    result: "Een veelzijdige beeldbank voor website, sales en social content — van dakwerk tot het team op kantoor.",
-    gallery: sunforceSelectie,
-  },
-  "kes-sloopwerk": {
-    title: "Kes Sloopwerk", type: "Projectfotografie", image: kesSelectie[2]?.src ?? kesProject,
-    kop: "Projectfotografie voor Kes Sloopwerk",
+  // De volgorde hier is de volgorde op /cases/. De eerste zeven zijn ook de
+  // selectie op de homepage (zie FEATURED_CASES daar).
+  "b2-keyserkerk": {
+    title: "B2 Restauratie — Keyserkerk", type: "Projectvideo", image: keyserkerkVideoPoster,
+    kop: "Projectvideo voor B2 Restauratie: de Keyserkerk",
     dienst: "projectvideo",
-    seo: { title: "Kes Sloopwerk — projectfotografie | TVM Productions", description: "Projectfotografie voor Kes Sloopwerk: materieel, mensen en uitvoering van sloop- en grondwerk, vastgelegd van het eerste graafwerk tot de afronding." },
-    intro: "Projectwerk vastgelegd zonder de energie en schaal van de locatie kwijt te raken.",
-    facts: { Klant: "Kes Sloopwerken", Sector: "Sloop- en grondwerk", Opgeleverd: "Projectfotografie", Locatie: "Wieringenlaan" },
-    situation: "Telefoonbeelden deden geen recht aan het materieel, de mensen en de uitvoering.",
-    made: "Een gerichte fotoreportage met overzicht, actie en details van het werk, van het eerste graafwerk tot de afronding.",
-    result: "Een bruikbare beeldserie voor website, projecten en online zichtbaarheid.",
-    gallery: kesSelectie,
+    seo: { title: "B2 Restauratie — projectvideo Keyserkerk | TVM Productions", description: "Projectvideo voor B2 Restauratie over de restauratie van de Keyserkerk in Middenbeemster: de toren vanuit de lucht, het werk op de steigers en het vakmanschap van dichtbij." },
+    intro: "Een monumentale kerktoren in de steigers, en het vakwerk dat daar dagelijks achter schuilgaat, in één film gevangen.",
+    facts: { Klant: "B2 Restauratie", Sector: "Restauratie & monumentenzorg", Opgeleverd: "Projectvideo", Locatie: "Middenbeemster" },
+    situation: "Restauratiewerk is vakwerk dat zich hoog in de steigers afspeelt, buiten het zicht van opdrachtgevers en nieuwe collega's. B2 Restauratie wilde laten zien wat er bij zo'n project komt kijken.",
+    made: "Een projectvideo met dronebeeld van de Keyserkerk en het dorp eromheen, gecombineerd met opnames op de steigers: het metselwerk, de tekeningen en de handen die het werk doen.",
+    result: "Een film die het project en het vakmanschap van B2 Restauratie tastbaar maakt voor opdrachtgevers, gemeenten en vakmensen die bij het bedrijf willen werken.",
+    video: { src: videoUrl("/videos/b2-keyserkerk/restauratie.mp4"), poster: keyserkerkVideoPoster, title: "Restauratie Keyserkerk — projectvideo" },
+    gallery: keyserkerkSelectie,
   },
-  vesto: { title: "Vesto", type: "Productfotografie", image: vestoProduct, kop: "Productfotografie voor Vesto", dienst: "productfotografie", seo: { title: "Vesto — productfotografie gereedschap | TVM Productions", description: "Productfotografie voor Vesto: gereedschap gefotografeerd op locatie, in gebruik en in zijn omgeving. Een frisse beeldserie voor productpagina's en campagnes." }, intro: "Een productserie die het gereedschap niet alleen toont, maar in zijn omgeving laat werken.", situation: "Het product had helder en aantrekkelijk beeld nodig voor online gebruik.", made: "Productfoto's op locatie met aandacht voor vorm, materiaal en gebruik.", result: "Een frisse beeldbank voor productpagina's en campagnes." },
-  "ter-leede": {
-    title: "Ter Leede", type: "Eventreportage", image: terLeedeSelectie[5]?.src,
-    kop: "Eventvideo en fotografie voor Business Club Ter Leede",
-    dienst: "eventvideo-fotografie",
-    seo: { title: "Ter Leede — aftermovie en eventfotografie | TVM Productions", description: "Aftermovie en eventfotografie van het Business Diner van Business Club Ter Leede: ontvangst, speeches, sponsormomenten en show, voor terugblik en social media." },
-    intro: "Een zakelijk diner met entertainment, sponsoractiviteiten en een feestelijke show vastgelegd van ontvangst tot late avond.",
-    facts: { Klant: "Business Club Ter Leede", Sector: "Zakelijk netwerkevent", Opgeleverd: "Eventvideo + fotografie", Locatie: "De Rustende Jager" },
-    situation: "De organisatie wilde de sfeer bewaren en tegelijk materiaal voor een volgende editie.",
-    made: "Een fotoreportage van ontvangst, speeches, sponsormomenten en de samba-show, aangevuld met een aftermovie die de avond in beweging vastlegt.",
-    result: "Herbruikbaar beeld én video voor terugblik, uitnodiging en social media.",
-    video: { src: videoUrl("/videos/ter-leede/business-diner.mp4"), poster: terLeedeVideoPoster, title: "Aftermovie — Business Diner" },
-    gallery: terLeedeSelectie,
-  },
-  "24wines": {
-    title: "24Wines", type: "Bedrijfsvideo", image: wines24Selectie[6]?.src,
-    kop: "Bedrijfsvideo voor 24Wines in Volendam",
+  "vijzelstraat-1": {
+    title: "Vijzelstraat 1, Edam", type: "Woningpresentatie", image: vijzelstraatDrone,
+    kop: "Woningpresentatie Vijzelstraat 1 voor Van Baarsen Vastgoed",
     dienst: "bedrijfsvideo",
-    seo: { title: "24Wines — bedrijfsvideo in Volendam | TVM Productions", description: "Bedrijfsvideo en productfotografie voor slijterij 24Wines in Volendam: winkel, assortiment en inpakproces in beeld, zodat een online bestelling een gezicht krijgt." },
-    intro: "Een slijterij vol verhalen — van het assortiment tot de laatste stap voordat een bestelling de deur uitgaat.",
-    facts: { Klant: "24Wines", Sector: "Slijterij & wijnhandel", Opgeleverd: "Bedrijfsvideo + fotografie", Locatie: "Volendam" },
-    situation: "24Wines wilde laten zien wat er achter een online bestelling schuilgaat: het assortiment, de sfeer in de zaak en de zorg waarmee iedere fles wordt ingepakt.",
-    made: "Een bedrijfsvideo die de winkel en het aanbod in beeld brengt, aangevuld met productfotografie en een behind-the-scenes video van het inpakproces.",
-    result: "Beeldmateriaal dat vertrouwen wekt bij nieuwe klanten en 24Wines onderscheidt van een anonieme webshop.",
-    video: { src: videoUrl("/videos/24wines/algemeen.mp4"), poster: wines24VideoPoster, title: "24Wines — het verhaal" },
-    videoSecondary: { src: videoUrl("/videos/24wines/inpakken.mp4"), poster: wines24InpakkenPoster, title: "Achter de schermen: een bestelling inpakken" },
-    gallery: wines24Selectie,
+    seo: { title: "Vijzelstraat 1 Edam — woningvideo Van Baarsen Vastgoed | TVM Productions", description: "Woningpresentatie op video voor Van Baarsen Vastgoed: de makelaar leidt je door Vijzelstraat 1 in Edam, van de straat tot de tuin, aangevuld met twee staande advertenties voor een Meta-campagne op Instagram en Facebook." },
+    intro: "Geen slideshow van foto's, maar de makelaar zelf die je door de woning en de straat meeneemt.",
+    facts: { Klant: "Van Baarsen Vastgoed", Sector: "Makelaardij", Opgeleverd: "Woningfilm + 2 Meta-advertenties", Locatie: "Edam" },
+    situation: "Een karakteristieke woning in het centrum van Edam verdient meer dan een fotoreeks. Van Baarsen Vastgoed wilde kijkers het gevoel geven dat ze al binnen zijn geweest voordat ze een bezichtiging aanvragen.",
+    made: "Een woningfilm waarin Daan van Baarsen de kijker persoonlijk rondleidt, met dronebeeld van de straat en de daken van Edam, plus twee korte staande advertenties voor een Meta-campagne op Instagram en Facebook.",
+    result: "Een presentatie die de woning én de makelaar een gezicht geeft, in een lange versie voor Funda en de website en twee korte advertenties voor Instagram en Facebook.",
+    reels: {
+      label: "Meta-advertenties",
+      kop: "Twee advertenties voor Instagram en Facebook",
+      tekst: "Uit dezelfde draaidag komen twee staande advertenties van dertien seconden: het huis vanuit de lucht, de straat en het interieur. Ingezet als betaalde Meta-campagne om woningzoekenden in de regio te bereiken en door te sturen naar de volledige presentatie.",
+    },
+    videos: [
+      { src: videoUrl("/videos/vijzelstraat-1/woningfilm.mp4"), poster: vijzelstraatVideoPoster, title: "Vijzelstraat 1 — de woningfilm", eyebrow: "Videoproductie" },
+      { src: videoUrl("/videos/vijzelstraat-1/social-01.mp4"), poster: vijzelstraatSocial1Poster, title: "Advertentie 1", eyebrow: "Meta-advertentie", portrait: true },
+      { src: videoUrl("/videos/vijzelstraat-1/social-02.mp4"), poster: vijzelstraatSocial2Poster, title: "Advertentie 2", eyebrow: "Meta-advertentie", portrait: true },
+    ],
+    gallery: vijzelstraatSelectie,
   },
-  "hsb-fc-volendam": {
-    title: "HSB x FC Volendam", type: "Eventfotografie", image: hsbSelectie[1]?.src,
-    kop: "Eventfotografie voor HSB x FC Volendam",
-    dienst: "eventvideo-fotografie",
-    seo: { title: "HSB x FC Volendam — eventfotografie | TVM Productions", description: "Eventfotografie van de bijeenkomst rond de samenwerking tussen HSB en FC Volendam, in opdracht van Qstylez: presentaties, volle zaal en de vestiging in beeld." },
-    intro: "Een bedrijfsevenement vastgelegd in opdracht van Qstylez, van de volle zaal tot de vestiging zelf.",
-    facts: { Klant: "HSB x FC Volendam", Sector: "Retail — in opdracht van Qstylez", Opgeleverd: "Eventfotografie", Locatie: "Volendam" },
-    situation: "Voor de samenwerking tussen HSB en FC Volendam organiseerde het team een bijeenkomst voor medewerkers en relaties. Qstylez wilde de sfeer en inhoud van die dag professioneel vastleggen.",
-    made: "Een fotoreportage van de presentaties, de volle zaal en de vestiging, in opdracht van Qstylez uitgevoerd voor HSB.",
-    result: "Beeld dat de samenwerking en de betrokkenheid van het team laat zien, inzetbaar voor interne communicatie en promotie.",
-    gallery: hsbSelectie,
+  "cc-topparken": {
+    title: "CoffeeClick x TopParken", type: "Klantcasevideo", image: topparkenSelectie[0]?.src,
+    kop: "Klantcasevideo voor CoffeeClick bij TopParken",
+    dienst: "klantcasevideo",
+    seo: { title: "CoffeeClick x TopParken — klantcasevideo | TVM Productions", description: "Klantcasevideo voor CoffeeClick, opgenomen bij TopParken in Lunteren: de operations manager vertelt waarom het park voor CoffeeClick koos, terwijl de nieuwe koffiemachines worden geïnstalleerd." },
+    intro: "Een bestaande klant die zelf vertelt waarom hij voor je koos, opgenomen op de dag dat de nieuwe machines worden geplaatst.",
+    facts: { Klant: "CoffeeClick", Sector: "Koffie voor de zakelijke markt", Opgeleverd: "Klantcasevideo", Locatie: "TopParken, Lunteren" },
+    situation: "CoffeeClick levert koffiemachines en service aan bedrijven. Dat verhaal komt het sterkst over als een klant het zelf vertelt, niet als het bedrijf het over zichzelf zegt.",
+    made: "Een klantcase op locatie bij vakantiepark TopParken: een interview met de operations manager, afgewisseld met de installatie van de nieuwe machines en het park zelf vanuit de lucht.",
+    result: "Een geloofwaardig verhaal van klant tot klant, dat CoffeeClick inzet in salesgesprekken, op de website en op social media.",
+    video: { src: videoUrl("/videos/cc-topparken/klantcase.mp4"), poster: topparkenVideoPoster, title: "Klantcase — TopParken Lunteren" },
+    gallery: topparkenSelectie,
+  },
+  faceland: {
+    title: "CoffeeClick x Faceland Clinics", type: "Klantcasevideo", image: facelandSelectie.at(-1)?.src,
+    kop: "Klantcasevideo voor CoffeeClick bij Faceland Clinics",
+    dienst: "klantcasevideo",
+    seo: { title: "CoffeeClick x Faceland Clinics — klantcasevideo | TVM Productions", description: "Klantcasevideo voor CoffeeClick bij Faceland Clinics: waarom een kliniekketen kiest voor goede koffie in de wachtruimte, opgenomen tijdens de installatie en het onderhoud van de machines." },
+    intro: "Koffie in de wachtruimte als onderdeel van de klantbeleving, verteld door de klant zelf.",
+    facts: { Klant: "CoffeeClick", Sector: "Koffie voor de zakelijke markt", Opgeleverd: "Klantcasevideo", Locatie: "Faceland Clinics" },
+    situation: "Voor een kliniekketen als Faceland is de ontvangst onderdeel van de behandeling. CoffeeClick wilde laten zien hoe hun machines en service daarin passen, met de klant aan het woord.",
+    made: "Een interview bij Faceland Clinics, gecombineerd met beeld van de kliniek, de koffiemachine op de balie en de servicemonteur van CoffeeClick aan het werk.",
+    result: "Een tweede klantcase in dezelfde stijl als TopParken, zodat CoffeeClick een serie opbouwt die per branche laat zien wat ze doen.",
+    video: { src: videoUrl("/videos/faceland/klantcase.mp4"), poster: facelandVideoPoster, title: "Klantcase — Faceland Clinics" },
+    gallery: facelandSelectie,
   },
   "jaimm-pmu": {
     title: "Jaimm PMU", type: "Bedrijfsfotografie", image: jaimmBehandeling5,
@@ -287,8 +297,21 @@ export const caseData = {
       { src: jaimmBehandeling6, alt: "Een PMU-behandeling bij Jaimm PMU" },
     ],
   },
+  "ter-leede": {
+    title: "Ter Leede", type: "Eventreportage", image: terLeedeSelectie[5]?.src,
+    kop: "Eventvideo en fotografie voor Business Club Ter Leede",
+    dienst: "eventvideo-fotografie",
+    seo: { title: "Ter Leede — aftermovie en eventfotografie | TVM Productions", description: "Aftermovie en eventfotografie van het Business Diner van Business Club Ter Leede: ontvangst, speeches, sponsormomenten en show, voor terugblik en social media." },
+    intro: "Een zakelijk diner met entertainment, sponsoractiviteiten en een feestelijke show vastgelegd van ontvangst tot late avond.",
+    facts: { Klant: "Business Club Ter Leede", Sector: "Zakelijk netwerkevent", Opgeleverd: "Eventvideo + fotografie", Locatie: "De Rustende Jager" },
+    situation: "De organisatie wilde de sfeer bewaren en tegelijk materiaal voor een volgende editie.",
+    made: "Een fotoreportage van ontvangst, speeches, sponsormomenten en de samba-show, aangevuld met een aftermovie die de avond in beweging vastlegt.",
+    result: "Herbruikbaar beeld én video voor terugblik, uitnodiging en social media.",
+    video: { src: videoUrl("/videos/ter-leede/business-diner.mp4"), poster: terLeedeVideoPoster, title: "Aftermovie — Business Diner" },
+    gallery: terLeedeSelectie,
+  },
   "sg-wj-bladergroen": {
-    title: "SG WJ Bladergroen", type: "Campagnefotografie", image: bladergroenSelectie[14]?.src,
+    title: "SG WJ Bladergroen", type: "Campagnefotografie", image: bladergroenSelectie[3]?.src,
     kop: "Campagnefotografie voor SG WJ Bladergroen",
     dienst: "bedrijfsfotografie",
     seo: { title: "SG WJ Bladergroen — campagnefotografie | TVM Productions", description: "Campagnefotografie voor SG WJ Bladergroen: leerlingen in de les, praktijkvakken, sport en het team achter de school, voor website en wervingsmateriaal." },
@@ -298,6 +321,57 @@ export const caseData = {
     made: "Sfeerfotografie door de hele school heen — leerlingen aan het werk, in de les en op het plein, aangevuld met een teamportret.",
     result: "Een herkenbare beeldserie voor de website en wervingsmateriaal die laat zien hoe het er op Bladergroen echt aan toegaat.",
     gallery: bladergroenSelectie,
+  },
+  sunforce: {
+    title: "Sunforce", type: "Bedrijfsfotografie", image: sunforceSelectie[5]?.src ?? sunforce,
+    kop: "Bedrijfsfotografie voor Sunforce",
+    dienst: "bedrijfsfotografie",
+    seo: { title: "Sunforce — bedrijfsfotografie zonnepanelen | TVM Productions", description: "Bedrijfsfotografie voor Sunforce, installateur van zonnepanelen in Noord-Holland: installatie op het dak, technische keuring en het team op kantoor." },
+    intro: "Technisch werk op hoogte, in de meterkast en op kantoor vertaald naar een helder verhaal voor klanten en nieuwe medewerkers.",
+    facts: { Klant: "Sunforce", Sector: "Zonne-energie & installatietechniek", Opgeleverd: "Bedrijfsfotografie", Locatie: "Noord-Holland" },
+    situation: "Veel van het vakmanschap gebeurt op locatie en blijft voor klanten onzichtbaar. Van de technische keuring in de meterkast tot de installatie op het dak — en het team erachter.",
+    made: "Een fotoreportage van de installatie op locatie, technische controles en de sfeer op kantoor.",
+    result: "Een veelzijdige beeldbank voor website, sales en social content — van dakwerk tot het team op kantoor.",
+    gallery: sunforceSelectie,
+  },
+  "kes-sloopwerk": {
+    title: "Kes Sloopwerk", type: "Projectfotografie", image: kesSelectie[2]?.src ?? kesProject,
+    kop: "Projectfotografie voor Kes Sloopwerk",
+    dienst: "projectvideo",
+    seo: { title: "Kes Sloopwerk — projectfotografie | TVM Productions", description: "Projectfotografie voor Kes Sloopwerk: materieel, mensen en uitvoering van sloop- en grondwerk, vastgelegd van het eerste graafwerk tot de afronding." },
+    intro: "Projectwerk vastgelegd zonder de energie en schaal van de locatie kwijt te raken.",
+    facts: { Klant: "Kes Sloopwerken", Sector: "Sloop- en grondwerk", Opgeleverd: "Projectfotografie", Locatie: "Wieringenlaan" },
+    situation: "Telefoonbeelden deden geen recht aan het materieel, de mensen en de uitvoering.",
+    made: "Een gerichte fotoreportage met overzicht, actie en details van het werk, van het eerste graafwerk tot de afronding.",
+    result: "Een bruikbare beeldserie voor website, projecten en online zichtbaarheid.",
+    gallery: kesSelectie,
+  },
+  vesto: { title: "Vesto", type: "Productfotografie", image: vestoProduct, kop: "Productfotografie voor Vesto", dienst: "productfotografie", seo: { title: "Vesto — productfotografie gereedschap | TVM Productions", description: "Productfotografie voor Vesto: gereedschap gefotografeerd op locatie, in gebruik en in zijn omgeving. Een frisse beeldserie voor productpagina's en campagnes." }, intro: "Een productserie die het gereedschap niet alleen toont, maar in zijn omgeving laat werken.", situation: "Het product had helder en aantrekkelijk beeld nodig voor online gebruik.", made: "Productfoto's op locatie met aandacht voor vorm, materiaal en gebruik.", result: "Een frisse beeldbank voor productpagina's en campagnes." },
+  "24wines": {
+    title: "24Wines", type: "Bedrijfsvideo", image: wines24Selectie[6]?.src,
+    kop: "Bedrijfsvideo voor 24Wines in Volendam",
+    dienst: "bedrijfsvideo",
+    seo: { title: "24Wines — bedrijfsvideo in Volendam | TVM Productions", description: "Bedrijfsvideo en productfotografie voor slijterij 24Wines in Volendam: winkel, assortiment en inpakproces in beeld, zodat een online bestelling een gezicht krijgt." },
+    intro: "Een slijterij vol verhalen — van het assortiment tot de laatste stap voordat een bestelling de deur uitgaat.",
+    facts: { Klant: "24Wines", Sector: "Slijterij & wijnhandel", Opgeleverd: "Bedrijfsvideo + fotografie", Locatie: "Volendam" },
+    situation: "24Wines wilde laten zien wat er achter een online bestelling schuilgaat: het assortiment, de sfeer in de zaak en de zorg waarmee iedere fles wordt ingepakt.",
+    made: "Een bedrijfsvideo die de winkel en het aanbod in beeld brengt, aangevuld met productfotografie en een behind-the-scenes video van het inpakproces.",
+    result: "Beeldmateriaal dat vertrouwen wekt bij nieuwe klanten en 24Wines onderscheidt van een anonieme webshop.",
+    video: { src: videoUrl("/videos/24wines/algemeen.mp4"), poster: wines24VideoPoster, title: "24Wines — het verhaal" },
+    videoSecondary: { src: videoUrl("/videos/24wines/inpakken.mp4"), poster: wines24InpakkenPoster, title: "Achter de schermen: een bestelling inpakken" },
+    gallery: wines24Selectie,
+  },
+  "hsb-fc-volendam": {
+    title: "HSB x FC Volendam", type: "Eventfotografie", image: hsbSelectie[1]?.src,
+    kop: "Eventfotografie voor HSB x FC Volendam",
+    dienst: "eventvideo-fotografie",
+    seo: { title: "HSB x FC Volendam — eventfotografie | TVM Productions", description: "Eventfotografie van de bijeenkomst rond de samenwerking tussen HSB en FC Volendam, in opdracht van Qstylez: presentaties, volle zaal en de vestiging in beeld." },
+    intro: "Een bedrijfsevenement vastgelegd in opdracht van Qstylez, van de volle zaal tot de vestiging zelf.",
+    facts: { Klant: "HSB x FC Volendam", Sector: "Retail — in opdracht van Qstylez", Opgeleverd: "Eventfotografie", Locatie: "Volendam" },
+    situation: "Voor de samenwerking tussen HSB en FC Volendam organiseerde het team een bijeenkomst voor medewerkers en relaties. Qstylez wilde de sfeer en inhoud van die dag professioneel vastleggen.",
+    made: "Een fotoreportage van de presentaties, de volle zaal en de vestiging, in opdracht van Qstylez uitgevoerd voor HSB.",
+    result: "Beeld dat de samenwerking en de betrokkenheid van het team laat zien, inzetbaar voor interne communicatie en promotie.",
+    gallery: hsbSelectie,
   },
   "stichting-voor-het-kind": {
     title: "Stichting voor het Kind", type: "Fotoreportage", image: stichtingSelectie[1]?.src,
@@ -405,7 +479,7 @@ const serviceWork = {
   bedrijfsvideo: [
     { title: "24Wines", type: "Bedrijfsvideo", image: wines24Selectie[6]?.src, href: "/cases/24wines/" },
     { title: "Sunforce", type: "Bedrijfsfotografie", image: sunforce, href: "/cases/sunforce/" },
-    { title: "Van Baarsen Vastgoed", type: "Presentatievideo", image: daanVastgoed },
+    { title: "Van Baarsen Vastgoed", type: "Woningpresentatie", image: vijzelstraatDrone, href: "/cases/vijzelstraat-1/" },
   ],
   promotievideo: [
     { title: "Vesto", type: "Productcampagne", image: vestoProduct, href: "/cases/vesto/" },
@@ -413,18 +487,18 @@ const serviceWork = {
     { title: "Luchtbeeld", type: "Promotiecontent", image: droneProduction },
   ],
   klantcasevideo: [
-    { title: "Van Baarsen Vastgoed", type: "Verhaal op locatie", image: daanVastgoed },
+    { title: "CoffeeClick x TopParken", type: "Klantcase op locatie", image: topparkenSelectie[0]?.src, href: "/cases/cc-topparken/" },
+    { title: "CoffeeClick x Faceland Clinics", type: "Klant aan het woord", image: facelandSelectie.at(-1)?.src, href: "/cases/faceland/" },
     { title: "Sunforce", type: "Mensen en vakmanschap", image: sunforce, href: "/cases/sunforce/" },
-    { title: "CoffeeClick", type: "Klantverhaal in productie", image: productShoot },
   ],
   uitlegvideo: [
     { title: "Woonmaand", type: "Ruimte en product uitgelegd", image: woonmaandInterior },
     { title: "Studio Bocalista", type: "Visuele demonstratie", image: studioProduction },
-    { title: "Van Baarsen Vastgoed", type: "Presentatie op locatie", image: daanVastgoed },
+    { title: "Van Baarsen Vastgoed", type: "Presentatie op locatie", image: vijzelstraatSelectie[0]?.src, href: "/cases/vijzelstraat-1/" },
   ],
   projectvideo: [
+    { title: "B2 Restauratie — Keyserkerk", type: "Projectvideo", image: keyserkerkVideoPoster, href: "/cases/b2-keyserkerk/" },
     { title: "Kes Sloopwerk", type: "Projectreportage", image: kesProject, href: "/cases/kes-sloopwerk/" },
-    { title: "Cor Kes", type: "Werk in uitvoering", image: corkesProject, href: "/cases/kes-sloopwerk/" },
     { title: "Sunforce", type: "Techniek op locatie", image: sunforce, href: "/cases/sunforce/" },
   ],
   "eventvideo-fotografie": [
@@ -558,18 +632,46 @@ function CaseFacts({ facts }) {
   return <section className="relative z-10 -mt-4 px-3 pb-4 sm:px-6"><Reveal className="mx-auto max-w-[1440px] rounded-[2rem] bg-white p-6 shadow-[0_18px_60px_rgba(17,17,17,.05)] sm:rounded-[2.5rem] sm:p-9"><div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{Object.entries(facts).map(([label, value]) => <div key={label}><p className="eyebrow text-black/35">{label}</p><p className="mt-2 text-xl font-black tracking-[-.03em] sm:text-2xl">{value}</p></div>)}</div></Reveal></section>;
 }
 
-function CaseVideo({ video, eyebrow }) {
-  return <Reveal className="overflow-hidden rounded-[2rem] bg-black sm:rounded-[2.5rem]"><video controls preload="none" poster={video.poster} className="aspect-video w-full bg-black" playsInline><source src={video.src} type="video/mp4" /></video><div className="flex items-center justify-between gap-4 p-6 sm:p-7"><div><p className="eyebrow text-white/40">{eyebrow}</p><h3 {...titleProps(video.title, "card", "mt-2 text-white")}>{video.title}</h3></div><span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#f5ca3c] text-black"><ArrowUpRight className="size-5" /></span></div></Reveal>;
+// `compact` is voor smalle kaarten (staande reels): kleinere titel en geen
+// pijlknop.
+function CaseVideo({ video, eyebrow, compact = false }) {
+  return <Reveal className="flex flex-col overflow-hidden rounded-[2rem] bg-black sm:rounded-[2.5rem]"><video controls preload="none" poster={video.poster} className={`${video.portrait ? "aspect-[9/16]" : "aspect-video"} w-full bg-black`} playsInline><source src={video.src} type="video/mp4" /></video><div className={`flex items-center justify-between gap-4 ${compact ? "p-5 sm:p-6" : "flex-1 p-6 sm:p-7"}`}><div className="min-w-0"><p className="eyebrow text-white/40">{eyebrow}</p>{compact ? <h3 className="mt-2 text-base font-extrabold leading-tight tracking-[-0.015em] text-white sm:text-lg">{video.title}</h3> : <h3 {...titleProps(video.title, "card", "mt-2 text-white")}>{video.title}</h3>}</div>{!compact && <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#f5ca3c] text-black"><ArrowUpRight className="size-5" /></span>}</div></Reveal>;
+}
+
+// Een case heeft óf `videos` (lijst met eigen eyebrow, evt. staand), óf het
+// oudere paar `video` + `videoSecondary`. Hier wordt dat één lijst.
+function caseVideos(item) {
+  if (item.videos) return item.videos;
+  return [
+    item.video && { ...item.video, eyebrow: "Videoproductie" },
+    item.videoSecondary && { ...item.videoSecondary, eyebrow: "Behind the scenes" },
+  ].filter(Boolean);
 }
 
 function CasePage({ item, slug }) {
   const dienst = item.dienst ? serviceData[item.dienst] : null;
+  const videos = caseVideos(item);
+  const liggend = videos.filter((v) => !v.portrait);
+  const staand = videos.filter((v) => v.portrait);
   return <Layout>
     <PageHero label={item.type} title={(item.kop ?? item.title).toUpperCase()} intro={item.intro} image={item.image} imageAlt={item.gallery?.find((shot) => shot.src === item.image)?.alt ?? `${item.type} voor ${item.title}`} compact breadcrumbs={[{ label: "Cases", href: "/cases/" }, { label: item.title, href: `/cases/${slug}/` }]} />
 
     {item.facts && <CaseFacts facts={item.facts} />}
 
-    {item.video && <section className="px-3 py-16 sm:px-6 sm:py-20"><div className="mx-auto max-w-[1440px]"><div className={`grid gap-3 ${item.videoSecondary ? "sm:grid-cols-2" : ""}`}><CaseVideo video={item.video} eyebrow="Videoproductie" />{item.videoSecondary && <CaseVideo video={item.videoSecondary} eyebrow="Behind the scenes" />}</div></div></section>}
+    {videos.length > 0 && <section className="px-3 py-16 sm:px-6 sm:py-20"><div className="mx-auto max-w-[1440px]">
+      <div className={`grid gap-3 ${liggend.length > 1 ? "sm:grid-cols-2" : ""}`}>{liggend.map((video) => <CaseVideo key={video.src} video={video} eyebrow={video.eyebrow} />)}</div>
+      {/* Staande reels in een eigen blok onder de hoofdvideo, met ruimte
+          eromheen: links een korte toelichting, rechts de reels naast elkaar.
+          De tekst komt uit item.reels; zonder tekst staan alleen de reels. */}
+      {staand.length > 0 && <div className="mt-20 grid gap-10 border-t border-black/15 pb-6 pt-16 sm:mt-24 sm:pb-10 sm:pt-20 lg:grid-cols-[1fr_1.15fr] lg:gap-20">
+        <Reveal className="lg:pt-2">
+          <p className="eyebrow text-black/40">{item.reels?.label ?? "Social media"}</p>
+          {item.reels?.kop && <h2 {...titleProps(item.reels.kop, "card", "mt-6")}>{item.reels.kop}</h2>}
+          {item.reels?.tekst && <p className="mt-5 max-w-md t-body text-black/55">{item.reels.tekst}</p>}
+        </Reveal>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">{staand.map((video) => <CaseVideo key={video.src} video={video} eyebrow={video.eyebrow} compact />)}</div>
+      </div>}
+    </div></section>}
 
     {item.gallery && item.gallery.length > 0 && <section className="px-3 pb-4 sm:px-6"><div className="mx-auto max-w-[1440px]"><div className={`grid gap-3 ${item.gallery.length >= 3 ? "sm:grid-cols-2 lg:grid-cols-3" : item.gallery.length === 2 ? "sm:grid-cols-2" : ""}`}>{item.gallery.map((shot, i) => <Reveal key={shot.src} delay={i * .05}><figure className={`group relative overflow-hidden rounded-[2rem] bg-[#ddd] sm:rounded-[2.5rem] ${item.gallery.length === 1 ? "min-h-[26rem] sm:min-h-[34rem]" : "min-h-[22rem] sm:min-h-[26rem]"}`}><img src={shot.src} alt={shot.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />{shot.caption && <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent p-6 text-sm font-semibold text-white sm:p-7">{shot.caption}</figcaption>}</figure></Reveal>)}</div></div></section>}
 

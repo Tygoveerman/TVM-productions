@@ -11,16 +11,31 @@
 #
 # -movflags +faststart zet de index vooraan zodat de video direct begint
 # met afspelen in plaats van eerst volledig te bufferen.
+#
+# Masters van 4K worden teruggeschaald naar maximaal 1920 breed; staande
+# video's (1080x1920) blijven ongemoeid omdat die al smaller zijn.
+#
+# Gebruik: scripts/compress-videos.sh            -> alle mappen
+#          scripts/compress-videos.sh faceland   -> alleen die map(pen)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-for original in video-originals/*/*.mp4; do
+if [ $# -gt 0 ]; then
+  originals=()
+  for dir in "$@"; do originals+=(video-originals/"$dir"/*.mp4); done
+else
+  originals=(video-originals/*/*.mp4)
+fi
+
+for original in "${originals[@]}"; do
   target="public/videos/${original#video-originals/}"
   tmp="${target}.tmp.mp4"
+  mkdir -p "$(dirname "$target")"
 
   echo "==> $target"
   ffmpeg -nostdin -v error -y -i "$original" \
+    -vf "scale='min(1920,iw)':-2" \
     -c:v libx264 -crf 24 -preset slow -profile:v high -pix_fmt yuv420p \
     -maxrate 2500k -bufsize 5000k \
     -c:a aac -b:a 128k \
