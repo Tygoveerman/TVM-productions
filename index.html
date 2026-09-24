@@ -35,8 +35,64 @@
     <meta name="twitter:title" content="Videoproductie & bedrijfsfotografie Purmerend | TVM Productions" />
     <meta name="twitter:description" content="Zakelijke video en bedrijfsfotografie vanuit Purmerend voor bedrijven in Noord-Holland. Beeld dat zichtbaar maakt wat je doet en klanten en medewerkers overtuigt." />
     <meta name="twitter:image" content="https://www.tvm-productions.nl/favicon-512.png" />
+    <!-- ── Google Tag Manager ─────────────────────────────────────────────
+      Eén container (GTM-NM7TZL29) voor alle tracking. Er staat bewust géén
+      losse gtag.js/GA4-snippet in de site: GA4 en eventuele marketingtags
+      worden binnen GTM geconfigureerd, zodat ze onder de consent-logica vallen.
+
+      De volgorde hieronder is essentieel en mag niet omgedraaid worden:
+      1. Consent Mode v2-defaults (alles geweigerd, behalve wat functioneel/
+         veiligheid nodig is). Dit moet vóór de container-load staan, anders
+         vuren tags eenmalig zonder consent.
+      2. De eerder gemaakte keuze uit localStorage terugzetten, nog steeds vóór
+         de container-load, zodat een terugkerende bezoeker die al ja zei niet
+         eerst als 'denied' wordt gemeten.
+      3. De container zelf.
+      De update na een klik in de banner gebeurt in src/site/analytics.js.
+    -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+      });
+
+      try {
+        if (localStorage.getItem("tvm-consent") === "granted") {
+          gtag("consent", "update", { analytics_storage: "granted" });
+        }
+        // Vlag voor src/site/analytics.js: de keuze is hier al toegepast, dus
+        // initAnalytics() hoeft niet nóg een keer dezelfde update te pushen.
+        window.__tvmConsentSynced = true;
+      } catch (e) {
+        // localStorage geblokkeerd (privémodus) — defaults blijven staan.
+      }
+    </script>
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NM7TZL29");
+    </script>
+    <!-- ── Einde Google Tag Manager ───────────────────────────────────── -->
   </head>
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NM7TZL29"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- Einde Google Tag Manager (noscript) -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

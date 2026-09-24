@@ -79,6 +79,7 @@ const ROUTES = [
   {
     nummer: "01",
     id: "zichtbaar-worden",
+    href: "/oplossingen/zichtbaar-worden/",
     titel: "Zichtbaar worden",
     probleem: "Je levert goed werk, maar potentiële klanten zien onvoldoende wat jullie anders of beter maakt.",
     punten: ["Expertise zichtbaar maken", "Vertrouwen opbouwen", "Bewijs laten zien", "Meer relevante aanvragen"],
@@ -88,6 +89,7 @@ const ROUTES = [
   {
     nummer: "02",
     id: "medewerkers-aantrekken",
+    href: "/oplossingen/medewerkers-aantrekken/",
     titel: "Medewerkers aantrekken",
     probleem: "Je hebt een goed bedrijf en leuk werk, maar kandidaten krijgen daar online weinig van mee.",
     punten: ["Het echte werk laten zien", "Medewerkers aan het woord", "Cultuur voelbaar maken", "Kandidaten enthousiasmeren"],
@@ -97,6 +99,7 @@ const ROUTES = [
   {
     nummer: "03",
     id: "duidelijk-uitleggen",
+    href: "/oplossingen/duidelijk-uitleggen/",
     titel: "Duidelijk uitleggen",
     probleem: "Wat jij doet is niet in één zin uit te leggen, en dat kost je klanten die afhaken voordat ze het snappen.",
     // De vormen hieronder verwijzen naar dienstpagina's die daadwerkelijk bestaan.
