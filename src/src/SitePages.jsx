@@ -35,7 +35,13 @@ import { oplossingen } from "../site/oplossingen.js";
 import { VOORWAARDEN } from "../site/voorwaarden.js";
 import { titleProps } from "../site/typography.js";
 import Testimonials from "../site/Testimonials.jsx";
-import { trackEvent } from "../site/analytics.js";
+import {
+  trackCaseView,
+  trackContactStart,
+  trackLead,
+  trackServiceView,
+  useVideoTracking,
+} from "../site/analytics.js";
 import droneProduction from "../assets/portfolio/drone-production.jpeg";
 import hsbBusiness from "../assets/portfolio/hsb-business.jpeg";
 import productShoot from "../assets/portfolio/product-shoot.jpeg";
@@ -532,8 +538,8 @@ function BrandLogo({ compact = false }) {
   return <span className={`relative block shrink-0 transition-all duration-300 ${compact ? "h-7 w-[5.2rem]" : "h-11 w-32"}`}><img src={tvmLogo} alt="TVM Productions" className="absolute inset-0 h-full w-full object-contain brightness-0" /><span className="absolute left-[0.3%] right-[0.7%] top-[67.45%] h-[3.7%] bg-[#f5aa00]" aria-hidden="true" /></span>;
 }
 
-function Action({ href = "/contact/", children, yellow = false }) {
-  return <a href={href} className={`group inline-flex min-h-12 items-center gap-4 rounded-full py-1 pl-5 pr-1 text-sm font-black transition-transform hover:-translate-y-1 ${yellow ? "bg-[#f5ca3c] text-black" : "bg-black text-white"}`}>{children}<span className={`flex size-10 items-center justify-center rounded-full ${yellow ? "bg-black text-white" : "bg-white text-black"}`}><ArrowUpRight className="size-5 -translate-x-px translate-y-px" /></span></a>;
+function Action({ href = "/contact/", children, yellow = false, ctaLocation }) {
+  return <a href={href} data-cta-location={ctaLocation} className={`group inline-flex min-h-12 items-center gap-4 rounded-full py-1 pl-5 pr-1 text-sm font-black transition-transform hover:-translate-y-1 ${yellow ? "bg-[#f5ca3c] text-black" : "bg-black text-white"}`}>{children}<span className={`flex size-10 items-center justify-center rounded-full ${yellow ? "bg-black text-white" : "bg-white text-black"}`}><ArrowUpRight className="size-5 -translate-x-px translate-y-px" /></span></a>;
 }
 
 function Header() {
@@ -544,10 +550,10 @@ function Header() {
     <div className={`mx-auto flex h-14 w-full max-w-[960px] items-center justify-between rounded-full border border-black/[0.07] bg-[#faf9f6]/80 pl-5 pr-2 backdrop-blur-2xl transition-all duration-300 sm:pl-6 sm:pr-2 ${scrolled ? "shadow-[0_2px_14px_rgba(0,0,0,.05)]" : "shadow-[0_1px_8px_rgba(0,0,0,.03)]"}`}>
       <a href="/"><BrandLogo compact /></a>
       <nav className="hidden items-center gap-10 lg:flex">{navItems.map(([label, href]) => label === "Oplossingen" ? (<div key={label} className="group relative"><a href={href} className="flex items-center gap-1.5 text-sm font-semibold text-black/50 transition-colors hover:text-black">{label} <ChevronDown className="size-3.5 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" /></a><div className="invisible absolute left-0 top-full w-[26rem] translate-y-2 pt-7 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"><div className="grid gap-1 rounded-[1.5rem] border border-black/10 bg-white/95 p-3 shadow-[0_24px_70px_rgba(0,0,0,.14)] backdrop-blur-2xl">{OPLOSSINGEN_MENU.map(([titel, link, uitleg]) => <a key={link} href={link} className="group/link rounded-2xl px-4 py-3 transition-colors hover:bg-[#f4f3ee]"><span className="block text-sm font-bold text-black/80 group-hover/link:text-black">{titel}</span><span className="mt-1 block text-sm leading-snug text-black/45">{uitleg}</span></a>)}</div></div></div>) : <a key={href} href={href} className="text-sm font-semibold text-black/50 transition-colors hover:text-black">{label}</a>)}</nav>
-      <a href="/contact/" className="group relative hidden h-10 items-center gap-2 overflow-hidden rounded-full bg-[#f5ca3c] px-5 text-sm font-bold text-black transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-0.5 sm:flex"><span className="absolute -inset-px origin-left scale-x-0 bg-[#ffda58] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden="true" /><span className="relative">Bespreek je uitdaging</span><ArrowSwap className="relative size-4" strokeWidth={2.5} /></a>
+      <a href="/contact/" data-cta-location="header" className="group relative hidden h-10 items-center gap-2 overflow-hidden rounded-full bg-[#f5ca3c] px-5 text-sm font-bold text-black transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-0.5 sm:flex"><span className="absolute -inset-px origin-left scale-x-0 bg-[#ffda58] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden="true" /><span className="relative">Bespreek je uitdaging</span><ArrowSwap className="relative size-4" strokeWidth={2.5} /></a>
       <button className="grid size-10 place-items-center rounded-full border border-black/15 sm:hidden" onClick={() => setOpen(!open)} aria-expanded={open}>{open ? <X /> : <Menu />}</button>
     </div>
-    {open && <nav className="mx-auto mt-2 flex flex-col rounded-[2rem] border border-black/10 bg-white p-5 shadow-xl sm:hidden">{navItems.map(([label, href]) => label === "Oplossingen" ? (<details key={label} className="border-b border-black/10"><summary className="flex cursor-pointer list-none items-center justify-between py-4 text-xl font-bold">{label} <ChevronDown className="size-5" aria-hidden="true" /></summary><div className="grid pb-3">{OPLOSSINGEN_MENU.map(([titel, link]) => <a key={link} href={link} onClick={() => setOpen(false)} className="py-2 pl-3 text-sm font-bold text-black/55">{titel}</a>)}</div></details>) : <a key={href} href={href} onClick={() => setOpen(false)} className="border-b border-black/10 py-4 text-xl font-bold">{label}</a>)}<a href="/contact/" onClick={() => setOpen(false)} className="mt-5 rounded-full bg-black px-5 py-4 text-center font-bold text-white">Bespreek je uitdaging</a></nav>}
+    {open && <nav className="mx-auto mt-2 flex flex-col rounded-[2rem] border border-black/10 bg-white p-5 shadow-xl sm:hidden">{navItems.map(([label, href]) => label === "Oplossingen" ? (<details key={label} className="border-b border-black/10"><summary className="flex cursor-pointer list-none items-center justify-between py-4 text-xl font-bold">{label} <ChevronDown className="size-5" aria-hidden="true" /></summary><div className="grid pb-3">{OPLOSSINGEN_MENU.map(([titel, link]) => <a key={link} href={link} onClick={() => setOpen(false)} className="py-2 pl-3 text-sm font-bold text-black/55">{titel}</a>)}</div></details>) : <a key={href} href={href} onClick={() => setOpen(false)} className="border-b border-black/10 py-4 text-xl font-bold">{label}</a>)}<a href="/contact/" data-cta-location="mobile_nav" onClick={() => setOpen(false)} className="mt-5 rounded-full bg-black px-5 py-4 text-center font-bold text-white">Bespreek je uitdaging</a></nav>}
   </header>;
 }
 
@@ -563,7 +569,7 @@ function PageHero({ label, title, intro, image, imageAlt = "", compact = false, 
 // sectiemaat niet meer op twee regels.
 function SectionTitle({ label, title, intro, narrow = false }) { return <Reveal className="mb-12 grid gap-6 lg:grid-cols-[.75fr_1.25fr] lg:items-end"><p className="eyebrow text-black/40">{label}</p><div><h2 {...titleProps(title, narrow ? "card" : "section")}>{title}</h2>{intro && <p className="mt-5 t-lead text-black/55">{intro}</p>}</div></Reveal>; }
 
-function CTA() { return <section className="bg-[#f4f3ee] px-3 pb-3 pt-20 sm:px-6 sm:pb-6"><Reveal className="mx-auto max-w-[1440px] rounded-[2rem] bg-[#f5ca3c] p-8 sm:rounded-[3rem] sm:p-14 lg:p-16"><p className="eyebrow">Meestal binnen één werkdag reactie</p><h2 {...titleProps("VERTEL ME WAT JE WILT MAKEN.", "section", "mt-8")}>VERTEL ME WAT JE WILT MAKEN.</h2><p className="mt-7 t-lead text-black/65">Een eerste idee is genoeg. Ik denk mee over de vorm, aanpak en wat daarvoor nodig is.</p><div className="mt-9"><Action href="/contact/">Start het gesprek</Action></div></Reveal></section>; }
+function CTA() { return <section className="bg-[#f4f3ee] px-3 pb-3 pt-20 sm:px-6 sm:pb-6"><Reveal className="mx-auto max-w-[1440px] rounded-[2rem] bg-[#f5ca3c] p-8 sm:rounded-[3rem] sm:p-14 lg:p-16"><p className="eyebrow">Meestal binnen één werkdag reactie</p><h2 {...titleProps("VERTEL ME WAT JE WILT MAKEN.", "section", "mt-8")}>VERTEL ME WAT JE WILT MAKEN.</h2><p className="mt-7 t-lead text-black/65">Een eerste idee is genoeg. Ik denk mee over de vorm, aanpak en wat daarvoor nodig is.</p><div className="mt-9"><Action href="/contact/" ctaLocation="section">Start het gesprek</Action></div></Reveal></section>; }
 
 function Accordion({ items }) {
   const [open, setOpen] = useState(0);
@@ -581,6 +587,10 @@ function ServicesHub() {
 
 function ServicePage({ service, slug }) {
   const detail = servicePageDetails[slug];
+  // Alleen op een concrete dienstpagina, niet op de /diensten/-hub.
+  useEffect(() => {
+    trackServiceView({ serviceName: service.short, serviceSlug: slug });
+  }, [service.short, slug]);
   const faqs = [
     ...service.faqs,
     ["Hoeveel tijd kost de voorbereiding mij?", "Voor de meeste producties zijn een kennismaking en één gerichte voorbereidingsronde genoeg. Ik verzamel vooraf de benodigde informatie en maak zelf het draaiplan, zodat jij vooral inhoud, mensen en locatie hoeft af te stemmen."],
@@ -611,7 +621,7 @@ function ServicePage({ service, slug }) {
 
     <section className="px-3 py-20 sm:px-6 sm:py-28"><div className="mx-auto grid max-w-[1440px] gap-4 lg:grid-cols-[1.05fr_.95fr] lg:items-stretch"><Reveal><div className="relative min-h-[34rem] h-full overflow-hidden rounded-[2.5rem]"><img src={proof.image} alt={`${proof.type} voor ${proof.client}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" /></div></Reveal><Reveal delay={.06} className="flex flex-col justify-between rounded-[2.5rem] bg-white p-8 sm:p-11"><div className="flex items-start justify-between gap-5"><div><p className="eyebrow text-black/40">{proof.href ? "Uitgelicht werk" : "Voorbeeld van de aanpak"}</p><h2 {...titleProps(proof.client, "section", "mt-5")}>{proof.client}</h2><p className="mt-2 eyebrow text-[#9c7900]">{proof.type}</p></div>{proof.href && <a href={proof.href} aria-label="Bekijk de volledige case" className="grid size-12 shrink-0 place-items-center rounded-full bg-black text-white"><ArrowUpRight className="size-5" /></a>}</div><div className="mt-12 grid gap-8"><div><strong className="eyebrow text-black/35">De vraag</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.challenge}</p></div><div><strong className="eyebrow text-black/35">Wat ik maakte</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.made}</p></div><div><strong className="eyebrow text-black/35">Het resultaat</strong><p className="mt-3 text-xl font-semibold leading-snug tracking-[-.02em] text-black/75">{proof.result}</p></div></div></Reveal></div></section>
 
-    <section className="px-3 py-20 sm:px-6 sm:py-28"><Reveal className="mx-auto max-w-6xl rounded-[2.5rem] bg-white p-7 sm:p-10"><div className="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-end"><div><p className="eyebrow text-black/40">Investering</p><h2 {...titleProps("EEN PRIJS DIE PAST BIJ HET PLAN.", "section", "mt-5")}>EEN PRIJS DIE PAST BIJ HET PLAN.</h2></div><p className="max-w-2xl t-body text-black/55">Iedere productie wordt afgestemd op het doel, de draaidag en waar je het materiaal wilt gebruiken. Na een korte kennismaking ontvang je een helder voorstel met één vaste prijs.</p></div><div className="mt-10 flex flex-col gap-5 rounded-[1.75rem] bg-[#f4f3ee] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"><div><p className="eyebrow text-black/35">Indicatieve investering</p><p className="mt-2 text-2xl font-black tracking-[-.035em] sm:text-3xl">{detail.price}</p></div><a href="/contact/" className="inline-flex w-fit items-center gap-3 rounded-full bg-black py-2 pl-5 pr-2 font-black text-white">Bespreek je productie <span className="grid size-10 place-items-center rounded-full bg-[#f5ca3c] text-black"><ArrowUpRight className="size-5" /></span></a></div></Reveal></section>
+    <section className="px-3 py-20 sm:px-6 sm:py-28"><Reveal className="mx-auto max-w-6xl rounded-[2.5rem] bg-white p-7 sm:p-10"><div className="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-end"><div><p className="eyebrow text-black/40">Investering</p><h2 {...titleProps("EEN PRIJS DIE PAST BIJ HET PLAN.", "section", "mt-5")}>EEN PRIJS DIE PAST BIJ HET PLAN.</h2></div><p className="max-w-2xl t-body text-black/55">Iedere productie wordt afgestemd op het doel, de draaidag en waar je het materiaal wilt gebruiken. Na een korte kennismaking ontvang je een helder voorstel met één vaste prijs.</p></div><div className="mt-10 flex flex-col gap-5 rounded-[1.75rem] bg-[#f4f3ee] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"><div><p className="eyebrow text-black/35">Indicatieve investering</p><p className="mt-2 text-2xl font-black tracking-[-.035em] sm:text-3xl">{detail.price}</p></div><a href="/contact/" data-cta-location="service" className="inline-flex w-fit items-center gap-3 rounded-full bg-black py-2 pl-5 pr-2 font-black text-white">Bespreek je productie <span className="grid size-10 place-items-center rounded-full bg-[#f5ca3c] text-black"><ArrowUpRight className="size-5" /></span></a></div></Reveal></section>
 
     <section className="px-3 py-20 sm:px-6 sm:py-28"><Reveal className="mx-auto grid max-w-[1440px] gap-12 rounded-[2.5rem] bg-white p-7 sm:p-12 lg:grid-cols-[.7fr_1.3fr] lg:p-14"><div><p className="eyebrow text-black/40">Veel gevraagd</p><h2 {...titleProps("GOED OM TE WETEN.", "section", "mt-6")}>GOED OM TE WETEN.</h2></div><Accordion items={faqs} /></Reveal></section>
 
@@ -633,8 +643,9 @@ function CaseFacts({ facts }) {
 
 // `compact` is voor smalle kaarten (staande reels): kleinere titel en geen
 // pijlknop.
-function CaseVideo({ video, eyebrow, compact = false }) {
-  return <Reveal className="flex flex-col overflow-hidden rounded-[2rem] bg-black sm:rounded-[2.5rem]"><video controls preload="none" poster={video.poster} className={`${video.portrait ? "aspect-[9/16]" : "aspect-video"} w-full bg-black`} playsInline><source src={video.src} type="video/mp4" /></video><div className={`flex items-center justify-between gap-4 ${compact ? "p-5 sm:p-6" : "flex-1 p-6 sm:p-7"}`}><div className="min-w-0"><p className="eyebrow text-white/40">{eyebrow}</p>{compact ? <h3 className="mt-2 text-base font-extrabold leading-tight tracking-[-0.015em] text-white sm:text-lg">{video.title}</h3> : <h3 {...titleProps(video.title, "card", "mt-2 text-white")}>{video.title}</h3>}</div>{!compact && <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#f5ca3c] text-black"><ArrowUpRight className="size-5" /></span>}</div></Reveal>;
+function CaseVideo({ video, eyebrow, compact = false, videoLocation = "case" }) {
+  const tracking = useVideoTracking({ videoName: video.title, videoLocation });
+  return <Reveal className="flex flex-col overflow-hidden rounded-[2rem] bg-black sm:rounded-[2.5rem]"><video controls preload="none" poster={video.poster} className={`${video.portrait ? "aspect-[9/16]" : "aspect-video"} w-full bg-black`} playsInline {...tracking}><source src={video.src} type="video/mp4" /></video><div className={`flex items-center justify-between gap-4 ${compact ? "p-5 sm:p-6" : "flex-1 p-6 sm:p-7"}`}><div className="min-w-0"><p className="eyebrow text-white/40">{eyebrow}</p>{compact ? <h3 className="mt-2 text-base font-extrabold leading-tight tracking-[-0.015em] text-white sm:text-lg">{video.title}</h3> : <h3 {...titleProps(video.title, "card", "mt-2 text-white")}>{video.title}</h3>}</div>{!compact && <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#f5ca3c] text-black"><ArrowUpRight className="size-5" /></span>}</div></Reveal>;
 }
 
 // Een case heeft óf `videos` (lijst met eigen eyebrow, evt. staand), óf het
@@ -649,6 +660,9 @@ function caseVideos(item) {
 
 function CasePage({ item, slug }) {
   const dienst = item.dienst ? serviceData[item.dienst] : null;
+  useEffect(() => {
+    trackCaseView({ caseName: item.title, caseSlug: slug, serviceName: dienst?.short });
+  }, [item.title, slug, dienst?.short]);
   const videos = caseVideos(item);
   const liggend = videos.filter((v) => !v.portrait);
   const staand = videos.filter((v) => v.portrait);
@@ -736,8 +750,16 @@ function ContactPage() {
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "Verzenden is mislukt.");
-      trackEvent("generate_lead", { method: "contact_form" });
-      window.location.href = "/contact/bedankt/";
+      // Pas hier: de aanvraag is aantoonbaar aangekomen. Niet bij submit, niet
+      // bij een validatiefout. De navigatie wacht op GTM's eventCallback,
+      // anders gaat het event verloren doordat de pagina al weg is.
+      trackLead({
+        formName: "contact",
+        formLocation: "contact_page",
+        onReady: () => {
+          window.location.href = "/contact/bedankt/";
+        },
+      });
     } catch (err) {
       setStatus("error");
       setError(err.message || "Er ging iets mis. Probeer het later opnieuw of mail rechtstreeks.");
@@ -751,7 +773,14 @@ function ContactPage() {
     <section className="px-3 pb-20 pt-28 sm:px-5 sm:pt-32">
       <div className="mx-auto max-w-[1440px] px-2.5 sm:px-3.5">
         <Breadcrumbs items={[{ label: "Contact", href: "/contact/" }]} />
-        <form onSubmit={submit} className="mt-6 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
+        <form
+          onSubmit={submit}
+          // Eerste betekenisvolle interactie met een veld, niet het laden van de
+          // pagina. trackContactStart vuurt zelf hoogstens één keer.
+          onInput={() => trackContactStart({ formName: "contact", formLocation: "contact_page" })}
+          onChange={() => trackContactStart({ formName: "contact", formLocation: "contact_page" })}
+          className="mt-6 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20"
+        >
           <div>
             <h1 {...titleProps("Wat is je uitdaging?", "section")}>Wat is je uitdaging?</h1>
             <p className="mt-4 max-w-xl t-body text-black/60">Je hoeft nog niet te weten welke video je nodig hebt. Kies waar het vastloopt en vertel er kort iets over.</p>
@@ -806,7 +835,7 @@ function ContactPage() {
               ))}
             </ol>
             <div className="mt-8 grid gap-3 border-t border-black/15 pt-6 text-base font-semibold text-black/60">
-              <a href="mailto:tygo@tvm-productions.nl" className="flex w-fit items-center gap-3 transition-colors hover:text-black"><Mail className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />tygo@tvm-productions.nl</a>
+              <a href="mailto:tygo@tvm-productions.nl" data-link-location="contact_page" className="flex w-fit items-center gap-3 transition-colors hover:text-black"><Mail className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />tygo@tvm-productions.nl</a>
               <span className="flex items-center gap-3"><MapPin className="size-5 shrink-0 text-[#b78d00]" aria-hidden="true" />Purmerend, Noord-Holland</span>
             </div>
           </aside>

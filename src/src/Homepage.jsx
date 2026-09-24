@@ -188,10 +188,11 @@ function Reveal({ children, className = "", delay = 0, id }) {
 // De vulling schuift van links in over de basiskleur heen, in plaats van dat de
 // achtergrond in één keer omklapt. Het pijltje wisselt tegelijk (zie ArrowSwap),
 // zodat de knop als één beweging leest en niet als twee losse effecten.
-function PillButton({ children, href, yellow = false }) {
+function PillButton({ children, href, yellow = false, ctaLocation }) {
   return (
     <a
       href={href}
+      data-cta-location={ctaLocation}
       className={`group relative inline-flex min-h-12 shrink-0 items-center gap-4 overflow-hidden whitespace-nowrap rounded-full py-1 pl-5 pr-1 text-sm font-black leading-none transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 ${yellow ? "bg-[#f5ca3c] text-black" : "bg-[#111] text-white"}`}
     >
       <span
@@ -280,6 +281,7 @@ export default function Homepage() {
 
                     <a
                       href="/contact/"
+                      data-cta-location="header"
                       className="group/voet flex items-center justify-between gap-4 border-t border-black/[0.07] px-5 py-4 text-sm font-bold text-black/60 transition-colors duration-200 hover:bg-black/[0.04] hover:text-black"
                     >
                       Weet je het niet zeker? Bespreek je uitdaging
@@ -300,7 +302,7 @@ export default function Homepage() {
           </nav>
           {/* Zelfde beweging als de knoppen in de pagina: vulling schuift in,
               pijl wisselt. Compacter, want hij moet in de pill passen. */}
-          <a href="/contact/" className="group relative hidden h-10 items-center gap-2 overflow-hidden rounded-full bg-[#f5ca3c] px-5 text-sm font-bold text-black transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-0.5 sm:flex">
+          <a href="/contact/" data-cta-location="header" className="group relative hidden h-10 items-center gap-2 overflow-hidden rounded-full bg-[#f5ca3c] px-5 text-sm font-bold text-black transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-0.5 sm:flex">
             <span className="absolute -inset-px origin-left scale-x-0 bg-[#ffda58] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden="true" />
             <span className="relative hidden xl:inline">Bespreek je uitdaging</span>
             <span className="relative inline xl:hidden">Bespreek</span>
@@ -341,7 +343,7 @@ export default function Homepage() {
                 {item.label}
               </a>
             ))}
-            <a href="/contact/" onClick={() => setMenuOpen(false)} className="mt-5 rounded-full bg-black px-5 py-4 text-center font-bold text-white">Bespreek je uitdaging</a>
+            <a href="/contact/" data-cta-location="mobile_nav" onClick={() => setMenuOpen(false)} className="mt-5 rounded-full bg-black px-5 py-4 text-center font-bold text-white">Bespreek je uitdaging</a>
           </Motion.nav>
         )}
       </header>
@@ -412,7 +414,7 @@ export default function Homepage() {
                   Videoproductie en bedrijfsfotografie voor bedrijven in Purmerend en Noord-Holland. Beeld dat zichtbaar maakt wat je doet, mensen overtuigt en complexe verhalen begrijpelijk maakt.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
-                  <PillButton href="/contact/" yellow>Bespreek je uitdaging</PillButton>
+                  <PillButton href="/contact/" yellow ctaLocation="hero">Bespreek je uitdaging</PillButton>
                   <a href="/cases/" className={`group relative inline-flex min-h-12 shrink-0 items-center gap-4 overflow-hidden whitespace-nowrap rounded-full border border-[#F3F0EA]/30 py-1 pl-5 pr-1 text-sm font-bold leading-none text-[#F3F0EA] transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 hover:border-[#F3F0EA]`}>
                     <span className="absolute -inset-px origin-left scale-x-0 bg-[#F3F0EA]/10 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden="true" />
                     <span className="relative">Bekijk mijn werk</span>
@@ -774,7 +776,7 @@ export default function Homepage() {
                 </p>
 
                 <div className="mt-10 flex justify-center">
-                  <PillButton href="/contact/" yellow>Bespreek je uitdaging</PillButton>
+                  <PillButton href="/contact/" yellow ctaLocation="section">Bespreek je uitdaging</PillButton>
                 </div>
 
                 <div className="mx-auto mt-14 flex max-w-2xl flex-col items-center gap-4 border-t border-[#F3F0EA]/15 pt-8 text-lg font-bold text-[#F3F0EA]/55 sm:flex-row sm:justify-center sm:gap-10">

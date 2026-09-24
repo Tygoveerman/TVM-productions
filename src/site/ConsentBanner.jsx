@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion as Motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { getConsent, initAnalytics, setConsent } from "./analytics.js";
+import { getConsent, initAnalytics, initInteractionTracking, setConsent } from "./analytics.js";
 
 export default function ConsentBanner() {
   const [visible, setVisible] = useState(false);
@@ -9,6 +9,9 @@ export default function ConsentBanner() {
 
   useEffect(() => {
     initAnalytics();
+    // Eén gedelegeerde klik-listener voor contactlinks en CTA's. Registreren
+    // mag altijd: trackEvent pusht pas iets als er toestemming is.
+    initInteractionTracking();
     if (!getConsent()) setVisible(true);
   }, []);
 

@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { motion as Motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { titleProps } from "../site/typography.js";
 import SubpageHero from "../site/SubpageHero.jsx";
 import ArrowSwap from "../site/ArrowSwap.jsx";
 import { vervolgstappen } from "../site/oplossingen.js";
+import { trackSolutionView } from "../site/analytics.js";
 
 // Eén component voor alle drie de oplossingspagina's. De opbouw is per pagina
 // gelijk — probleem, oplossing, bewijs, vervolgstap — zodat iemand die er twee
@@ -31,10 +33,11 @@ function Kader({ children, className = "" }) {
   return <div className={`mx-auto max-w-[1440px] px-2.5 sm:px-3.5 ${className}`}>{children}</div>;
 }
 
-function Knop({ href, children }) {
+function Knop({ href, children, ctaLocation }) {
   return (
     <a
       href={href}
+      data-cta-location={ctaLocation}
       className="group relative inline-flex min-h-12 shrink-0 items-center gap-4 overflow-hidden whitespace-nowrap rounded-full bg-[#f5ca3c] py-1 pl-6 pr-1 text-base font-bold leading-none text-[#0F0E0B] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1"
     >
       <span className="absolute -inset-px origin-left scale-x-0 bg-[#ffda58] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden="true" />
@@ -49,6 +52,10 @@ function Knop({ href, children }) {
 export default function OplossingPagina({ data, slug, cases = {} }) {
   const beeld = cases[data.beeld];
   const bewijs = data.cases.map((s) => ({ slug: s, ...cases[s] })).filter((c) => c.title);
+
+  useEffect(() => {
+    trackSolutionView({ solutionName: data.eyebrow, solutionSlug: slug });
+  }, [data.eyebrow, slug]);
 
   return (
     <>
@@ -203,7 +210,7 @@ export default function OplossingPagina({ data, slug, cases = {} }) {
               Vertel me waar je tegenaan loopt. Ik denk met je mee over wat daarvoor nodig is.
             </p>
             {/* De slug gaat mee zodat het contactformulier deze uitdaging al aanvinkt. */}
-            <Knop href={`/contact/?uitdaging=${slug}`}>Bespreek je uitdaging</Knop>
+            <Knop href={`/contact/?uitdaging=${slug}`} ctaLocation="section">Bespreek je uitdaging</Knop>
           </Reveal>
         </Kader>
       </section>

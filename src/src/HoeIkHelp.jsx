@@ -83,10 +83,11 @@ function Reveal({ children, className = "", delay = 0, id }) {
   );
 }
 
-function Knop({ href, children }) {
+function Knop({ href, children, ctaLocation }) {
   return (
     <a
       href={href}
+      data-cta-location={ctaLocation}
       className="group relative inline-flex min-h-12 shrink-0 items-center gap-4 overflow-hidden whitespace-nowrap rounded-full bg-[#f5ca3c] py-1 pl-6 pr-1 text-base font-bold leading-none text-[#0F0E0B] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1"
     >
       <span className="absolute -inset-px origin-left scale-x-0 bg-[#ffda58] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100" aria-hidden="true" />
@@ -420,7 +421,7 @@ export default function HoeIkHelp({ cases = {} }) {
               Dan kijk ik met je mee naar wat daarvoor nodig is.
             </p>
             <div className="mt-10 flex justify-center">
-              <Knop href="/contact/">Bespreek je uitdaging</Knop>
+              <Knop href="/contact/" ctaLocation="section">Bespreek je uitdaging</Knop>
             </div>
           </Reveal>
         </Kader>
